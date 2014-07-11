@@ -1,0 +1,1313 @@
+RASU8(ML610111)Relocatable Assembler, Ver.1.61.2    assemble list. page:   1 
+ Source File: _output\_obj\uart.asm
+ Object File: _output\_obj\uart.obj
+ Date  : 2014/07/11 Fri.[18:14]
+ Title : 
+## Loc. Object                   Line   Source Statements
+
+                                    1   ;; Compile Options : /TML610111 /MS /near /Icommon /Imain /Iirq /Itimer /Itbc /Ipwm /Iuart /Ii2c /SS 256 /SD /Oa /Ot /W 1 /Ff /Fa_output\_obj\ 
+                                    2   ;; Version Number  : Ver.3.41.8
+                                    3   ;; File Name       : uart.c
+                                    4   
+                                    5   	type (ML610111) 
+                                    6   	fastfloat
+                                    7   	model small, near
+                                    8   	$$NVARuart segment data 2h #0h
+                                    9   	$$NINITVAR segment data 2h #0h
+                                   10   	$$NINITTAB segment table 2h any
+                                   11   	$$OLDuart_0_Init$uart segment code 2h #0h
+                                   12   	$$_send_byte$uart segment code 2h #0h
+                                   13   	$$uart0_startReceive$uart segment code 2h #0h
+                                   14   	$$uartSendStr$uart segment code 2h #0h
+                                   15   	$$uart_0_Init$uart segment code 2h #0h
+                                   16   	$$uart_ErrClr$uart segment code 2h #0h
+                                   17   	$$uart_ErrGet$uart segment code 2h #0h
+                                   18   	$$uart_ErrSet$uart segment code 2h #0h
+                                   19   	$$uart_PortClear$uart segment code 2h #0h
+                                   20   	$$uart_PortSet$uart segment code 2h #0h
+                                   21   	$$uart_checkIRQ$uart segment code 2h #0h
+                                   22   	$$uart_clearIRQ$uart segment code 2h #0h
+                                   23   	$$uart_continue$uart segment code 2h #0h
+                                   24   	$$uart_getTransSize$uart segment code 2h #0h
+                                   25   	$$uart_startReceive$uart segment code 2h #0h
+                                   26   	$$uart_startSend$uart segment code 2h #0h
+                                   27   	$$uart_stop$uart segment code 2h #0h
+                                   28   CVERSION 3.41.8
+                                   29   CSGLOBAL 03H 0000H "_send_byte" 08H 02H 10H 00H 80H 00H 00H 00H 07H
+                                   30   CGLOBAL 01H 02H 0000H "uart_getTransSize" 08H 02H 08H 00H 80H 00H 00H 00H 01H
+                                   31   CGLOBAL 01H 03H 0000H "uart_PortSet" 08H 02H 0CH 00H 80H 00H 00H 00H 07H
+                                   32   CGLOBAL 01H 03H 0000H "uart_0_Init" 08H 02H 0EH 00H 80H 00H 00H 00H 07H
+                                   33   CGLOBAL 01H 03H 0000H "uart_startReceive" 08H 02H 03H 00H 82H 02H 00H 00H 07H
+                                   34   CGLOBAL 01H 03H 0000H "uart_checkIRQ" 08H 02H 06H 00H 80H 00H 00H 00H 01H
+                                   35   CGLOBAL 01H 03H 0000H "uart_clearIRQ" 08H 02H 07H 00H 80H 00H 00H 00H 07H
+                                   36   CGLOBAL 01H 03H 0000H "uart_ErrClr" 08H 02H 0BH 00H 80H 00H 00H 00H 07H
+                                   37   CGLOBAL 01H 02H 0000H "uart_ErrGet" 08H 02H 0AH 00H 80H 00H 00H 00H 00H
+                                   38   CGLOBAL 01H 03H 0000H "uart_ErrSet" 08H 02H 09H 00H 80H 00H 00H 00H 07H
+                                   39   CGLOBAL 01H 03H 0000H "uart0_startReceive" 08H 02H 14H 00H 83H 68H 00H 00H 07H
+                                   40   CGLOBAL 01H 03H 0000H "uart_stop" 08H 02H 05H 00H 80H 00H 00H 00H 07H
+                                   41   CGLOBAL 01H 03H 0000H "uart_startSend" 08H 02H 02H 00H 82H 04H 00H 00H 07H
+                                   42   CGLOBAL 01H 03H 0000H "uartSendStr" 08H 02H 0FH 00H 81H 0aH 00H 00H 07H
+                                   43   CGLOBAL 01H 03H 0000H "OLDuart_0_Init" 08H 02H 21H 00H 80H 00H 00H 00H 07H
+                                   44   CGLOBAL 01H 03H 0000H "uart_continue" 08H 02H 04H 00H 81H 04H 00H 00H 01H
+                                   45   CGLOBAL 01H 03H 0000H "uart_PortClear" 08H 02H 0DH 00H 80H 00H 00H 00H 07H
+                                   46   CSTRUCTTAG 0000H 0000H 0002H 0005H 0000000AH "_Notag"
+                                   47   CSTRUCTMEM 42H 00000002H 00000000H "data" 04H 03H 00H 00H 00H
+                                   48   CSTRUCTMEM 42H 00000002H 00000002H "size" 02H 00H 01H
+                                   49   CSTRUCTMEM 42H 00000002H 00000004H "cnt" 02H 00H 01H
+                                   50   CSTRUCTMEM 43H 00000002H 00000006H "callBack" 0AH 03H 00H 02H 00H 00H 00H 00H 00H 00H 07H
+                                   51   CSTRUCTMEM 42H 00000001H 00000008H "errStat" 02H 00H 00H
+                                   52   CSTRUCTTAG 0000H 0000H 0001H 0006H 0000000AH "_Notag"
+                                   53   CSTRUCTMEM 42H 00000004H 00000000H "br" 02H 00H 02H
+                                   54   CSTRUCTMEM 42H 00000001H 00000004H "lg" 02H 00H 00H
+                                   55   CSTRUCTMEM 42H 00000001H 00000005H "pt" 02H 00H 00H
+                                   56   CSTRUCTMEM 42H 00000001H 00000006H "stp" 02H 00H 00H
+                                   57   CSTRUCTMEM 42H 00000001H 00000007H "neg" 02H 00H 00H
+                                   58   CSTRUCTMEM 42H 00000001H 00000008H "dir" 02H 00H 00H
+                                   59   CSTRUCTTAG 0000H 0000H 0000H 0008H 00000001H "_Notag"
+                                   60   CSTRUCTMEM 52H 00000001H 00000000H "b0" 02H 00H 00H
+                                   61   CSTRUCTMEM 52H 00000001H 00000001H "b1" 02H 00H 00H
+                                   62   CSTRUCTMEM 52H 00000001H 00000002H "b2" 02H 00H 00H
+                                   63   CSTRUCTMEM 52H 00000001H 00000003H "b3" 02H 00H 00H
+                                   64   CSTRUCTMEM 52H 00000001H 00000004H "b4" 02H 00H 00H
+                                   65   CSTRUCTMEM 52H 00000001H 00000005H "b5" 02H 00H 00H
+                                   66   CSTRUCTMEM 52H 00000001H 00000006H "b6" 02H 00H 00H
+                                   67   CSTRUCTMEM 52H 00000001H 00000007H "b7" 02H 00H 00H
+                                   68   CTYPEDEF 0000H 0000H 43H "tUartCtrlParam" 04H 00H 05H 02H 00H
+                                   69   CTYPEDEF 0000H 0000H 43H "tUartSetParam" 04H 00H 05H 01H 00H
+                                   70   CTYPEDEF 0000H 0000H 43H "cbfUart" 0AH 03H 00H 02H 00H 00H 00H 00H 00H 00H 07H
+                                   71   CTYPEDEF 0000H 0000H 43H "_BYTE_FIELD" 04H 00H 05H 00H 00H
+                                   72   CSGLOBAL 42H 0001H "_Err_Status" 02H 00H 00H
+                                   73   CSGLOBAL 43H 000AH "_gsCtrlParam" 04H 00H 05H 02H 00H
+                                   74   CFILE 0001H 00000027H "common\\common.h"
+                                   75   CFILE 0002H 00000028H "main\\mcu.h"
+                                   76   CFILE 0003H 000007EEH "main\\ML610111.H"
+                                   77   CFILE 0004H 0000006FH "uart\\uart.h"
+                                   78   CFILE 0000H 000002DEH "uart\\uart.c"
+                                   79   
+  --------------------------       80   	rseg $$uart_0_Init$uart
+                                   81   CFUNCTION 14
+                                   82   
+00:0000                            83   _uart_0_Init	:
+                                   84   CBLOCK 14 1 215
+                                   85   
+                                   86   ;;{
+                                   87   CLINEA 0000H 0001H 00D7H 0001H 0001H
+                                   88   CBLOCK 14 2 215
+                                   89   
+                                   90   ;;	UA0BRT = ( unsigned short )( ( ( HSCLK_kHZ * 1000UL ) / UART_CalcBAUD ) - 1 );
+                                   91   CLINEA 0000H 0001H 00DBH 0002H 004FH
+00:0000 54 00                      92   	mov	r0,	#054h
+00:0002 03 01                      93   	mov	r1,	#03h
+00:0004 13-90 94-F2                94   	st	er0,	0f294h
+                                   95   
+                                   96   ;;	PB0DIR = 1;		// PortB Bit0 set to Input  Mode...UART-RX
+                                   97   CLINEA 0000H 0001H 00E6H 0002H 0038H
+00:0008 80-A0 59-F2                98   	sb	0f259h.0
+                                   99   
+                                  100   ;;	PB1DIR = 0;		// PortB Bit1 set to Output Mode...UART-TX
+                                  101   CLINEA 0000H 0001H 00E7H 0002H 0038H
+00:000C 92-A0 59-F2               102   	rb	0f259h.1
+                                  103   
+                                  104   ;;	PB0C1  = 1;		// PortB Bit0 set to (High-impedance input when PBxDIR=1)...
+                                  105   CLINEA 0000H 0001H 00EAH 0002H 004AH
+00:0010 80-A0 5B-F2               106   	sb	0f25bh.0
+                                  107   
+                                  108   ;;	PB0C0  = 1;		
+                                  109   CLINEA 0000H 0001H 00EBH 0002H 000EH
+00:0014 80-A0 5A-F2               110   	sb	0f25ah.0
+                                  111   
+                                  112   ;;	PB1C1  = 1;		// PortB Bit1 set to CMOS Output... 
+                                  113   CLINEA 0000H 0001H 00ECH 0002H 0032H
+00:0018 90-A0 5B-F2               114   	sb	0f25bh.1
+                                  115   
+                                  116   ;;	PB1C0  = 1;	
+                                  117   CLINEA 0000H 0001H 00EDH 0002H 000DH
+00:001C 90-A0 5A-F2               118   	sb	0f25ah.1
+                                  119   
+                                  120   ;;	PB0MD1  = 0;	// PortB Bit0 set to General-purpose input/output mode (initial value)
+                                  121   CLINEA 0000H 0001H 00F0H 0002H 0054H
+00:0020 82-A0 5D-F2               122   	rb	0f25dh.0
+                                  123   
+                                  124   ;;	PB0MD0  = 0;	
+                                  125   CLINEA 0000H 0001H 00F1H 0002H 000EH
+00:0024 82-A0 5C-F2               126   	rb	0f25ch.0
+                                  127   
+                                  128   ;;	PB1MD1  = 1;	// PortB Bit1 set to UART0 data output pin
+                                  129   CLINEA 0000H 0001H 00F2H 0002H 0038H
+00:0028 90-A0 5D-F2               130   	sb	0f25dh.1
+                                  131   
+                                  132   ;;	PB1MD0  = 0;	
+                                  133   CLINEA 0000H 0001H 00F3H 0002H 000EH
+00:002C 92-A0 5C-F2               134   	rb	0f25ch.1
+                                  135   
+                                  136   ;;		U0EN = 0;	 // 0 = Stops communication. (Initial value)
+                                  137   CLINEA 0000H 0001H 00F7H 0003H 0038H
+00:0030 82-A0 91-F2               138   	rb	0f291h.0
+                                  139   
+                                  140   ;;		U0IO   = 0;	 // 0 = Transmit mode (initial value)
+                                  141   CLINEA 0000H 0001H 00FAH 0003H 0033H
+00:0034 82-A0 92-F2               142   	rb	0f292h.0
+                                  143   
+                                  144   ;;		U0CK1  = 1;	 // 10 => Select the HSCLK clock to be input to the baud rate generator of the UART0 		
+                                  145   CLINEA 0000H 0001H 00FCH 0003H 0065H
+00:0038 A0-A0 92-F2               146   	sb	0f292h.2
+                                  147   
+                                  148   ;;		U0CK0  = 0;
+                                  149   CLINEA 0000H 0001H 00FDH 0003H 000DH
+00:003C 92-A0 92-F2               150   	rb	0f292h.1
+                                  151   
+                                  152   ;;		U0RSEL = 0;	 // 0 = Selects the PB0 pin as the RX Pin;
+                                  153   CLINEA 0000H 0001H 00FFH 0003H 0038H
+00:0040 C2-A0 92-F2               154   	rb	0f292h.4
+                                  155   
+                                  156   ;;		U0RSS = 1;   // U0RSS bit is used to select the received data input sampling timing for the UART0...WAS 0!
+                                  157   CLINEA 0000H 0001H 0101H 0003H 006CH
+00:0044 D0-A0 92-F2               158   	sb	0f292h.5
+                                  159   
+                                  160   ;;		U0LG1 = 0;	 // 00=> 8-bit data length (initial value)... 
+                                  161   CLINEA 0000H 0001H 0104H 0003H 003BH
+00:0048 92-A0 93-F2               162   	rb	0f293h.1
+                                  163   
+                                  164   ;;		U0LG0 = 0;
+                                  165   CLINEA 0000H 0001H 0105H 0003H 000CH
+00:004C 82-A0 93-F2               166   	rb	0f293h.0
+                                  167   
+                                  168   ;;		U0PT1 = 1;	 // 10=> No PARITY bit (initial value)
+                                  169   CLINEA 0000H 0001H 0107H 0003H 0033H
+00:0050 B0-A0 93-F2               170   	sb	0f293h.3
+                                  171   
+                                  172   ;;		U0PT0 = 0;
+                                  173   CLINEA 0000H 0001H 0108H 0003H 000CH
+00:0054 A2-A0 93-F2               174   	rb	0f293h.2
+                                  175   
+                                  176   ;;		U0STP = 0;	 // 0=> 1-stop-bit (initial value)
+                                  177   CLINEA 0000H 0001H 010AH 0003H 002FH
+00:0058 C2-A0 93-F2               178   	rb	0f293h.4
+                                  179   
+                                  180   ;;		U0NEG = 0;	 // 0=> Positive Logic (initial value)
+                                  181   CLINEA 0000H 0001H 010CH 0003H 0033H
+00:005C D2-A0 93-F2               182   	rb	0f293h.5
+                                  183   
+                                  184   ;;		U0DIR = 0;	 // 0=> LSB first (initial value)
+                                  185   CLINEA 0000H 0001H 010EH 0003H 002EH
+00:0060 E2-A0 93-F2               186   	rb	0f293h.6
+                                  187   CBLOCKEND 14 2 284
+                                  188   
+                                  189   ;;}
+                                  190   CLINEA 0000H 0001H 011CH 0001H 0001H
+00:0064 1F-FE                     191   	rt
+                                  192   CBLOCKEND 14 1 284
+                                  193   CFUNCTIONEND 14
+                                  194   
+                                  195   
+  --------------------------      196   	rseg $$uartSendStr$uart
+                                  197   CFUNCTION 15
+                                  198   
+00:0000                           199   _uartSendStr	:
+                                  200   CBLOCK 15 1 287
+                                  201   
+                                  202   ;;{
+                                  203   CLINEA 0000H 0001H 011FH 0001H 0001H
+00:0000 CE-F8                     204   	push	lr
+00:0002 6E-F8                     205   	push	xr8
+00:0004 6E-F4                     206   	push	xr4
+00:0006 05-F8                     207   	mov	er8,	er0
+00:0008 20-8A                     208   	mov	r10,	r2
+                                  209   CBLOCK 15 2 287
+                                  210   CRET 0008H
+                                  211   CARGUMENT 47H 0002H 0028H "str" 04H 03H 00H 00H 00H
+                                  212   CARGUMENT 46H 0001H 001EH "num" 02H 00H 00H
+                                  213   CLOCAL 46H 0001H 0018H 0002H "i" 02H 00H 00H
+                                  214   CLOCAL 46H 0002H 0027H 0002H "ptr" 04H 03H 00H 00H 00H
+                                  215   
+                                  216   ;;	unsigned char i = 0;
+                                  217   CLINEA 0000H 0001H 0120H 0002H 0015H
+00:000A 00 04                     218   	mov	r4,	#00h
+                                  219   
+                                  220   ;;	unsigned char* ptr = (unsigned char*)str;
+                                  221   CLINEA 0000H 0001H 0121H 0002H 002AH
+00:000C 85-F6                     222   	mov	er6,	er8
+                                  223   
+                                  224   ;;	while( i < num )
+                                  225   CLINEA 0000H 0001H 0124H 0002H 0011H
+00:000E 07 CE                     226   	bal	_$L2
+00:0010                           227   _$L4 :
+                                  228   CBLOCK 15 3 293
+                                  229   
+                                  230   ;;		_send_byte( *(ptr+i) ); //Now send the Byte...
+                                  231   CLINEA 0000H 0001H 0126H 0003H 0030H
+00:0010 40-80                     232   	mov	r0,	r4
+00:0012 00 01                     233   	mov	r1,	#00h
+00:0014 66-F0                     234   	add	er0,	er6
+00:0016 00-90                     235   	l	r0,	[er0]
+00:0018 01-F0'00-00'              236   	bl	__send_byte
+                                  237   
+                                  238   ;;		i++;				// increment to select next byte...
+                                  239   CLINEA 0000H 0000H 0127H 0003H 002DH
+00:001C 01 14                     240   	add	r4,	#01h
+                                  241   CBLOCKEND 15 3 296
+                                  242   
+                                  243   ;;	}
+                                  244   CLINEA 0000H 0000H 0128H 0002H 0002H
+00:001E                           245   _$L2 :
+                                  246   
+                                  247   ;;	while( i < num )
+                                  248   CLINEA 0000H 0000H 0124H 0000H 0000H
+00:001E A7-84                     249   	cmp	r4,	r10
+00:0020 F7 C1                     250   	blt	_$L4
+                                  251   CBLOCKEND 15 2 297
+                                  252   
+                                  253   ;;}
+                                  254   CLINEA 0000H 0001H 0129H 0001H 0001H
+00:0022 2E-F4                     255   	pop	xr4
+00:0024 2E-F8                     256   	pop	xr8
+00:0026 8E-F2                     257   	pop	pc
+                                  258   CBLOCKEND 15 1 297
+                                  259   CFUNCTIONEND 15
+                                  260   
+                                  261   
+  --------------------------      262   	rseg $$_send_byte$uart
+                                  263   CFUNCTION 16
+                                  264   
+00:0000                           265   __send_byte	:
+                                  266   CBLOCK 16 1 300
+                                  267   
+                                  268   ;;{
+                                  269   CLINEA 0000H 0001H 012CH 0001H 0001H
+                                  270   CBLOCK 16 2 300
+                                  271   CARGUMENT 46H 0001H 0014H "c" 02H 00H 00H
+                                  272   
+                                  273   ;;	U0IO = 0; 		// 0 = Transmit mode (initial value)			
+                                  274   CLINEA 0000H 0001H 012DH 0002H 0034H
+00:0000 82-A0 92-F2               275   	rb	0f292h.0
+                                  276   
+                                  277   ;;	UA0BUF = c;		// Load byte into Buffer...
+                                  278   CLINEA 0000H 0001H 012EH 0002H 0029H
+00:0004 11-90 90-F2               279   	st	r0,	0f290h
+                                  280   
+                                  281   ;;	U0EN = 1;		// START COMMUNICATION...		
+                                  282   CLINEA 0000H 0001H 012FH 0002H 0027H
+00:0008 80-A0 91-F2               283   	sb	0f291h.0
+                                  284   
+                                  285   ;;	while(U0EN != 0)	// In transmit mode, this bit is automatically set to 0 at termination of transmission.
+                                  286   CLINEA 0000H 0000H 0131H 0002H 0069H
+00:000C                           287   _$L9 :
+                                  288   CBLOCK 16 3 306
+                                  289   CBLOCKEND 16 3 308
+00:000C 81-A0 91-F2               290   	tb	0f291h.0
+00:0010 FD C8                     291   	bne	_$L9
+                                  292   
+                                  293   ;;	QUA0 = 0;		//QUA0 is the request flag for the UART0 interrupt
+                                  294   CLINEA 0000H 0001H 0137H 0002H 003EH
+00:0012 82-A0 1C-F0               295   	rb	0f01ch.0
+                                  296   CBLOCKEND 16 2 312
+                                  297   
+                                  298   ;;}
+                                  299   CLINEA 0000H 0001H 0138H 0001H 0001H
+00:0016 1F-FE                     300   	rt
+                                  301   CBLOCKEND 16 1 312
+                                  302   CFUNCTIONEND 16
+                                  303   
+                                  304   
+  --------------------------      305   	rseg $$uart0_startReceive$uart
+                                  306   CFUNCTION 20
+                                  307   
+00:0000                           308   _uart0_startReceive	:
+                                  309   CBLOCK 20 1 329
+                                  310   
+                                  311   ;;{
+                                  312   CLINEA 0000H 0001H 0149H 0001H 0001H
+00:0000 CE-F8                     313   	push	lr
+00:0002 5E-FE                     314   	push	fp
+00:0004 1A-AE                     315   	mov	fp,	sp
+00:0006 9C E1                     316   	add	sp,	#-0100
+                                  317   CBLOCK 20 2 329
+                                  318   CRET 0066H
+                                  319   CLOCAL 4BH 0004H 0000H 0002H "delay" 02H 00H 02H
+                                  320   CLOCAL 42H 0064H 0064H 0002H "RX_Code" 05H 01H 64H 00H 00H 00H
+                                  321   
+                                  322   ;;	U0EN = 0;  //UART0 Control Register Bit 0 - "0" Stops communication.
+                                  323   CLINEA 0000H 0001H 014EH 0002H 0045H
+00:0008 82-A0 91-F2               324   	rb	0f291h.0
+                                  325   
+                                  326   ;;		U0FER = 0; //UART0 Status Register Bit 0 - Clear Framing Error Flag
+                                  327   CLINEA 0000H 0001H 0152H 0003H 0045H
+00:000C 82-A0 96-F2               328   	rb	0f296h.0
+                                  329   
+                                  330   ;;		U0OER = 0; //UART0 Status Register Bit 1 - Clear Overrun Error Flag
+                                  331   CLINEA 0000H 0001H 0153H 0003H 0045H
+00:0010 92-A0 96-F2               332   	rb	0f296h.1
+                                  333   
+                                  334   ;;		U0PER = 0; //UART0 Status Register Bit 2 - Clear Parity  Error Flag
+                                  335   CLINEA 0000H 0001H 0154H 0003H 0045H
+00:0014 A2-A0 96-F2               336   	rb	0f296h.2
+                                  337   
+                                  338   ;;		U0IO = 1;  //UART0 Mode Register 0 Bit 0 - "1" = Receive Mode	
+                                  339   CLINEA 0000H 0001H 0156H 0003H 0040H
+00:0018 80-A0 92-F2               340   	sb	0f292h.0
+                                  341   
+                                  342   ;;		RX_Code[0] = UA0BUF; //Copy buffer into array...
+                                  343   CLINEA 0000H 0001H 0158H 0003H 0032H
+00:001C 10-90 90-F2               344   	l	r0,	0f290h
+00:0020 E9-90 9C-FF               345   	st	r0,	-100[fp]
+                                  346   
+                                  347   ;;	U0EN = 1; //UART0 Control Register Bit 0 - "1" Starts communication
+                                  348   CLINEA 0000H 0001H 015CH 0002H 0044H
+00:0024 80-A0 91-F2               349   	sb	0f291h.0
+                                  350   
+                                  351   ;;		_send_byte(RX_Code[0] );//echo array
+                                  352   CLINEA 0000H 0001H 0160H 0003H 0026H
+00:0028 01-F0'00-00'              353   	bl	__send_byte
+                                  354   CBLOCKEND 20 2 356
+                                  355   
+                                  356   ;;}
+                                  357   CLINEA 0000H 0001H 0164H 0001H 0001H
+00:002C EA-A1                     358   	mov	sp,	fp
+00:002E 1E-FE                     359   	pop	fp
+00:0030 8E-F2                     360   	pop	pc
+                                  361   CBLOCKEND 20 1 356
+                                  362   CFUNCTIONEND 20
+                                  363   
+                                  364   
+  --------------------------      365   	rseg $$uart_startSend$uart
+                                  366   CFUNCTION 2
+                                  367   
+00:0000                           368   _uart_startSend	:
+                                  369   CBLOCK 2 1 374
+                                  370   
+                                  371   ;;{
+                                  372   CLINEA 0000H 0001H 0176H 0001H 0001H
+00:0000 5E-FE                     373   	push	fp
+00:0002 1A-AE                     374   	mov	fp,	sp
+00:0004 5E-F8                     375   	push	er8
+00:0006 05-F8                     376   	mov	er8,	er0
+                                  377   CBLOCK 2 2 374
+                                  378   CARGUMENT 46H 0002H 0028H "data" 04H 03H 00H 00H 00H
+                                  379   CARGUMENT 46H 0002H 0025H "size" 02H 00H 01H
+                                  380   CARGUMENT 43H 0002H 0002H "func" 0AH 03H 00H 02H 00H 00H 00H 00H 00H 00H 07H
+                                  381   
+                                  382   ;;	U0EN = 0;
+                                  383   CLINEA 0000H 0001H 0178H 0002H 000AH
+00:0008 82-A0 91-F2               384   	rb	0f291h.0
+                                  385   
+                                  386   ;;	U0IO = 0;
+                                  387   CLINEA 0000H 0001H 0179H 0002H 000AH
+00:000C 82-A0 92-F2               388   	rb	0f292h.0
+                                  389   
+                                  390   ;;	_gsCtrlParam.data		= data;
+                                  391   CLINEA 0000H 0001H 017CH 0002H 001BH
+00:0010 13-90 00-00'              392   	st	er0,	NEAR __gsCtrlParam
+                                  393   
+                                  394   ;;	_gsCtrlParam.size		= size;
+                                  395   CLINEA 0000H 0001H 017DH 0002H 001BH
+00:0014 13-92 00-00'              396   	st	er2,	NEAR __gsCtrlParam+02h
+                                  397   
+                                  398   ;;	_gsCtrlParam.cnt		= 0;
+                                  399   CLINEA 0000H 0001H 017EH 0002H 0017H
+00:0018 00 E0                     400   	mov	er0,	#0 
+00:001A 13-90 00-00'              401   	st	er0,	NEAR __gsCtrlParam+04h
+                                  402   
+                                  403   ;;	_gsCtrlParam.callBack	= func;
+                                  404   CLINEA 0000H 0001H 017FH 0002H 001EH
+00:001E 42 B0                     405   	l	er0,	2[fp]
+00:0020 13-90 00-00'              406   	st	er0,	NEAR __gsCtrlParam+06h
+                                  407   
+                                  408   ;;	_gsCtrlParam.errStat	= 0;
+                                  409   CLINEA 0000H 0001H 0180H 0002H 001AH
+00:0024 00 00                     410   	mov	r0,	#00h
+00:0026 11-90 00-00'              411   	st	r0,	NEAR __gsCtrlParam+08h
+                                  412   
+                                  413   ;;	if( _gsCtrlParam.size > 0 ){
+                                  414   CLINEA 0000H 0001H 0182H 0002H 001DH
+00:002A 00 72                     415   	cmp	r2,	#00h
+00:002C 00 53                     416   	cmpc	r3,	#00h
+00:002E 0F C3                     417   	ble	_$L13
+                                  418   CBLOCK 2 3 386
+                                  419   
+                                  420   ;;		UA0BUF = *data;
+                                  421   CLINEA 0000H 0001H 0184H 0003H 0011H
+00:0030 80-90                     422   	l	r0,	[er8]
+00:0032 11-90 90-F2               423   	st	r0,	0f290h
+                                  424   
+                                  425   ;;		_gsCtrlParam.data++;
+                                  426   CLINEA 0000H 0000H 0185H 0003H 0016H
+00:0036 12-90 00-00'              427   	l	er0,	NEAR __gsCtrlParam
+00:003A 81 E0                     428   	add	er0,	#1 
+00:003C 13-90 00-00'              429   	st	er0,	NEAR __gsCtrlParam
+                                  430   
+                                  431   ;;		_gsCtrlParam.cnt++;
+                                  432   CLINEA 0000H 0000H 0186H 0003H 0015H
+00:0040 12-90 00-00'              433   	l	er0,	NEAR __gsCtrlParam+04h
+00:0044 81 E0                     434   	add	er0,	#1 
+00:0046 13-90 00-00'              435   	st	er0,	NEAR __gsCtrlParam+04h
+                                  436   
+                                  437   ;;		U0EN = 1;
+                                  438   CLINEA 0000H 0001H 0187H 0003H 000BH
+00:004A 80-A0 91-F2               439   	sb	0f291h.0
+                                  440   CBLOCKEND 2 3 392
+                                  441   
+                                  442   ;;	}
+                                  443   CLINEA 0000H 0000H 0188H 0002H 0002H
+00:004E                           444   _$L13 :
+                                  445   CBLOCKEND 2 2 393
+                                  446   
+                                  447   ;;}
+                                  448   CLINEA 0000H 0001H 0189H 0001H 0001H
+00:004E 1E-F8                     449   	pop	er8
+00:0050 EA-A1                     450   	mov	sp,	fp
+00:0052 1E-FE                     451   	pop	fp
+00:0054 1F-FE                     452   	rt
+                                  453   CBLOCKEND 2 1 393
+                                  454   CFUNCTIONEND 2
+                                  455   
+                                  456   
+  --------------------------      457   	rseg $$uart_startReceive$uart
+                                  458   CFUNCTION 3
+                                  459   
+00:0000                           460   _uart_startReceive	:
+                                  461   CBLOCK 3 1 405
+                                  462   
+                                  463   ;;{
+                                  464   CLINEA 0000H 0001H 0195H 0001H 0001H
+00:0000 5E-FE                     465   	push	fp
+00:0002 1A-AE                     466   	mov	fp,	sp
+                                  467   CBLOCK 3 2 405
+                                  468   CARGUMENT 46H 0002H 0024H "data" 04H 03H 00H 00H 00H
+                                  469   CARGUMENT 46H 0002H 0025H "size" 02H 00H 01H
+                                  470   CARGUMENT 43H 0002H 0002H "func" 0AH 03H 00H 02H 00H 00H 00H 00H 00H 00H 07H
+                                  471   
+                                  472   ;;	U0EN = 0;
+                                  473   CLINEA 0000H 0001H 0197H 0002H 000AH
+00:0004 82-A0 91-F2               474   	rb	0f291h.0
+                                  475   
+                                  476   ;;	U0FER = 0;
+                                  477   CLINEA 0000H 0001H 0199H 0002H 000BH
+00:0008 82-A0 96-F2               478   	rb	0f296h.0
+                                  479   
+                                  480   ;;	U0OER = 0;
+                                  481   CLINEA 0000H 0001H 019AH 0002H 000BH
+00:000C 92-A0 96-F2               482   	rb	0f296h.1
+                                  483   
+                                  484   ;;	U0PER = 0;
+                                  485   CLINEA 0000H 0001H 019BH 0002H 000BH
+00:0010 A2-A0 96-F2               486   	rb	0f296h.2
+                                  487   
+                                  488   ;;	U0IO = 1;
+                                  489   CLINEA 0000H 0001H 019DH 0002H 000AH
+00:0014 80-A0 92-F2               490   	sb	0f292h.0
+                                  491   
+                                  492   ;;	_gsCtrlParam.data		= data;
+                                  493   CLINEA 0000H 0001H 019FH 0002H 001BH
+00:0018 13-90 00-00'              494   	st	er0,	NEAR __gsCtrlParam
+                                  495   
+                                  496   ;;	_gsCtrlParam.size		= size;
+                                  497   CLINEA 0000H 0001H 01A0H 0002H 001BH
+00:001C 13-92 00-00'              498   	st	er2,	NEAR __gsCtrlParam+02h
+                                  499   
+                                  500   ;;	_gsCtrlParam.cnt		= 0;
+                                  501   CLINEA 0000H 0001H 01A1H 0002H 0017H
+00:0020 00 E0                     502   	mov	er0,	#0 
+00:0022 13-90 00-00'              503   	st	er0,	NEAR __gsCtrlParam+04h
+                                  504   
+                                  505   ;;	_gsCtrlParam.callBack	= func;
+                                  506   CLINEA 0000H 0001H 01A2H 0002H 001EH
+00:0026 42 B0                     507   	l	er0,	2[fp]
+00:0028 13-90 00-00'              508   	st	er0,	NEAR __gsCtrlParam+06h
+                                  509   
+                                  510   ;;	_gsCtrlParam.errStat	= 0;
+                                  511   CLINEA 0000H 0001H 01A3H 0002H 001AH
+00:002C 00 00                     512   	mov	r0,	#00h
+00:002E 11-90 00-00'              513   	st	r0,	NEAR __gsCtrlParam+08h
+                                  514   
+                                  515   ;;	if( _gsCtrlParam.size > 0 ){
+                                  516   CLINEA 0000H 0001H 01A5H 0002H 001DH
+00:0032 00 72                     517   	cmp	r2,	#00h
+00:0034 00 53                     518   	cmpc	r3,	#00h
+00:0036 02 C3                     519   	ble	_$L16
+                                  520   CBLOCK 3 3 421
+                                  521   
+                                  522   ;;		U0EN = 1;
+                                  523   CLINEA 0000H 0001H 01A7H 0003H 000BH
+00:0038 80-A0 91-F2               524   	sb	0f291h.0
+                                  525   CBLOCKEND 3 3 424
+                                  526   
+                                  527   ;;	}
+                                  528   CLINEA 0000H 0000H 01A8H 0002H 0002H
+00:003C                           529   _$L16 :
+                                  530   CBLOCKEND 3 2 425
+                                  531   
+                                  532   ;;}
+                                  533   CLINEA 0000H 0001H 01A9H 0001H 0001H
+00:003C EA-A1                     534   	mov	sp,	fp
+00:003E 1E-FE                     535   	pop	fp
+00:0040 1F-FE                     536   	rt
+                                  537   CBLOCKEND 3 1 425
+                                  538   CFUNCTIONEND 3
+                                  539   
+                                  540   
+  --------------------------      541   	rseg $$uart_continue$uart
+                                  542   CFUNCTION 4
+                                  543   
+00:0000                           544   _uart_continue	:
+                                  545   CBLOCK 4 1 441
+                                  546   
+                                  547   ;;{
+                                  548   CLINEA 0000H 0001H 01B9H 0001H 0001H
+00:0000 CE-F8                     549   	push	lr
+00:0002 5E-FC                     550   	push	bp
+                                  551   CBLOCK 4 2 441
+                                  552   CRET 0002H
+                                  553   CLOCAL 46H 0001H 0014H 0002H "u0io" 02H 00H 00H
+                                  554   CLOCAL 46H 0001H 0014H 0002H "u0ful" 02H 00H 00H
+                                  555   CLOCAL 46H 0001H 0014H 0002H "u0en" 02H 00H 00H
+                                  556   CLOCAL 46H 0001H 0016H 0002H "errStat" 02H 00H 00H
+                                  557   CLOCAL 47H 0002H 002AH 0002H "cbfTmp" 0AH 03H 00H 02H 00H 00H 00H 00H 00H 00H 07H
+                                  558   
+                                  559   ;;	u0io = (unsigned char)( UA0MOD0 & (unsigned char)UA0MOD0_U0IO );
+                                  560   CLINEA 0000H 0001H 01C0H 0002H 0041H
+00:0004 10-90 92-F2               561   	l	r0,	0f292h
+00:0008 01 20                     562   	and	r0,	#01h
+                                  563   
+                                  564   ;;	if( u0io == 0 ){
+                                  565   CLINEA 0000H 0001H 01C2H 0002H 0011H
+00:000A 00 70                     566   	cmp	r0,	#00h
+00:000C 35 C8                     567   	bne	_$L19
+                                  568   CBLOCK 4 3 450
+                                  569   
+                                  570   ;;		if( _gsCtrlParam.size != _gsCtrlParam.cnt ){
+                                  571   CLINEA 0000H 0001H 01C4H 0003H 002EH
+00:000E 12-90 00-00'              572   	l	er0,	NEAR __gsCtrlParam+02h
+00:0012 12-92 00-00'              573   	l	er2,	NEAR __gsCtrlParam+04h
+00:0016 27-F0                     574   	cmp	er0,	er2
+00:0018 19 C9                     575   	beq	_$L21
+                                  576   CBLOCK 4 4 452
+                                  577   
+                                  578   ;;			u0ful = (unsigned char)( UA0STAT & (unsigned char)UA0STAT_U0FUL );
+                                  579   CLINEA 0000H 0001H 01C6H 0004H 0045H
+00:001A 10-90 96-F2               580   	l	r0,	0f296h
+00:001E 08 20                     581   	and	r0,	#08h
+                                  582   
+                                  583   ;;			if( u0ful == 0 ){
+                                  584   CLINEA 0000H 0001H 01C8H 0004H 0014H
+00:0020 00 70                     585   	cmp	r0,	#00h
+00:0022 12 C8                     586   	bne	_$L23
+                                  587   CBLOCK 4 5 456
+                                  588   
+                                  589   ;;				UA0BUF = *_gsCtrlParam.data;
+                                  590   CLINEA 0000H 0001H 01C9H 0005H 0020H
+00:0024 12-9C 00-00'              591   	l	bp,	NEAR __gsCtrlParam
+00:0028 C0-90                     592   	l	r0,	[bp]
+00:002A 11-90 90-F2               593   	st	r0,	0f290h
+                                  594   
+                                  595   ;;				_gsCtrlParam.data++;
+                                  596   CLINEA 0000H 0000H 01CAH 0005H 0018H
+00:002E C5-F0                     597   	mov	er0,	bp
+00:0030 81 E0                     598   	add	er0,	#1 
+00:0032 13-90 00-00'              599   	st	er0,	NEAR __gsCtrlParam
+                                  600   
+                                  601   ;;				_gsCtrlParam.cnt++;
+                                  602   CLINEA 0000H 0000H 01CBH 0005H 0017H
+00:0036 25-F0                     603   	mov	er0,	er2
+00:0038 81 E0                     604   	add	er0,	#1 
+00:003A 13-90 00-00'              605   	st	er0,	NEAR __gsCtrlParam+04h
+                                  606   
+                                  607   ;;				U0EN = 1;
+                                  608   CLINEA 0000H 0001H 01CCH 0005H 000DH
+00:003E 80-A0 91-F2               609   	sb	0f291h.0
+                                  610   
+                                  611   ;;				return ( UART_R_TRANS_CONT_OK );
+                                  612   CLINEA 0000H 0001H 01CDH 0005H 0024H
+00:0042 00 E0                     613   	mov	er0,	#0 
+                                  614   CBLOCKEND 4 5 462
+                                  615   CBLOCKEND 4 2 512
+                                  616   
+                                  617   ;;}
+                                  618   CLINEA 0000H 0001H 0200H 0001H 0001H
+00:0044                           619   _$L18 :
+00:0044 1E-FC                     620   	pop	bp
+00:0046 8E-F2                     621   	pop	pc
+                                  622   CBLOCKEND 4 3 512
+                                  623   CBLOCKEND 4 4 512
+                                  624   
+                                  625   ;;			else{
+                                  626   CLINEA 0000H 0000H 01CFH 0004H 0008H
+00:0048                           627   _$L23 :
+                                  628   CBLOCK 4 6 463
+                                  629   
+                                  630   ;;				return ( UART_R_TRANS_CONT_NG );
+                                  631   CLINEA 0000H 0001H 01D0H 0005H 0024H
+00:0048 7F E0                     632   	mov	er0,	#-1
+00:004A FC CE                     633   	bal	_$L18
+                                  634   CBLOCKEND 4 6 465
+                                  635   
+                                  636   ;;		else{
+                                  637   CLINEA 0000H 0000H 01D3H 0003H 0007H
+00:004C                           638   _$L21 :
+                                  639   CBLOCK 4 7 467
+                                  640   
+                                  641   ;;			u0en = (unsigned char)( UA0CON & (unsigned char)UA0CON_U0EN );
+                                  642   CLINEA 0000H 0001H 01D5H 0004H 0041H
+00:004C 10-90 91-F2               643   	l	r0,	0f291h
+00:0050 01 20                     644   	and	r0,	#01h
+                                  645   
+                                  646   ;;			if( u0en == 0 ){
+                                  647   CLINEA 0000H 0001H 01D6H 0004H 0013H
+00:0052 00 70                     648   	cmp	r0,	#00h
+00:0054 0F C8                     649   	bne	_$L27
+                                  650   CBLOCK 4 8 470
+                                  651   
+                                  652   ;;				if( _gsCtrlParam.callBack != (void *)0 ){
+                                  653   CLINEA 0000H 0001H 01D8H 0005H 002DH
+00:0056 12-90 00-00'              654   	l	er0,	NEAR __gsCtrlParam+06h
+00:005A 0A C9                     655   	beq	_$L29
+                                  656   CBLOCK 4 9 472
+                                  657   
+                                  658   ;;					_gsCtrlParam.callBack( _gsCtrlParam.size, _gsCtrlParam.errStat );
+                                  659   CLINEA 0000H 0001H 01D9H 0006H 0046H
+00:005C 10-92 00-00'              660   	l	r2,	NEAR __gsCtrlParam+08h
+00:0060 12-90 00-00'              661   	l	er0,	NEAR __gsCtrlParam+02h
+00:0064 12-9C 00-00'              662   	l	bp,	NEAR __gsCtrlParam+06h
+00:0068 C3-F0                     663   	bl	bp
+                                  664   
+                                  665   ;;					_gsCtrlParam.callBack = (void *)0;
+                                  666   CLINEA 0000H 0001H 01DAH 0006H 0027H
+00:006A 00 E0                     667   	mov	er0,	#0 
+00:006C 13-90 00-00'              668   	st	er0,	NEAR __gsCtrlParam+06h
+                                  669   CBLOCKEND 4 9 475
+                                  670   
+                                  671   ;;				}
+                                  672   CLINEA 0000H 0000H 01DBH 0005H 0005H
+00:0070                           673   _$L29 :
+                                  674   
+                                  675   ;;				return ( UART_R_TRANS_FIN );
+                                  676   CLINEA 0000H 0001H 01DCH 0005H 0020H
+00:0070 01 E0                     677   	mov	er0,	#1 
+00:0072 E8 CE                     678   	bal	_$L18
+                                  679   CBLOCKEND 4 8 477
+                                  680   
+                                  681   ;;			}
+                                  682   CLINEA 0000H 0000H 01DDH 0004H 0004H
+00:0074                           683   _$L27 :
+                                  684   
+                                  685   ;;			return ( UART_R_TRANS_FIN_NG );
+                                  686   CLINEA 0000H 0001H 01DEH 0004H 0022H
+00:0074 7E E0                     687   	mov	er0,	#-2
+00:0076 E6 CE                     688   	bal	_$L18
+                                  689   CBLOCKEND 4 7 479
+                                  690   
+                                  691   ;;	else{
+                                  692   CLINEA 0000H 0000H 01E2H 0002H 0006H
+00:0078                           693   _$L19 :
+                                  694   CBLOCK 4 10 482
+                                  695   
+                                  696   ;;		if( _gsCtrlParam.size != _gsCtrlParam.cnt ){
+                                  697   CLINEA 0000H 0001H 01E4H 0003H 002EH
+00:0078 12-90 00-00'              698   	l	er0,	NEAR __gsCtrlParam+02h
+00:007C 12-92 00-00'              699   	l	er2,	NEAR __gsCtrlParam+04h
+00:0080 27-F0                     700   	cmp	er0,	er2
+00:0082 2C C9                     701   	beq	_$L38
+                                  702   CBLOCK 4 11 484
+                                  703   
+                                  704   ;;			errStat = (unsigned char)( UA0STAT & (unsigned char)(UA0STAT_U0FER|UA0STAT_U0OER|UA0STAT_U0PER) );
+                                  705   CLINEA 0000H 0001H 01E5H 0004H 0065H
+00:0084 10-90 96-F2               706   	l	r0,	0f296h
+00:0088 07 20                     707   	and	r0,	#07h
+00:008A 00-82                     708   	mov	r2,	r0
+                                  709   
+                                  710   ;;			_gsCtrlParam.errStat |= errStat;
+                                  711   CLINEA 0000H 0001H 01E6H 0004H 0023H
+00:008C 10-90 00-00'              712   	l	r0,	NEAR __gsCtrlParam+08h
+00:0090 23-80                     713   	or	r0,	r2
+00:0092 11-90 00-00'              714   	st	r0,	NEAR __gsCtrlParam+08h
+                                  715   
+                                  716   ;;			U0FER = 0;
+                                  717   CLINEA 0000H 0001H 01E7H 0004H 000DH
+00:0096 82-A0 96-F2               718   	rb	0f296h.0
+                                  719   
+                                  720   ;;			U0OER = 0;
+                                  721   CLINEA 0000H 0001H 01E8H 0004H 000DH
+00:009A 92-A0 96-F2               722   	rb	0f296h.1
+                                  723   
+                                  724   ;;			U0PER = 0;
+                                  725   CLINEA 0000H 0001H 01E9H 0004H 000DH
+00:009E A2-A0 96-F2               726   	rb	0f296h.2
+                                  727   
+                                  728   ;;			*_gsCtrlParam.data = UA0BUF;
+                                  729   CLINEA 0000H 0001H 01EAH 0004H 001FH
+00:00A2 12-9C 00-00'              730   	l	bp,	NEAR __gsCtrlParam
+00:00A6 10-90 90-F2               731   	l	r0,	0f290h
+00:00AA C1-90                     732   	st	r0,	[bp]
+                                  733   
+                                  734   ;;			_gsCtrlParam.data++;
+                                  735   CLINEA 0000H 0000H 01EBH 0004H 0017H
+00:00AC 12-90 00-00'              736   	l	er0,	NEAR __gsCtrlParam
+00:00B0 81 E0                     737   	add	er0,	#1 
+00:00B2 13-90 00-00'              738   	st	er0,	NEAR __gsCtrlParam
+                                  739   
+                                  740   ;;			_gsCtrlParam.cnt++;
+                                  741   CLINEA 0000H 0000H 01ECH 0004H 0016H
+00:00B6 12-90 00-00'              742   	l	er0,	NEAR __gsCtrlParam+04h
+00:00BA 81 E0                     743   	add	er0,	#1 
+00:00BC 13-90 00-00'              744   	st	er0,	NEAR __gsCtrlParam+04h
+                                  745   
+                                  746   ;;			if( ( errStat & ( unsigned char )( UA0STAT_U0FER ) ) == 0 ) {
+                                  747   CLINEA 0000H 0001H 01EEH 0004H 0040H
+00:00C0 01-A2                     748   	tb	r2.0
+00:00C2 09 C8                     749   	bne	_$L34
+                                  750   CBLOCK 4 12 494
+                                  751   
+                                  752   ;;				if( _gsCtrlParam.size != _gsCtrlParam.cnt ){
+                                  753   CLINEA 0000H 0001H 01F0H 0005H 0030H
+00:00C4 12-90 00-00'              754   	l	er0,	NEAR __gsCtrlParam+02h
+00:00C8 12-92 00-00'              755   	l	er2,	NEAR __gsCtrlParam+04h
+00:00CC 27-F0                     756   	cmp	er0,	er2
+00:00CE 06 C9                     757   	beq	_$L38
+                                  758   CBLOCK 4 13 496
+                                  759   
+                                  760   ;;					return ( UART_R_TRANS_CONT_OK );
+                                  761   CLINEA 0000H 0001H 01F1H 0006H 0025H
+00:00D0 00 E0                     762   	mov	er0,	#0 
+00:00D2 00-F0'00-00'              763   	b	_$L18
+                                  764   CBLOCKEND 4 13 498
+                                  765   
+                                  766   ;;				}
+                                  767   CLINEA 0000H 0000H 01F2H 0005H 0005H
+                                  768   CBLOCKEND 4 12 499
+                                  769   
+                                  770   ;;			} else {
+                                  771   CLINEA 0000H 0000H 01F3H 0004H 000BH
+00:00D6                           772   _$L34 :
+                                  773   CBLOCK 4 14 499
+                                  774   
+                                  775   ;;				uart_ErrSet( UA0STAT_U0FER );
+                                  776   CLINEA 0000H 0001H 01F5H 0005H 0021H
+00:00D6 01 00                     777   	mov	r0,	#01h
+00:00D8 01-F0'00-00'              778   	bl	_uart_ErrSet
+                                  779   CBLOCKEND 4 14 502
+                                  780   
+                                  781   ;;			}
+                                  782   CLINEA 0000H 0000H 01F6H 0004H 0004H
+00:00DC                           783   _$L38 :
+                                  784   CBLOCKEND 4 11 503
+                                  785   
+                                  786   ;;		if( _gsCtrlParam.callBack != (void *)0 ){
+                                  787   CLINEA 0000H 0001H 01F9H 0003H 002BH
+00:00DC 12-90 00-00'              788   	l	er0,	NEAR __gsCtrlParam+06h
+00:00E0 09 C9                     789   	beq	_$L39
+                                  790   CBLOCK 4 15 505
+                                  791   
+                                  792   ;;			cbfTmp = _gsCtrlParam.callBack;
+                                  793   CLINEA 0000H 0001H 01FAH 0004H 0022H
+00:00E2 05-FC                     794   	mov	bp,	er0
+                                  795   
+                                  796   ;;			_gsCtrlParam.callBack = (void *)0;
+                                  797   CLINEA 0000H 0001H 01FBH 0004H 0025H
+00:00E4 00 E0                     798   	mov	er0,	#0 
+00:00E6 13-90 00-00'              799   	st	er0,	NEAR __gsCtrlParam+06h
+                                  800   
+                                  801   ;;			cbfTmp( _gsCtrlParam.size, _gsCtrlParam.errStat );
+                                  802   CLINEA 0000H 0001H 01FCH 0004H 0035H
+00:00EA 10-92 00-00'              803   	l	r2,	NEAR __gsCtrlParam+08h
+00:00EE 12-90 00-00'              804   	l	er0,	NEAR __gsCtrlParam+02h
+00:00F2 C3-F0                     805   	bl	bp
+                                  806   CBLOCKEND 4 15 509
+                                  807   
+                                  808   ;;		}
+                                  809   CLINEA 0000H 0000H 01FDH 0003H 0003H
+00:00F4                           810   _$L39 :
+                                  811   
+                                  812   ;;		return ( UART_R_TRANS_FIN );
+                                  813   CLINEA 0000H 0001H 01FEH 0003H 001EH
+00:00F4 01 E0                     814   	mov	er0,	#1 
+00:00F6 00-F0'00-00'              815   	b	_$L18
+                                  816   CBLOCKEND 4 10 511
+                                  817   CBLOCKEND 4 1 512
+                                  818   CFUNCTIONEND 4
+                                  819   
+                                  820   
+  --------------------------      821   	rseg $$uart_stop$uart
+                                  822   CFUNCTION 5
+                                  823   
+00:0000                           824   _uart_stop	:
+                                  825   CBLOCK 5 1 522
+                                  826   
+                                  827   ;;{
+                                  828   CLINEA 0000H 0001H 020AH 0001H 0001H
+                                  829   CBLOCK 5 2 522
+                                  830   
+                                  831   ;;	U0EN = 0;
+                                  832   CLINEA 0000H 0001H 020BH 0002H 000AH
+00:0000 82-A0 91-F2               833   	rb	0f291h.0
+                                  834   
+                                  835   ;;	_gsCtrlParam.data		= (void *)0;
+                                  836   CLINEA 0000H 0001H 020CH 0002H 0020H
+00:0004 00 E0                     837   	mov	er0,	#0 
+00:0006 13-90 00-00'              838   	st	er0,	NEAR __gsCtrlParam
+                                  839   
+                                  840   ;;	_gsCtrlParam.size		= 0;
+                                  841   CLINEA 0000H 0001H 020DH 0002H 0018H
+00:000A 13-90 00-00'              842   	st	er0,	NEAR __gsCtrlParam+02h
+                                  843   
+                                  844   ;;	_gsCtrlParam.cnt		= 0;
+                                  845   CLINEA 0000H 0001H 020EH 0002H 0017H
+00:000E 13-90 00-00'              846   	st	er0,	NEAR __gsCtrlParam+04h
+                                  847   
+                                  848   ;;	_gsCtrlParam.callBack	= (void *)0;
+                                  849   CLINEA 0000H 0001H 020FH 0002H 0023H
+00:0012 13-90 00-00'              850   	st	er0,	NEAR __gsCtrlParam+06h
+                                  851   
+                                  852   ;;	_gsCtrlParam.errStat	= 0;
+                                  853   CLINEA 0000H 0001H 0210H 0002H 001AH
+00:0016 11-90 00-00'              854   	st	r0,	NEAR __gsCtrlParam+08h
+                                  855   CBLOCKEND 5 2 529
+                                  856   
+                                  857   ;;}
+                                  858   CLINEA 0000H 0001H 0211H 0001H 0001H
+00:001A 1F-FE                     859   	rt
+                                  860   CBLOCKEND 5 1 529
+                                  861   CFUNCTIONEND 5
+                                  862   
+                                  863   
+  --------------------------      864   	rseg $$uart_checkIRQ$uart
+                                  865   CFUNCTION 6
+                                  866   
+00:0000                           867   _uart_checkIRQ	:
+                                  868   CBLOCK 6 1 541
+                                  869   
+                                  870   ;;{
+                                  871   CLINEA 0000H 0001H 021DH 0001H 0001H
+                                  872   CBLOCK 6 2 541
+                                  873   CLOCAL 46H 0001H 0014H 0002H "qua0" 02H 00H 00H
+                                  874   CLOCAL 47H 0002H 0024H 0002H "ret" 02H 00H 01H
+                                  875   
+                                  876   ;;	qua0 = (unsigned char)( IRQ4 & (unsigned char)IRQ4_QUA0 );
+                                  877   CLINEA 0000H 0001H 0221H 0002H 003BH
+00:0000 10-90 1C-F0               878   	l	r0,	0f01ch
+00:0004 01 20                     879   	and	r0,	#01h
+                                  880   
+                                  881   ;;	if( qua0 == 1 ){
+                                  882   CLINEA 0000H 0001H 0222H 0002H 0011H
+00:0006 01 70                     883   	cmp	r0,	#01h
+00:0008 02 C8                     884   	bne	_$L43
+                                  885   CBLOCK 6 3 546
+                                  886   
+                                  887   ;;		ret = ( UART_R_IRQ );
+                                  888   CLINEA 0000H 0001H 0223H 0003H 0017H
+00:000A 01 E0                     889   	mov	er0,	#1 
+                                  890   CBLOCKEND 6 3 548
+                                  891   
+                                  892   ;;	else{
+                                  893   CLINEA 0000H 0001H 0225H 0002H 0006H
+00:000C 1F-FE                     894   	rt
+00:000E                           895   _$L43 :
+                                  896   CBLOCK 6 4 549
+                                  897   
+                                  898   ;;		ret = ( UART_R_NON_IRQ );
+                                  899   CLINEA 0000H 0001H 0226H 0003H 001BH
+00:000E 00 E0                     900   	mov	er0,	#0 
+                                  901   CBLOCKEND 6 4 551
+                                  902   
+                                  903   ;;	return ret;
+                                  904   CLINEA 0000H 0001H 0229H 0002H 000CH
+                                  905   CBLOCKEND 6 2 554
+                                  906   
+                                  907   ;;}
+                                  908   CLINEA 0000H 0000H 022AH 0001H 0001H
+00:0010 1F-FE                     909   	rt
+                                  910   CBLOCKEND 6 1 554
+                                  911   CFUNCTIONEND 6
+                                  912   
+                                  913   
+  --------------------------      914   	rseg $$uart_clearIRQ$uart
+                                  915   CFUNCTION 7
+                                  916   
+00:0000                           917   _uart_clearIRQ	:
+                                  918   CBLOCK 7 1 564
+                                  919   
+                                  920   ;;{
+                                  921   CLINEA 0000H 0001H 0234H 0001H 0001H
+                                  922   CBLOCK 7 2 564
+                                  923   
+                                  924   ;;	QUA0 = 0;
+                                  925   CLINEA 0000H 0001H 0235H 0002H 000AH
+00:0000 82-A0 1C-F0               926   	rb	0f01ch.0
+                                  927   CBLOCKEND 7 2 566
+                                  928   
+                                  929   ;;}
+                                  930   CLINEA 0000H 0001H 0236H 0001H 0001H
+00:0004 1F-FE                     931   	rt
+                                  932   CBLOCKEND 7 1 566
+                                  933   CFUNCTIONEND 7
+                                  934   
+                                  935   
+  --------------------------      936   	rseg $$uart_getTransSize$uart
+                                  937   CFUNCTION 8
+                                  938   
+00:0000                           939   _uart_getTransSize	:
+                                  940   CBLOCK 8 1 577
+                                  941   
+                                  942   ;;{
+                                  943   CLINEA 0000H 0001H 0241H 0001H 0001H
+                                  944   CBLOCK 8 2 577
+                                  945   
+                                  946   ;;	return _gsCtrlParam.cnt;
+                                  947   CLINEA 0000H 0001H 0242H 0002H 0019H
+00:0000 12-90 00-00'              948   	l	er0,	NEAR __gsCtrlParam+04h
+                                  949   CBLOCKEND 8 2 579
+                                  950   
+                                  951   ;;}
+                                  952   CLINEA 0000H 0000H 0243H 0001H 0001H
+00:0004 1F-FE                     953   	rt
+                                  954   CBLOCKEND 8 1 579
+                                  955   CFUNCTIONEND 8
+                                  956   
+                                  957   
+  --------------------------      958   	rseg $$uart_ErrSet$uart
+                                  959   CFUNCTION 9
+                                  960   
+00:0000                           961   _uart_ErrSet	:
+                                  962   CBLOCK 9 1 590
+                                  963   
+                                  964   ;;{
+                                  965   CLINEA 0000H 0001H 024EH 0001H 0001H
+00:0000 00-82                     966   	mov	r2,	r0
+                                  967   CBLOCK 9 2 590
+                                  968   CARGUMENT 46H 0001H 0016H "status" 02H 00H 00H
+                                  969   
+                                  970   ;;	_Err_Status |= status;
+                                  971   CLINEA 0000H 0001H 024FH 0002H 0017H
+00:0002 10-90 00-00'              972   	l	r0,	NEAR __Err_Status
+00:0006 23-80                     973   	or	r0,	r2
+00:0008 11-90 00-00'              974   	st	r0,	NEAR __Err_Status
+                                  975   CBLOCKEND 9 2 592
+                                  976   
+                                  977   ;;}
+                                  978   CLINEA 0000H 0001H 0250H 0001H 0001H
+00:000C 1F-FE                     979   	rt
+                                  980   CBLOCKEND 9 1 592
+                                  981   CFUNCTIONEND 9
+                                  982   
+                                  983   
+  --------------------------      984   	rseg $$uart_ErrGet$uart
+                                  985   CFUNCTION 10
+                                  986   
+00:0000                           987   _uart_ErrGet	:
+                                  988   CBLOCK 10 1 602
+                                  989   
+                                  990   ;;{
+                                  991   CLINEA 0000H 0001H 025AH 0001H 0001H
+                                  992   CBLOCK 10 2 602
+                                  993   
+                                  994   ;;	return( _Err_Status );
+                                  995   CLINEA 0000H 0001H 025BH 0002H 0017H
+00:0000 10-90 00-00'              996   	l	r0,	NEAR __Err_Status
+                                  997   CBLOCKEND 10 2 604
+                                  998   
+                                  999   ;;}
+                                 1000   CLINEA 0000H 0000H 025CH 0001H 0001H
+00:0004 1F-FE                    1001   	rt
+                                 1002   CBLOCKEND 10 1 604
+                                 1003   CFUNCTIONEND 10
+                                 1004   
+                                 1005   
+  --------------------------     1006   	rseg $$uart_ErrClr$uart
+                                 1007   CFUNCTION 11
+                                 1008   
+00:0000                          1009   _uart_ErrClr	:
+                                 1010   CBLOCK 11 1 614
+                                 1011   
+                                 1012   ;;{
+                                 1013   CLINEA 0000H 0001H 0266H 0001H 0001H
+                                 1014   CBLOCK 11 2 614
+                                 1015   
+                                 1016   ;;	_Err_Status = 0;
+                                 1017   CLINEA 0000H 0001H 0267H 0002H 0011H
+00:0000 00 00                    1018   	mov	r0,	#00h
+00:0002 11-90 00-00'             1019   	st	r0,	NEAR __Err_Status
+                                 1020   CBLOCKEND 11 2 616
+                                 1021   
+                                 1022   ;;}
+                                 1023   CLINEA 0000H 0001H 0268H 0001H 0001H
+00:0006 1F-FE                    1024   	rt
+                                 1025   CBLOCKEND 11 1 616
+                                 1026   CFUNCTIONEND 11
+                                 1027   
+                                 1028   
+  --------------------------     1029   	rseg $$uart_PortSet$uart
+                                 1030   CFUNCTION 12
+                                 1031   
+00:0000                          1032   _uart_PortSet	:
+                                 1033   CBLOCK 12 1 626
+                                 1034   
+                                 1035   ;;{
+                                 1036   CLINEA 0000H 0001H 0272H 0001H 0001H
+                                 1037   CBLOCK 12 2 626
+                                 1038   
+                                 1039   ;;	PB1DIR = 0;		/* Output */
+                                 1040   CLINEA 0000H 0001H 0275H 0002H 001AH
+00:0000 92-A0 59-F2              1041   	rb	0f259h.1
+                                 1042   
+                                 1043   ;;	PB1C0 = 1;
+                                 1044   CLINEA 0000H 0001H 0276H 0002H 000BH
+00:0004 90-A0 5A-F2              1045   	sb	0f25ah.1
+                                 1046   
+                                 1047   ;;	PB1C1 = 1;		/* CMOS */
+                                 1048   CLINEA 0000H 0001H 0277H 0002H 0017H
+00:0008 90-A0 5B-F2              1049   	sb	0f25bh.1
+                                 1050   
+                                 1051   ;;	PB1MD0 = 1;
+                                 1052   CLINEA 0000H 0001H 0278H 0002H 000CH
+00:000C 90-A0 5C-F2              1053   	sb	0f25ch.1
+                                 1054   
+                                 1055   ;;	PB1MD1 = 0;		/* UART TXD */
+                                 1056   CLINEA 0000H 0001H 0279H 0002H 001CH
+00:0010 92-A0 5D-F2              1057   	rb	0f25dh.1
+                                 1058   
+                                 1059   ;;	PB0DIR = 1;		/* Input */
+                                 1060   CLINEA 0000H 0001H 027BH 0002H 0019H
+00:0014 80-A0 59-F2              1061   	sb	0f259h.0
+                                 1062   
+                                 1063   ;;	PB0C0 = 1;
+                                 1064   CLINEA 0000H 0001H 027CH 0002H 000BH
+00:0018 80-A0 5A-F2              1065   	sb	0f25ah.0
+                                 1066   
+                                 1067   ;;	PB0C1 = 1;		/* Hi Impedance */
+                                 1068   CLINEA 0000H 0001H 027DH 0002H 001FH
+00:001C 80-A0 5B-F2              1069   	sb	0f25bh.0
+                                 1070   
+                                 1071   ;;	PB0MD0 = 1;
+                                 1072   CLINEA 0000H 0001H 027EH 0002H 000CH
+00:0020 80-A0 5C-F2              1073   	sb	0f25ch.0
+                                 1074   
+                                 1075   ;;	PB0MD1 = 0;		/* UART RXD */
+                                 1076   CLINEA 0000H 0001H 027FH 0002H 001CH
+00:0024 82-A0 5D-F2              1077   	rb	0f25dh.0
+                                 1078   CBLOCKEND 12 2 640
+                                 1079   
+                                 1080   ;;}
+                                 1081   CLINEA 0000H 0001H 0280H 0001H 0001H
+00:0028 1F-FE                    1082   	rt
+                                 1083   CBLOCKEND 12 1 640
+                                 1084   CFUNCTIONEND 12
+                                 1085   
+                                 1086   
+  --------------------------     1087   	rseg $$uart_PortClear$uart
+                                 1088   CFUNCTION 13
+                                 1089   
+00:0000                          1090   _uart_PortClear	:
+                                 1091   CBLOCK 13 1 650
+                                 1092   
+                                 1093   ;;{
+                                 1094   CLINEA 0000H 0001H 028AH 0001H 0001H
+                                 1095   CBLOCK 13 2 650
+                                 1096   
+                                 1097   ;;	PB1DIR = 0;		/* Output */
+                                 1098   CLINEA 0000H 0001H 028DH 0002H 001AH
+00:0000 92-A0 59-F2              1099   	rb	0f259h.1
+                                 1100   
+                                 1101   ;;	PB1C0 = 0;
+                                 1102   CLINEA 0000H 0001H 028EH 0002H 000BH
+00:0004 92-A0 5A-F2              1103   	rb	0f25ah.1
+                                 1104   
+                                 1105   ;;	PB1C1 = 0;		/* Hi Impedance */
+                                 1106   CLINEA 0000H 0001H 028FH 0002H 001FH
+00:0008 92-A0 5B-F2              1107   	rb	0f25bh.1
+                                 1108   
+                                 1109   ;;	PB1MD0 = 0;
+                                 1110   CLINEA 0000H 0001H 0290H 0002H 000CH
+00:000C 92-A0 5C-F2              1111   	rb	0f25ch.1
+                                 1112   
+                                 1113   ;;	PB1MD1 = 0;	      /* General-purpose input/output mode */
+                                 1114   CLINEA 0000H 0001H 0291H 0002H 003AH
+00:0010 92-A0 5D-F2              1115   	rb	0f25dh.1
+                                 1116   
+                                 1117   ;;	PB0DIR = 0;		/* Output */
+                                 1118   CLINEA 0000H 0001H 0293H 0002H 001AH
+00:0014 82-A0 59-F2              1119   	rb	0f259h.0
+                                 1120   
+                                 1121   ;;	PB0C0 = 0;
+                                 1122   CLINEA 0000H 0001H 0294H 0002H 000BH
+00:0018 82-A0 5A-F2              1123   	rb	0f25ah.0
+                                 1124   
+                                 1125   ;;	PB0C1 = 0;		/* Hi Impedance */
+                                 1126   CLINEA 0000H 0001H 0295H 0002H 001FH
+00:001C 82-A0 5B-F2              1127   	rb	0f25bh.0
+                                 1128   
+                                 1129   ;;	PB0MD0 = 0;
+                                 1130   CLINEA 0000H 0001H 0296H 0002H 000CH
+00:0020 82-A0 5C-F2              1131   	rb	0f25ch.0
+                                 1132   
+                                 1133   ;;	PB0MD1 = 0;		/* General-purpose input/output mode */
+                                 1134   CLINEA 0000H 0001H 0297H 0002H 0035H
+00:0024 82-A0 5D-F2              1135   	rb	0f25dh.0
+                                 1136   CBLOCKEND 13 2 664
+                                 1137   
+                                 1138   ;;}
+                                 1139   CLINEA 0000H 0001H 0298H 0001H 0001H
+00:0028 1F-FE                    1140   	rt
+                                 1141   CBLOCKEND 13 1 664
+                                 1142   CFUNCTIONEND 13
+                                 1143   
+                                 1144   
+  --------------------------     1145   	rseg $$OLDuart_0_Init$uart
+                                 1146   CFUNCTION 33
+                                 1147   
+00:0000                          1148   _OLDuart_0_Init	:
+                                 1149   CBLOCK 33 1 669
+                                 1150   
+                                 1151   ;;{
+                                 1152   CLINEA 0000H 0001H 029DH 0001H 0001H
+                                 1153   CBLOCK 33 2 669
+                                 1154   
+                                 1155   ;;	PB0DIR = 1;		// PortB Bit0 set to Input  Mode...UART-RX
+                                 1156   CLINEA 0000H 0001H 02A8H 0002H 0038H
+00:0000 80-A0 59-F2              1157   	sb	0f259h.0
+                                 1158   
+                                 1159   ;;	PB1DIR = 0;		// PortB Bit1 set to Output Mode...UART-TX
+                                 1160   CLINEA 0000H 0001H 02A9H 0002H 0038H
+00:0004 92-A0 59-F2              1161   	rb	0f259h.1
+                                 1162   
+                                 1163   ;;	PB0C1  = 1;		// PortB Bit0 set to (High-impedance input when PBxDIR=1)...
+                                 1164   CLINEA 0000H 0001H 02ACH 0002H 004AH
+00:0008 80-A0 5B-F2              1165   	sb	0f25bh.0
+                                 1166   
+                                 1167   ;;	PB0C0  = 1;		
+                                 1168   CLINEA 0000H 0001H 02ADH 0002H 000EH
+00:000C 80-A0 5A-F2              1169   	sb	0f25ah.0
+                                 1170   
+                                 1171   ;;	PB1C1  = 1;		// PortB Bit1 set to CMOS Output... 
+                                 1172   CLINEA 0000H 0001H 02AEH 0002H 0032H
+00:0010 90-A0 5B-F2              1173   	sb	0f25bh.1
+                                 1174   
+                                 1175   ;;	PB1C0  = 1;	
+                                 1176   CLINEA 0000H 0001H 02AFH 0002H 000DH
+00:0014 90-A0 5A-F2              1177   	sb	0f25ah.1
+                                 1178   
+                                 1179   ;;	PB0MD1  = 0;	// PortB Bit0 set to General-purpose input/output mode (initial value)
+                                 1180   CLINEA 0000H 0001H 02B2H 0002H 0054H
+00:0018 82-A0 5D-F2              1181   	rb	0f25dh.0
+                                 1182   
+                                 1183   ;;	PB0MD0  = 0;	
+                                 1184   CLINEA 0000H 0001H 02B3H 0002H 000EH
+00:001C 82-A0 5C-F2              1185   	rb	0f25ch.0
+                                 1186   
+                                 1187   ;;	PB1MD1  = 1;	// PortB Bit1 set to UART0 data output pin
+                                 1188   CLINEA 0000H 0001H 02B4H 0002H 0038H
+00:0020 90-A0 5D-F2              1189   	sb	0f25dh.1
+                                 1190   
+                                 1191   ;;	PB1MD0  = 0;	
+                                 1192   CLINEA 0000H 0001H 02B5H 0002H 000EH
+00:0024 92-A0 5C-F2              1193   	rb	0f25ch.1
+                                 1194   
+                                 1195   ;;		U0EN = 0;	 // 0 = Stops communication. (Initial value)
+                                 1196   CLINEA 0000H 0001H 02B9H 0003H 0038H
+00:0028 82-A0 91-F2              1197   	rb	0f291h.0
+                                 1198   
+                                 1199   ;;		U0IO   = 0;	 // 0 = Transmit mode (initial value)
+                                 1200   CLINEA 0000H 0001H 02BCH 0003H 0033H
+00:002C 82-A0 92-F2              1201   	rb	0f292h.0
+                                 1202   
+                                 1203   ;;		U0CK1  = 1;	 // 10 => Select the HSCLK clock to be input to the baud rate generator of the UART0 		
+                                 1204   CLINEA 0000H 0001H 02BEH 0003H 0065H
+00:0030 A0-A0 92-F2              1205   	sb	0f292h.2
+                                 1206   
+                                 1207   ;;		U0CK0  = 0;
+                                 1208   CLINEA 0000H 0001H 02BFH 0003H 000DH
+00:0034 92-A0 92-F2              1209   	rb	0f292h.1
+                                 1210   
+                                 1211   ;;		U0RSEL = 0;	 // 0 = Selects the PB0 pin as the RX Pin;
+                                 1212   CLINEA 0000H 0001H 02C1H 0003H 0038H
+00:0038 C2-A0 92-F2              1213   	rb	0f292h.4
+                                 1214   
+                                 1215   ;;		U0RSS = 1;   // U0RSS bit is used to select the received data input sampling timing for the UART0...WAS 0!
+                                 1216   CLINEA 0000H 0001H 02C3H 0003H 006CH
+00:003C D0-A0 92-F2              1217   	sb	0f292h.5
+                                 1218   
+                                 1219   ;;		U0LG1 = 0;	 // 00=> 8-bit data length (initial value)... 
+                                 1220   CLINEA 0000H 0001H 02C6H 0003H 003BH
+00:0040 92-A0 93-F2              1221   	rb	0f293h.1
+                                 1222   
+                                 1223   ;;		U0LG0 = 0;
+                                 1224   CLINEA 0000H 0001H 02C7H 0003H 000CH
+00:0044 82-A0 93-F2              1225   	rb	0f293h.0
+                                 1226   
+                                 1227   ;;		U0PT1 = 1;	 // 10=> No PARITY bit (initial value)
+                                 1228   CLINEA 0000H 0001H 02C9H 0003H 0033H
+00:0048 B0-A0 93-F2              1229   	sb	0f293h.3
+                                 1230   
+                                 1231   ;;		U0PT0 = 0;
+                                 1232   CLINEA 0000H 0001H 02CAH 0003H 000CH
+00:004C A2-A0 93-F2              1233   	rb	0f293h.2
+                                 1234   
+                                 1235   ;;		U0STP = 0;	 // 0=> 1-stop-bit (initial value)
+                                 1236   CLINEA 0000H 0001H 02CCH 0003H 002FH
+00:0050 C2-A0 93-F2              1237   	rb	0f293h.4
+                                 1238   
+                                 1239   ;;		U0NEG = 0;	 // 0=> Positive Logic (initial value)
+                                 1240   CLINEA 0000H 0001H 02CEH 0003H 0033H
+00:0054 D2-A0 93-F2              1241   	rb	0f293h.5
+                                 1242   
+                                 1243   ;;		U0DIR = 0;	 // 0=> LSB first (initial value)
+                                 1244   CLINEA 0000H 0001H 02D0H 0003H 002EH
+00:0058 E2-A0 93-F2              1245   	rb	0f293h.6
+                                 1246   
+                                 1247   ;;	UA0BRT = ( unsigned short )( ( ( HSCLK_kHZ * 1000UL ) / UART_CalcBAUD ) - 1 );
+                                 1248   CLINEA 0000H 0001H 02DDH 0002H 004FH
+00:005C 54 00                    1249   	mov	r0,	#054h
+00:005E 03 01                    1250   	mov	r1,	#03h
+00:0060 13-90 94-F2              1251   	st	er0,	0f294h
+                                 1252   CBLOCKEND 33 2 734
+                                 1253   
+                                 1254   ;;}
+                                 1255   CLINEA 0000H 0001H 02DEH 0001H 0001H
+00:0064 1F-FE                    1256   	rt
+                                 1257   CBLOCKEND 33 1 734
+                                 1258   CFUNCTIONEND 33
+                                 1259   
+                                 1260   	public _uart_getTransSize
+                                 1261   	public _uart_PortSet
+                                 1262   	public _uart_0_Init
+                                 1263   	public _uart_startReceive
+                                 1264   	public _uart_checkIRQ
+                                 1265   	public _uart_clearIRQ
+                                 1266   	public _uart_ErrClr
+                                 1267   	public _uart_ErrGet
+                                 1268   	public _uart_ErrSet
+                                 1269   	public _uart0_startReceive
+                                 1270   	public _uart_stop
+                                 1271   	public _uart_startSend
+                                 1272   	public _uartSendStr
+                                 1273   	public _OLDuart_0_Init
+                                 1274   	public _uart_continue
+                                 1275   	public _uart_PortClear
+                                 1276   	extrn code near : _main
+                                 1277   
+  --------------------------     1278   	rseg $$NINITTAB
+??:0000 00-00                    1279   	dw	00h
+??:0002 00-00                    1280   	dw	00h
+??:0004 00-00                    1281   	dw	00h
+??:0006 00-00                    1282   	dw	00h
+??:0008 00                       1283   	db	00h
+??:0009 00                       1284   	align
+                                 1285   
+  --------------------------     1286   	rseg $$NINITVAR
+00:0000                          1287   __gsCtrlParam :
+00:0000                          1288   	ds	0ah
+                                 1289   
+  --------------------------     1290   	rseg $$NVARuart
+00:0000                          1291   __Err_Status :
+00:0000                          1292   	ds	01h
+                                 1293   
+                                 1294   	end
+
+
+
+  Target       : ML610111 (nX-U8/100)
+  Memory Model : SMALL
+  Data   Model : NEAR
+  ROM WINDOW   : (not specified)
+  Internal RAM : E000H to E7FFH
+
+  Errors   : 0
+  Warnings : 0  (/Wrpeast)
+  Lines    : 1294
