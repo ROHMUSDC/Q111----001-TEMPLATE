@@ -40,8 +40,8 @@
 #define UART_LG_6BIT		( 2 )		/* data length : 6bit			*/
 #define UART_LG_5BIT		( 3 )		/* data length : 5bit			*/
 #define UART_PT_EVEN		( 0 )		/* parity bit : even			*/
-#define UART_PT_ODD		( 1 )		/* parity bit : odd			*/
-#define UART_PT_NON		( 2 )		/* parity bit : none			*/
+#define UART_PT_ODD			( 1 )		/* parity bit : odd			*/
+#define UART_PT_NON			( 2 )		/* parity bit : none			*/
 #define UART_STP_1BIT		( 0 )		/* stop bit : 1bit			*/
 #define UART_STP_2BIT		( 1 )		/* stop bit : 2bit			*/
 #define UART_NEG_POS		( 0 )		/* logical value : positive		*/
@@ -59,10 +59,10 @@
 #define UART_R_ERR_NEG			( -6 )	/* improper setting (positive logic/negative logic)	*/
 #define UART_R_ERR_DIR			( -7 )	/* improper setting of significant bit (LSB/MSB)	*/
 #define UART_R_TRANS_FIN		(  1 )	/* send and receive is finished				*/
-#define UART_R_TRANS_CONT_OK		(  0 )	/* send and receive is continued (success)		*/
-#define UART_R_TRANS_CONT_NG		( -1 )	/* send and receive is continued (failure)		*/
+#define UART_R_TRANS_CONT_OK	(  0 )	/* send and receive is continued (success)		*/
+#define UART_R_TRANS_CONT_NG	( -1 )	/* send and receive is continued (failure)		*/
 #define UART_R_TRANS_FIN_NG		( -2 )	/* send and receive is finished (failure)			*/
-#define UART_R_IRQ			(  1 )	/* interrupt request is set					*/
+#define UART_R_IRQ				(  1 )	/* interrupt request is set					*/
 #define UART_R_NON_IRQ			(  0 )	/* interrupt request is not set				*/
 
 
@@ -71,9 +71,9 @@ typedef struct {
 	unsigned long br;		/* baud rate						*/
 	unsigned char lg;		/* data length						*/
 	unsigned char pt;		/* parity bit setting (even/odd/none)		*/
-	unsigned char stp;	/* stop bit length					*/
-	unsigned char neg;	/* logical value setting (positive/negative)	*/
-	unsigned char dir;	/* endian setting (LSB first/MSB first)		*/
+	unsigned char stp;		/* stop bit length					*/
+	unsigned char neg;		/* logical value setting (positive/negative)	*/
+	unsigned char dir;		/* endian setting (LSB first/MSB first)		*/
 } tUartSetParam;
 
 /*=== callback function ===*/

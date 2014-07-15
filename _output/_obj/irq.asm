@@ -1,9 +1,8 @@
-;; Compile Options : /TML610111 /MS /near /Icommon /Imain /Iirq /Itimer /Itbc /Ipwm /Iuart /Ii2c /SS 256 /SD /Oa /Ot /W 1 /Ff /Fa_output\_obj\ 
+;; Compile Options : /TML610111 /MS /near /LE /Ii2c /Iirq /Imain /Itbc /Itimer /Iuart /Icommon /Imath /Istdio /Istdlib /Istring /Iyvals /CT _output\_prn\irq.cal /SS 256 /SD /Oa /Ot /W 3 /Zg /Fa_output\_obj\ /Lv /Zs 
 ;; Version Number  : Ver.3.41.8
 ;; File Name       : irq.c
 
 	type (ML610111) 
-	fastfloat
 	model small, near
 	$$NVARirq segment data 2h #0h
 	$$_branchHdr$irq segment code 2h #0h
@@ -47,7 +46,7 @@
 CVERSION 3.41.8
 CSGLOBAL 03H 0000H "_intCMP1INT" 08H 02H 1AH 00H 91H 0aH 00H 00H 07H
 CSGLOBAL 03H 0000H "_intT32HINT" 08H 02H 24H 00H 91H 0aH 00H 00H 07H
-CGLOBAL 01H 03H 0000H "irq_init" 08H 02H 00H 00H 80H 02H 00H 00H 07H
+CGLOBAL 01H 03H 0000H "irq_init" 08H 02H 00H 00H 82H 04H 00H 00H 07H
 CSGLOBAL 03H 0000H "_intCMP0INT" 08H 02H 19H 00H 91H 0aH 00H 00H 07H
 CSGLOBAL 03H 0000H "_intTM8INT" 08H 02H 15H 00H 91H 0aH 00H 00H 07H
 CSGLOBAL 03H 0000H "_intTM9INT" 08H 02H 16H 00H 91H 0aH 00H 00H 07H
@@ -94,7 +93,7 @@ CSTRUCTMEM 52H 00000001H 00000006H "b6" 02H 00H 00H
 CSTRUCTMEM 52H 00000001H 00000007H "b7" 02H 00H 00H
 CTYPEDEF 0000H 0000H 43H "_BYTE_FIELD" 04H 00H 05H 00H 00H
 CSGLOBAL 43H 003EH "_sIrqHdr" 0DH 01H 1FH 00H 03H 00H 02H 05H 00H 10H 00H 00H 00H 07H
-CFILE 0001H 00000028H "main\\mcu.h"
+CFILE 0001H 00000024H "main\\mcu.h"
 CFILE 0002H 000007EEH "main\\ML610111.H"
 CFILE 0003H 00000057H "irq\\irq.h"
 CFILE 0000H 00000141H "irq\\irq.c"
@@ -107,9 +106,17 @@ CBLOCK 0 1 151
 
 ;;{
 CLINEA 0000H 0001H 0097H 0001H 0001H
-	push	er4
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+	_irqNo$0	set	-2
+;;*****************************************
+
+	push	fp
+	mov	fp,	sp
+	add	sp,	#-02
 CBLOCK 0 2 151
-CLOCAL 47H 0002H 0026H 0002H "irqNo" 02H 00H 01H
+CLOCAL 43H 0002H 0002H 0002H "irqNo" 02H 00H 01H
 
 ;;	IE1 = (unsigned char)0x00u;
 CLINEA 0000H 0001H 009BH 0002H 001CH
@@ -174,14 +181,14 @@ CLINEA 0000H 0001H 00AAH 0002H 001DH
 
 ;;	for( irqNo = 0; irqNo < IRQ_SIZE; irqNo++ ) {
 CLINEA 0000H 0001H 00ADH 0002H 002EH
-	mov	er4,	#0 
+	mov	er0,	#0 
+	st	er0,	_irqNo$0[fp]
 _$L3 :
 CBLOCK 0 3 173
 
 ;;		_sIrqHdr[irqNo] = _intNullHdr;
 CLINEA 0000H 0001H 00AEH 0003H 0020H
-	mov	er0,	er4
-	add	er0,	er4
+	add	er0,	er0
 	mov	r2,	#BYTE1 OFFSET __intNullHdr
 	mov	r3,	#BYTE2 OFFSET __intNullHdr
 	st	er2,	NEAR __sIrqHdr[er0]
@@ -189,15 +196,18 @@ CBLOCKEND 0 3 175
 
 ;;	for( irqNo = 0; irqNo < IRQ_SIZE; irqNo++ ) {
 CLINEA 0000H 0000H 00ADH 0002H 002EH
-	add	er4,	#1 
-	cmp	r4,	#01fh
-	cmpc	r5,	#00h
+	l	er0,	_irqNo$0[fp]
+	add	er0,	#1 
+	st	er0,	_irqNo$0[fp]
+	cmp	r0,	#01fh
+	cmpc	r1,	#00h
 	blts	_$L3
 CBLOCKEND 0 2 176
 
 ;;}
 CLINEA 0000H 0001H 00B0H 0001H 0001H
-	pop	er4
+	mov	sp,	fp
+	pop	fp
 	rt
 CBLOCKEND 0 1 176
 CFUNCTIONEND 0
@@ -211,6 +221,11 @@ CBLOCK 1 1 186
 
 ;;{
 CLINEA 0000H 0001H 00BAH 0001H 0001H
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 CBLOCK 1 2 186
 
 ;;	__EI();
@@ -233,6 +248,11 @@ CBLOCK 2 1 198
 
 ;;{
 CLINEA 0000H 0001H 00C6H 0001H 0001H
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 CBLOCK 2 2 198
 
 ;;	__DI();
@@ -255,6 +275,11 @@ CBLOCK 4 1 216
 
 ;;{
 CLINEA 0000H 0001H 00D8H 0001H 0001H
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 	push	xr8
 	mov	r8,	r0
 	mov	er10,	er2
@@ -334,6 +359,11 @@ CBLOCK 6 1 244
 
 ;;{
 CLINEA 0000H 0001H 00F4H 0001H 0001H
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 CBLOCK 6 2 244
 CBLOCKEND 6 2 246
 
@@ -352,6 +382,11 @@ CBLOCK 7 1 256
 
 ;;{
 CLINEA 0000H 0001H 0100H 0001H 0001H
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 CBLOCK 7 2 256
 CBLOCKEND 7 2 258
 
@@ -370,6 +405,11 @@ CBLOCK 48 1 271
 
 ;;{
 CLINEA 0000H 0001H 010FH 0001H 0001H
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 CBLOCK 48 2 271
 CARGUMENT 46H 0001H 0014H "intNo" 02H 00H 00H
 
@@ -393,6 +433,11 @@ CBLOCK 8 1 279
 
 ;;static void _intWDTINT(void)	{	_branchHdr(IRQ_NO_WDTINT);	}
 CLINEA 0000H 0001H 0117H 0001H 003BH
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 	push	elr, epsw, lr, ea
 	push	xr0
 	l	r0,	DSR
@@ -420,6 +465,11 @@ CBLOCK 9 1 280
 
 ;;static void _intVLSINT(void)	{	_branchHdr(IRQ_NO_VLSINT);	}
 CLINEA 0000H 0001H 0118H 0001H 003BH
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 	push	lr, ea
 	push	xr0
 	l	r0,	DSR
@@ -447,6 +497,11 @@ CBLOCK 10 1 282
 
 ;;static void _intPA0INT(void)	{	_branchHdr(IRQ_NO_PA0INT);	}
 CLINEA 0000H 0001H 011AH 0001H 003BH
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 	push	lr, ea
 	push	xr0
 	l	r0,	DSR
@@ -474,6 +529,11 @@ CBLOCK 11 1 283
 
 ;;static void _intPA1INT(void)	{	_branchHdr(IRQ_NO_PA1INT);	}
 CLINEA 0000H 0001H 011BH 0001H 003BH
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 	push	lr, ea
 	push	xr0
 	l	r0,	DSR
@@ -501,6 +561,11 @@ CBLOCK 12 1 284
 
 ;;static void _intPA2INT(void)	{	_branchHdr(IRQ_NO_PA2INT);	}
 CLINEA 0000H 0001H 011CH 0001H 003BH
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 	push	lr, ea
 	push	xr0
 	l	r0,	DSR
@@ -528,6 +593,11 @@ CBLOCK 13 1 286
 
 ;;static void _intPB0INT(void)	{	_branchHdr(IRQ_NO_PB0INT);	}
 CLINEA 0000H 0001H 011EH 0001H 003BH
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 	push	lr, ea
 	push	xr0
 	l	r0,	DSR
@@ -555,6 +625,11 @@ CBLOCK 14 1 287
 
 ;;static void _intPB1INT(void)	{	_branchHdr(IRQ_NO_PB1INT);	}
 CLINEA 0000H 0001H 011FH 0001H 003BH
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 	push	lr, ea
 	push	xr0
 	l	r0,	DSR
@@ -582,6 +657,11 @@ CBLOCK 15 1 288
 
 ;;static void _intPB2INT(void)	{	_branchHdr(IRQ_NO_PB2INT);	}
 CLINEA 0000H 0001H 0120H 0001H 003BH
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 	push	lr, ea
 	push	xr0
 	l	r0,	DSR
@@ -609,6 +689,11 @@ CBLOCK 16 1 289
 
 ;;static void _intPB3INT(void)	{	_branchHdr(IRQ_NO_PB3INT);	}
 CLINEA 0000H 0001H 0121H 0001H 003BH
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 	push	lr, ea
 	push	xr0
 	l	r0,	DSR
@@ -636,6 +721,11 @@ CBLOCK 17 1 291
 
 ;;static void _intSIO0INT(void)	{	_branchHdr(IRQ_NO_SIO0INT);	}
 CLINEA 0000H 0001H 0123H 0001H 003DH
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 	push	lr, ea
 	push	xr0
 	l	r0,	DSR
@@ -663,6 +753,11 @@ CBLOCK 18 1 293
 
 ;;static void _intSADINT(void)	{	_branchHdr(IRQ_NO_SADINT);	}
 CLINEA 0000H 0001H 0125H 0001H 003BH
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 	push	lr, ea
 	push	xr0
 	l	r0,	DSR
@@ -690,6 +785,11 @@ CBLOCK 19 1 295
 
 ;;static void _intI2CSINT(void)	{	_branchHdr(IRQ_NO_I2CSINT);	}
 CLINEA 0000H 0001H 0127H 0001H 003DH
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 	push	lr, ea
 	push	xr0
 	l	r0,	DSR
@@ -717,6 +817,11 @@ CBLOCK 20 1 296
 
 ;;static void _intI2CMINT(void)	{	_branchHdr(IRQ_NO_I2CMINT);	}
 CLINEA 0000H 0001H 0128H 0001H 003DH
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 	push	lr, ea
 	push	xr0
 	l	r0,	DSR
@@ -744,6 +849,11 @@ CBLOCK 21 1 298
 
 ;;static void _intTM8INT(void)	{	_branchHdr(IRQ_NO_TM8INT);	}
 CLINEA 0000H 0001H 012AH 0001H 003BH
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 	push	lr, ea
 	push	xr0
 	l	r0,	DSR
@@ -771,6 +881,11 @@ CBLOCK 22 1 299
 
 ;;static void _intTM9INT(void)	{	_branchHdr(IRQ_NO_TM9INT);	}
 CLINEA 0000H 0001H 012BH 0001H 003BH
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 	push	lr, ea
 	push	xr0
 	l	r0,	DSR
@@ -798,6 +913,11 @@ CBLOCK 23 1 301
 
 ;;static void _intUA0INT(void)	{	_branchHdr(IRQ_NO_UA0INT);	}
 CLINEA 0000H 0001H 012DH 0001H 003BH
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 	push	lr, ea
 	push	xr0
 	l	r0,	DSR
@@ -825,6 +945,11 @@ CBLOCK 24 1 302
 
 ;;static void _intUA1INT(void)	{	_branchHdr(IRQ_NO_UA1INT);	}
 CLINEA 0000H 0001H 012EH 0001H 003BH
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 	push	lr, ea
 	push	xr0
 	l	r0,	DSR
@@ -852,6 +977,11 @@ CBLOCK 25 1 304
 
 ;;static void _intCMP0INT(void)	{	_branchHdr(IRQ_NO_CMP0INT);	}
 CLINEA 0000H 0001H 0130H 0001H 003DH
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 	push	lr, ea
 	push	xr0
 	l	r0,	DSR
@@ -879,6 +1009,11 @@ CBLOCK 26 1 305
 
 ;;static void _intCMP1INT(void)	{	_branchHdr(IRQ_NO_CMP1INT);	}
 CLINEA 0000H 0001H 0131H 0001H 003DH
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 	push	lr, ea
 	push	xr0
 	l	r0,	DSR
@@ -906,6 +1041,11 @@ CBLOCK 27 1 307
 
 ;;static void _intTMEINT(void)	{	_branchHdr(IRQ_NO_TMEINT);	}
 CLINEA 0000H 0001H 0133H 0001H 003BH
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 	push	lr, ea
 	push	xr0
 	l	r0,	DSR
@@ -933,6 +1073,11 @@ CBLOCK 28 1 308
 
 ;;static void _intTMFINT(void)	{	_branchHdr(IRQ_NO_TMFINT);	}
 CLINEA 0000H 0001H 0134H 0001H 003BH
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 	push	lr, ea
 	push	xr0
 	l	r0,	DSR
@@ -960,6 +1105,11 @@ CBLOCK 29 1 309
 
 ;;static void _intTMAINT(void)	{	_branchHdr(IRQ_NO_TMAINT);	}
 CLINEA 0000H 0001H 0135H 0001H 003BH
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 	push	lr, ea
 	push	xr0
 	l	r0,	DSR
@@ -987,6 +1137,11 @@ CBLOCK 30 1 310
 
 ;;static void _intTMBINT(void)	{	_branchHdr(IRQ_NO_TMBINT);	}
 CLINEA 0000H 0001H 0136H 0001H 003BH
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 	push	lr, ea
 	push	xr0
 	l	r0,	DSR
@@ -1014,6 +1169,11 @@ CBLOCK 31 1 312
 
 ;;static void _intPWCINT(void)	{	_branchHdr(IRQ_NO_PWCINT);	}
 CLINEA 0000H 0001H 0138H 0001H 003BH
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 	push	lr, ea
 	push	xr0
 	l	r0,	DSR
@@ -1041,6 +1201,11 @@ CBLOCK 32 1 313
 
 ;;static void _intPWDINT(void)	{	_branchHdr(IRQ_NO_PWDINT);	}
 CLINEA 0000H 0001H 0139H 0001H 003BH
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 	push	lr, ea
 	push	xr0
 	l	r0,	DSR
@@ -1068,6 +1233,11 @@ CBLOCK 33 1 314
 
 ;;static void _intPWEINT(void)	{	_branchHdr(IRQ_NO_PWEINT);	}
 CLINEA 0000H 0001H 013AH 0001H 003BH
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 	push	lr, ea
 	push	xr0
 	l	r0,	DSR
@@ -1095,6 +1265,11 @@ CBLOCK 34 1 315
 
 ;;static void _intPWFINT(void)	{	_branchHdr(IRQ_NO_PWFINT);	}
 CLINEA 0000H 0001H 013BH 0001H 003BH
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 	push	lr, ea
 	push	xr0
 	l	r0,	DSR
@@ -1122,6 +1297,11 @@ CBLOCK 35 1 317
 
 ;;static void _intT128HINT(void)	{	_branchHdr(IRQ_NO_T128HINT);	}
 CLINEA 0000H 0001H 013DH 0001H 003FH
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 	push	lr, ea
 	push	xr0
 	l	r0,	DSR
@@ -1149,6 +1329,11 @@ CBLOCK 36 1 318
 
 ;;static void _intT32HINT(void)	{	_branchHdr(IRQ_NO_T32HINT);	}
 CLINEA 0000H 0001H 013EH 0001H 003DH
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 	push	lr, ea
 	push	xr0
 	l	r0,	DSR
@@ -1176,6 +1361,11 @@ CBLOCK 37 1 319
 
 ;;static void _intT16HINT(void)	{	_branchHdr(IRQ_NO_T16HINT);	}
 CLINEA 0000H 0001H 013FH 0001H 003DH
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 	push	lr, ea
 	push	xr0
 	l	r0,	DSR
@@ -1203,6 +1393,11 @@ CBLOCK 38 1 320
 
 ;;static void _intT2HINT(void)	{	_branchHdr(IRQ_NO_T2HINT);	}
 CLINEA 0000H 0001H 0140H 0001H 003BH
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 	push	lr, ea
 	push	xr0
 	l	r0,	DSR

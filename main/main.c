@@ -4,10 +4,11 @@
 //
 // DEMONSTRATES: 
 //					1.) INTERRUPTS on TBC
-//					1.) INTERRUPTS on TMR8/9
-//					1.) INTERRUPTS on TMR A/B
-//					1.) INTERRUPTS on TMR E/F
-//					1.) PWM Control
+//					2.) INTERRUPTS on TMR 8/9
+//					3.) INTERRUPTS on TMR A/B
+//					4.) INTERRUPTS on TMR E/F
+//					5.) PWM Control
+//					6.) UART...
 //
 // Program:	 LAPIS MCU Development Board Demo Code 
 // Author:	 C. Schell, K. Bahar & F. Lee 
@@ -16,14 +17,39 @@
 //
 // Started:  April 6th, 2013
 // Purpose:	 Demonstration Code for use with LAPIS MCU Development Board 
-// Updated:	 JULY 11th, 2014
+// Updated:	 JULY 15th, 2014
 //*****************************************************************************
+
+// ================================ ML610Q111 ================================= 
+//	ML610Q111 MCU PINOUT - TSSOP20 Package
+//
+// 		Pin 01 of mcu => PC0 / TM9OUT / PWMF0 
+// 		Pin 02 of mcu => RESET_N
+// 		Pin 03 of mcu => TEST
+// 		Pin 04 of mcu => PB0 / CMP1OUT / OUTCLK / PWMC / RXD0 / AIN2 / EXI4
+// 		Pin 05 of mcu => PB1 / TXD1 / TXD0 / PWMD / AIN3 / EXI5 
+// 		Pin 06 of mcu => PB2 / PWME / RXD1 / EXI6 
+// 		Pin 07 of mcu => PB3 / TXD1 / SIN / EXI7 
+// 		Pin 08 of mcu => PA2 / CMP0OUT / CLKIN / PWME / EXI2 
+// 		Pin 09 of mcu => TESTF
+// 		Pin 10 of mcu => PC3 / TMFOUT
+
+// 		Pin 11 of mcu => PC2 / PWMF2 
+// 		Pin 12 of mcu => PA1 / EXI1 / AIN1 / CMP1P / PWMD / LSCLK / TMFOUT
+// 		Pin 13 of mcu => PB4 / CMP0P / SOUT / TXD0 / TXD1
+// 		Pin 14 of mcu => PB5 / CMP0M / RXD0 / SCK / SCL / PWMF2
+// 		Pin 15 of mcu => PB6 / AIN4 / CLKIN / SDA / PWMF1
+// 		Pin 16 of mcu => VSS
+// 		Pin 17 of mcu => VDD
+// 		Pin 18 of mcu => PB7 / AIN5 / RXD1 / LSCLK / PWMF0 / PWMC
+// 		Pin 19 of mcu => PA0 / EXI0 / AIN0 / PWMC / OUTCLK / TM9OUT
+// 		Pin 20 of mcu => PC1 / PWMF1
+//
+//=============================================================================
 
 //*****************************************************************************
 // Microcontroller's connections on the LAPIS MCU Development Board to the 
 //  Plug 'n Play, Raspberry Pi Compatible, Universal Connectors:
-//
-// ================================ ML610Q111 ================================= 
 //
 // Pin-01 => 3.3V Power					Pin-02 => 5.0V Power (VBUS)
 // Pin-03 => I2C-SDA  (Q111 I/O B.6)	Pin-04 => no connection
@@ -43,10 +69,7 @@
 //*****************************************************************************
 
 //*****************************************************************************
-// Q111 Microcontroller's I/O Pins at J3 on the LAPIS MCU Development Board to the
-// LAPIS MCU Development Board 
-//
-// ================================ ML610Q111 ================================= 
+// Q111 Microcontroller's I/O Pins at J3 on the LAPIS MCU Development Board 
 //
 // Pin-01 => A.0				Pin-02 => A.1
 // Pin-03 => A.2				Pin-04 => B.0
@@ -65,30 +88,29 @@
  // INCLUDED FILES...
 	#include	<ML610111.H>	// Lapis Micro ML610Q111 on LAPIS MCU Development Board
 	#include	<stdlib.h>		// General-purpose utilities
-	#include 	<uart.h>		// UART Function Prototypes
+	#include	<stdio.h>		// I/O-related processing
 	#include 	<common.h>		// Common Definitions
 	#include 	<irq.h>			// IRQ Definitions
 	#include 	<mcu.h>			// MCU Definition
 	#include	<i2c.h>			// I2C Definition
-	#include	<stdio.h>		// I/O-related processing	
 	#include 	<tbc.h>			// Set TBC (Timer Based Clock) API
 	#include 	<timer.h>		// Timer Macros & APIs
-
-	#include	<float.h>		// Numerical limits for floating-point numbers	
-	#include	<string.h>		// Character string manipulation routines
-	#include	<yvals.h>		// Called for by most Header Files
-
-	#include 	<main.h>		// Clear WDT API
-	#include	<ctype.h>		// Character classification and conversion 
-	#include	<errno.h>		// Error identifiers Library
-	#include	<limits.h>		// Numerical limits for integers
 	#include	<math.h>		// Mathematical functions
-	#include	<muldivu8.h>	// Multiplication and Division accelerator
-	#include	<setjmp.h>		// Global jump (longjmp)
-	#include	<signal.h>		// Signal handling functions
-	#include	<stdarg.h>		// Variable numbers of arguments
-	#include	<stddef.h>		// Standard types and macros 
-	#include	<yfuns.h>		//  
+	#include 	<uart.h>		// UART Function Prototypes	
+	//#include	<float.h>		// Numerical limits for floating-point numbers	
+	//#include	<string.h>		// Character string manipulation routines
+	//#include	<yvals.h>		// Called for by most Header Files
+
+	//#include 	<main.h>		// Clear WDT API
+	//#include	<ctype.h>		// Character classification and conversion 
+	//#include	<errno.h>		// Error identifiers Library
+	//#include	<limits.h>		// Numerical limits for integers
+	//#include	<muldivu8.h>	// Multiplication and Division accelerator
+	//#include	<setjmp.h>		// Global jump (longjmp)
+	//#include	<signal.h>		// Signal handling functions
+	//#include	<stdarg.h>		// Variable numbers of arguments
+	//#include	<stddef.h>		// Standard types and macros 
+	//#include	<yfuns.h>		//  
 	
 //*****************************************************************************
  // I/O PIN DATA ALIASES...
@@ -133,6 +155,55 @@
 	#define LED8_pin		PB7D	//2013-04-18 (LaPi Plug 'n Play Board)
 	#define LED9_pin		PB6D	//2013-04-18 (LaPi Plug 'n Play Board)
 	
+	// ===== Commands for Parallax Serial LCD Display =====
+	#define LCD_Display_OFF			(  21U )
+	#define LCD_Display_ON_NoBlink	(  22U )
+	#define LCD_Display_ON 			(  25U )
+	#define LCD_Backlight_ON 		(  17U )
+	#define LCD_Backlight_OFF 		(  18U )
+	#define LCD_HOME 				( 128U )
+	#define LCD_Line2				( 148U )
+	
+	// ===== Serial Strings =====
+	#define WelcomeString		( "LAPIS Q111 LaPi DEV. DEMO") 
+	#define WelcomeString_LEN	( sizeof(WelcomeString) - 1 )
+
+	#define ClearLCD			( "                                ") 
+	#define ClearLCD_LEN		( sizeof(ClearLCD) - 1 )
+
+	#define DataHeaderString	( "My Sensor Data = \n\r")
+	#define DataHeaderString_LEN	( sizeof(DataHeaderString) - 1  )
+
+	#define AlarmString			( "MOTION DETECTED BY PIR SENSOR!  \n\r" ) 
+	#define AlarmString_LEN		( sizeof(AlarmString) - 1 )
+
+	#define NoAlarmString		( "PIR: NO MOTION  - ALL IS WELL!  \n\r" ) 
+	#define NoAlarmString_LEN	( sizeof(NoAlarmString) - 1 )
+
+	#define MagFieldString		( "MAGNETIC Field  DETECTED BY HALL\n\r" ) 
+	#define MagFieldString_LEN	( sizeof(MagFieldString) - 1 )
+
+	#define NoMagFieldString	( "HALL:NO MAGNETIC Field Detected!\n\r" ) 
+	#define NoMagFieldString_LEN	( sizeof(MagFieldString) - 1 )
+
+	#define OkayString			( "OKAY!\n\r") 
+	#define OkayString_LEN		( sizeof(OkayString) - 1 )
+
+	#define TestString			( "TESTING!") 
+	#define TestString_LEN		( sizeof(TestString) - 1 )
+
+	#define NewLineString		( "\n\r") 
+	#define NewLineString_LEN	( sizeof(NewLineString) - 1 )
+
+	#define FailureString		( "FAILURE!") 
+	#define FailureString_LEN	( sizeof(FailureString) - 1 )
+
+	#define SuccessString		( "SUCCESS!") 
+	#define SuccessString_LEN	( sizeof(SuccessString) - 1 )
+
+	#define PartSuccessString		( "PARTIALLY SUCCESSFUL!") 
+	#define PartSuccessString_LEN	( sizeof(PartSuccessString) - 1 )
+	
 
 //*****************************************************************************
 //===========================================================================
@@ -140,31 +211,30 @@
 //===========================================================================
 
 // ===== Peripheral setting.=====
-	#define HSCLK_KHZ				( 8192U ) 
-	//#define LSCLK_HZ				( 32768UL )
-	#define FLG_SET					( 0x01u )
+	#define HSCLK_KHZ	( 8000u )	// 8MHz = 8000kHz (will be multiplied by 1024 to give 8,192,000Hz)
+	#define FLG_SET	    ( 0x01u ) 	
 
-// ===== UART Setting =====
-	#define _OUTPUT_UART		// States that this micro has UART capabilities
+// ===== SET DESIRED UART SETTINGS HERE! (Options in UART.h) ================
+#define UART_BAUDRATE		( UART_BR_9600BPS) 		// Data Bits Per Second - Tested at rates from 2400bps to 512000bps!
+#define UART_DATA_LENGTH	( UART_LG_8BIT )		// x-Bit Data
+#define UART_PARITY_BIT		( UART_PT_NON )			// Parity
+#define UART_STOP_BIT		( UART_STP_1BIT )		// x Stop-Bits
+#define UART_LOGIC			( UART_NEG_POS )		// Desired Logic
+#define UART_DIRECTION		( UART_DIR_LSB )		// LSB or MSB First 
 
-	#define UART_BAUDRATE		( UART_BR_9600BPS )	// (Re-Open Port in GUI)
-	#define UART_DATA_LENGTH	( UART_LG_8BIT )
-	#define UART_PARITY_BIT		( UART_PT_NON )
-	#define UART_STOP_BIT		( UART_STP_1BIT )
-	#define UART_LOGIC			( UART_NEG_POS )
-	#define UART_DIRECTION		( UART_DIR_LSB )
+		// ===== UART Settings =====
+		//STRUCTURE:
+		static const tUartSetParam	_uartSetParam = { 
+			UART_BAUDRATE,
+			UART_DATA_LENGTH,
+			UART_PARITY_BIT,
+			UART_STOP_BIT,
+			UART_LOGIC,
+			UART_DIRECTION
+		};
+//===========================================================================
 
-//*****************************************************************************
-// Constants / Variables:
-	// ===== UART Settings =====
-	static const tUartSetParam	_uartSetParam = { 
-		UART_BAUDRATE,
-		UART_DATA_LENGTH,
-		UART_PARITY_BIT,
-		UART_STOP_BIT,
-		UART_LOGIC,
-		UART_DIRECTION
-	};
+
 
 //*****************************************************************************
 //===========================================================================
@@ -213,12 +283,18 @@
 	void _intI2c( void );
 	void _intADC( void );
 	
-	void TBC_ISR( void );			//TBC Interrupt Service Routine...
-	void TMR89_ISR( void );			//TIMER 8/9 Interrupt Service Routine...
-	void TMRAB_ISR( void );			//TIMER A/B Interrupt Service Routine...
-	void TMREF_ISR( void );			//TIMER E/F Interrupt Service Routine...
-	void ExtInt_ISR( void );		//External Interrupt Interrupt Service Routine...
-
+	void TBC_ISR( void );			// TBC Interrupt Service Routine...
+	void TMR89_ISR( void );			// TIMER 8/9 Interrupt Service Routine...
+	void TMRAB_ISR( void );			// TIMER A/B Interrupt Service Routine...
+	void TMREF_ISR( void );			// TIMER E/F Interrupt Service Routine...
+	void ExtInt_ISR( void );		// External Interrupt Interrupt Service Routine...
+	
+	void MyUART_Send ( void );		// no return value and no arguments
+	
+	void SerialLCDSplash (void);			// no return value and no arguments
+	void ClearSerialLCD (void);				// no return value and no arguments	
+	void SendLCDCmd(unsigned char LCDcmd);	// no return value - LCD CMD Argument
+	void LCD_Init (void);					// no return value and no arguments 
 //*****************************************************************************
 
 //GLOBALS...
@@ -228,6 +304,12 @@
 	unsigned char 	_flgI2CFin;
 	unsigned char	_flgADCFin;
 	unsigned char	_reqNotHalt;
+	
+	static unsigned char	MyData[200];		//Large Array...
+	static unsigned char	RecData[8];			//Small Array...for UART Receive, etc
+	static float			Sensor1_Data[10];	//Small Array...
+	static float			Sensor2_Data[10];	//Small Array...
+	static float			Sensor3_Data[10];	//Small Array...
 
 /*############################################################################*/
 /*#                                  APIs                                    #*/
@@ -249,7 +331,9 @@ int main(void)
 	int i,j,k,x,y;				// -32,768 to 32767
 
 	Init:
-		Initialization();		// Init Micro...(& UART)
+		Initialization();		// Init Micro...(Ports, Timers, OSC, IRQ's, UART, etc...)
+		LCD_Init();				// LCD Splash Display...
+		
 		main_clrWDT();
 		NOPx(10);				// Short Delay... 
 		
@@ -318,11 +402,11 @@ static void Initialization(void)
 
 	//Initialize Peripherals	
 		//BLKCON2 Control Bits...Manually Set 4/12/2013
-			DSIO0 = 1; // 0=> Enables Synchronous Serial Port 0 (initial value).
-			DUA0  = 1; // 0=> Enables the operation of UART0 (initial value).
-			DUA1  = 1; // 0=> Enables Uart1 (initial value). 
-			DI2C1 = 1; // 0=> Enables I2C bus Interface (Slave) (initial value).
-			DI2C0 = 0; // 0=> Enables I2C bus Interface (Master) (initial value).	
+			DSIO0 = 1; // 0=> Enables Synchronous Serial Port 0 
+			DUA0  = 1; // 0=> Enables the operation of UART0 
+			DUA1  = 1; // 0=> Enables Uart1 
+			DI2C1 = 1; // 0=> Enables I2C bus Interface (Slave) 
+			DI2C0 = 0; // 0=> Enables I2C bus Interface (Master)	
 	
 		BLKCON4 = 0x00; // SA-ADC: 0=> Enables ; 0xFF=> Disables
 		BLKCON6 = 0x00; // Timers 8, 9, A, E, F : 0=> Enables ; 0xFF=> Disables
@@ -336,7 +420,6 @@ static void Initialization(void)
 		PortB_Low();	//Initialize all 8 Ports of Q111 Port B to GPIO-Low
 		PortC_Low();	//Initialize all 4 Ports of Q111 Port C to GPIO-Low
 
-	//UART Initialization to 9600-8-N-1 
 
 
 	// ===== PWM =====	
@@ -397,10 +480,42 @@ static void Initialization(void)
 				PA0MD1  = 0;		// PortA Bit0 set Purpose to GENERAL PURPOSE Input/Output...
 				PA0MD0  = 0; */
 
+	//================== STANDBY CONTROL REGISTER===================================
+	//
+	// SBYCON is a 2-bit special function register to control operating mode of MCU
+	//		STP   :   HLT
+	// 		BIT 1 :  BIT 0
+	//  	 0         0     => Program RUN mode (initial value)
+	//  	 0         1     => HALT mode
+	//  	 1         0     => STOP mode
+	//  	 1         1     => (Prohibited)
+	// See ML610Q111/ML610Q112 User Manual - Section 4: MCU Control Function
+		SBYCON = 0;		// Program RUN mode
+	//==============================================================================
 
-    
-	// IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
+	//================== VOLTAGE LEVEL SUPERVISOR REGISTER =========================
+	// 
+	// The Q11x mcu's have two channels of VOLTAGE LEVEL SUPERVISORs
+	// Accuracy is ±3%
+	//
+	// The threshold voltages of VLS0 (VDD fall) : 2.85V (Typ. )
+	//								  (VDD rise) : 2.92V (Typ. )
+	//
+	// The threshold voltages of VLS1 (VDD fall) : 4 types selectable 3.3V/ 3.6V/ 3.9V/ 4.2V (Typ.)
+	// The VLS0 can be used as the low voltage level detector reset.
+	// 
+	// See ML610Q111/ML610Q112 User Manual - Section 22: Voltage Level Supervisor
+	//
+	//==============================================================================
+
+  	// IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 	// INTERRUPT SETUP...
+		//	The ML610Q1xx mcu's have 31 hardware interrupt sources 
+		//		 7 External Interrupt Sources
+		//		24 Internal Interrupt Sources 
+		// EXAMPLE: WDT; VLS; EXTERNAL INT Pins (6); SPI; ADC; I2C (Slave); I2C (Master);
+		//			TIMERS (6); UART; Comparators (2); PWM's ((4); TBC (4)		
+	
 		irq_di();	// Disable Interrupts
 		irq_init();	// Initialize Interrupts (All Off and NO Requests)
 			//====================================================================
@@ -546,7 +661,8 @@ static void Initialization(void)
 					PB3SM = 0;
 			// -----
 			//------------- SET UP EXTERNAL INTERRUPT on B.3 -----------------------------------------
-				(void)irq_setHdr( (unsigned char)IRQ_NO_PB3INT, ExtInt_ISR );  //Clear interrupt request flag
+			//Options include following pins: A.0; A.1; A.2. B.0; B.1; B.2 & B.3
+			(void)irq_setHdr( (unsigned char)IRQ_NO_PB3INT, ExtInt_ISR );  //Clear interrupt request flag
 					EPB3 = 0;	//1=> Enables Interrupt
 					QPB3 = 0;	//Enables Request Flag (need to set to 
 			//----------------------------------------------------------------------------------------
@@ -555,6 +671,21 @@ static void Initialization(void)
 	irq_ei(); // Enable Interrupts
 	// IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII 
 
+	// ===== UART Initialization ================================================
+	//
+	//	Pin PB0 of mcu => RX  
+	// 	Pin PB1 of mcu => TX 
+	// 
+		(void)uart_init( (unsigned char)UART_CS_HSCLK,	// Generator       				
+			     (unsigned short)HSCLK_KHZ,				// HSCLK frequency 				
+			     &_uartSetParam );						// Parameters from Structure    
+		uart_PortSet();									// Set UART Port Pins
+		_flgUartFin = 0;
+		uart_stop();
+	//
+	//===========================================================================
+	
+	
 
 	// SET UP WATCH DOG TIMER...
 		WDTMOD = 0x03; 	// 0x03=overflow 8sec...
@@ -1121,3 +1252,132 @@ xxx = MyCount;
 	ONCNT = 0;			// Reset Counter 
 }
 //===========================================================================
+
+//===========================================================================
+void MyUART_Send(void){
+	int i;
+
+	
+	for(i = 0; i<150; i++)
+	{
+		MyData[i] = 0x20;		// Clear Data Array...
+	}
+
+	sprintf(MyData, "%f,%f,%f", Sensor1_Data, Sensor2_Data, Sensor3_Data);
+	
+	MyData[148] = 0x0D;	//CR
+	MyData[149] = 0x0A;	//LF
+	
+	//Send Returned Sensor Output to PC!
+	_flgUartFin = 0;
+	uart_stop();
+	uart_startSend(MyData, 150, _funcUartFin);
+	while(_flgUartFin != 1){
+		main_clrWDT();
+	}
+}
+//===========================================================================
+
+
+//===========================================================================
+void MyUART_Receive(void){
+	
+		//Begin UART Receive
+		_flgUartFin = 0;
+		uart_stop();
+		uart_startReceive(RecData, 8, _funcUartFin);
+		while(_flgUartFin != 1){
+			main_clrWDT();
+		}
+		
+		if(RecData[0] == 0x44){			//if RecData == "DD" for Data Dump
+			if(RecData[1] == 0x44){
+			//...your code here...	
+			}
+		}
+}
+//===========================================================================
+
+
+
+//===========================================================================
+//Simple function to demonstrate Serial LCD
+void SerialLCDSplash (void)
+{
+	SendLCDCmd(LCD_Display_ON_NoBlink);
+	SendLCDCmd(LCD_Backlight_ON);
+	SendLCDCmd(LCD_HOME);
+
+	uartSendStr( ClearLCD,(unsigned char)ClearLCD_LEN);
+	uartSendStr( WelcomeString,(unsigned char)WelcomeString_LEN);
+}
+//===========================================================================
+
+//===========================================================================
+//Simple function to REFRESH/CLEAR Serial LCD Screen
+void ClearSerialLCD (void)
+{
+	SendLCDCmd(LCD_Display_ON_NoBlink);
+	SendLCDCmd(LCD_Backlight_ON);
+	SendLCDCmd(LCD_HOME);
+	uartSendStr( ClearLCD,(unsigned char)ClearLCD_LEN);
+}
+//===========================================================================
+
+//===========================================================================
+//Simple function to send commands to Serial LCD
+void SendLCDCmd(unsigned char LCDcmd)
+{
+	U0IO = 0; 		// 0 = Transmit mode (initial value)			
+	UA0BUF = LCDcmd;	// Load LCDcmd into Buffer...
+	U0EN = 1;		// START COMMUNICATION...		
+
+	while(U0EN != 0)	// In transmit mode, this bit is automatically set to 0 at termination of transmission.
+	{
+		;
+	}
+
+
+	QUA0 = 0;		//QUA0 is the request flag for the UART0 interrupt
+}
+//===========================================================================
+
+//===========================================================================
+void LCD_Init(void){
+	int i;
+
+	
+	for(i = 0; i<150; i++)
+	{
+		MyData[i] = 0x20;		// Clear Data Array...
+	}
+
+
+	//1.) Display ON - NO BLINK; 
+	//2.) Turn ON Back-Light
+	//3.) Move Cursor to Home
+	//sprintf(MyData, "%u, %u, %u", LCD_Display_ON_NoBlink, LCD_Backlight_ON, LCD_HOME);
+	sprintf("%u", LCD_Backlight_ON);
+	
+	
+	//uartSendStr( ClearLCD,(unsigned char)ClearLCD_LEN);
+	//uartSendStr( WelcomeString,(unsigned char)WelcomeString_LEN);
+
+
+
+	sprintf(MyData, "%f,%f,%f", Sensor1_Data, Sensor2_Data, Sensor3_Data);
+	
+	MyData[148] = 0x0D;	//CR
+	MyData[149] = 0x0A;	//LF
+	
+	//Send Returned Sensor Output to PC!
+	_flgUartFin = 0;
+	uart_stop();
+	uart_startSend(MyData, 150, _funcUartFin);
+	while(_flgUartFin != 1){
+		main_clrWDT();
+	}
+}
+//===========================================================================
+	
+

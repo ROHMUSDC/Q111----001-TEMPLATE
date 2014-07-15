@@ -66,7 +66,7 @@
 
 #include "common.h"
 #include "mcu.h"
-#include "uart.h"
+#include "uart.h" 
 
 /*############################################################################*/
 /*#                                  Macro                                   #*/
@@ -146,32 +146,32 @@
 #define UA0STAT_U0FUL		( 0x8u )		/* UA0STAT Register U0FUL bit */
 
 // PORTB Direction Register
-#define PBDIR_B0DIR		( 0x01u ) 		// RX pin
-#define PBDIR_B13DIR		( 0x02u ) 	// TX pin
+#define PBDIR_B0DIR			( 0x01u ) 		// RX pin
+#define PBDIR_B13DIR		( 0x02u ) 		// TX pin
 
 ///* PBCON0 */
-#define PBCON0_B0C0		( 0x01u ) // RX pin
-#define PBCON0_B1C0		( 0x02u ) // TX pin
+#define PBCON0_B0C0			( 0x01u ) 		// RX pin
+#define PBCON0_B1C0			( 0x02u ) 		// TX pin
 
 ///* PBCON1 */
-#define PBCON1_B0C1		( 0x01u ) // RX pin
-#define PBCON1_B1C1		( 0x02u ) // TX pin
+#define PBCON1_B0C1			( 0x01u ) 		// RX pin
+#define PBCON1_B1C1			( 0x02u ) 		// TX pin
 
 ///* PBMOD0 */
-#define PBMOD0_B0MD0		( 0x01u ) // RX pin
-#define PBMOD0_B1MD0		( 0x02u ) // TX pin
+#define PBMOD0_B0MD0		( 0x01u ) 		// RX pin
+#define PBMOD0_B1MD0		( 0x02u ) 		// TX pin
 
 ///* PBMOD1 */
-#define PBMOD1_B0MD1		( 0x01u ) // RX pin
-#define PBMOD1_B1MD1		( 0x02u ) // TX pin
+#define PBMOD1_B0MD1		( 0x01u ) 		// RX pin
+#define PBMOD1_B1MD1		( 0x02u ) 		// TX pin
 
 ///*=== control parameter for UART ===*/
 typedef struct {
 	unsigned char *	data;			/* pointer to area where the send/receive data is stored	*/
-	unsigned int	size;			/* size of send/receive data						*/
-	unsigned int	cnt;			/* size of data which is sent/received				*/
-	cbfUart		callBack;		/* callback function							*/
-	unsigned char	errStat;		/* error status								*/
+	unsigned int	size;			/* size of send/receive data								*/
+	unsigned int	cnt;			/* size of data which is sent/received						*/
+	cbfUart		callBack;			/* callback function										*/
+	unsigned char	errStat;		/* error status												*/
 } tUartCtrlParam; 
 
 /*############################################################################*/
@@ -211,76 +211,138 @@ void _send_byte(unsigned char c);
 //	Communication speed: Settable within the range of 2400bps to 115200bps.
 //	Built-in baud rate generator.
 
-void uart_0_Init( void )  	//Setup UART0 on PortB
+/*******************************************************************************
+	Routine Name:	uart_init
+	Form:			int uart_init( unsigned char cs,unsigned short kHz,tUartSetParam *prm)
+	Parameters:		unsigned char cs : choice of the clock oscillator inputted into the baud rate generator
+					UART_CS_LSCLK(=0)  : LSCLK
+					UART_CS_LSCLK2(=1) : LSCLK * 2
+					UART_CS_HSCLK(=2)  : HSCLK
+				unsigned short kHz       : frequency of HSCLK (this parameter is referred only HSCLK is chosen as the clock oscillator)
+				const tUartSetParam *prm : setting parameters
+	Return value:	int
+					UART_R_OK(=0)       : the UART is initialized
+					UART_R_ERR_CS(=-1)  : improper choice of the clock oscillator
+					UART_R_ERR_BR(=-2)  : improper choice of baud rate
+					UART_R_ERR_LG(=-3)  : data length is out of range
+					UART_R_ERR_PT(=-4)  : parity setting is out of range
+					UART_R_ERR_STP(=-5) : stop bit length is out of range
+					UART_R_ERR_NEG(=-6) : improper setting (positive logic/negative logic)
+					UART_R_ERR_DIR(=-7) : improper setting of significant bit (LSB/MSB)
+	Description:	initialize UART
+******************************************************************************/
+int uart_init( unsigned char cs, unsigned short kHz , const tUartSetParam *prm )
 {
-
-
-	//Set Up BAUD Rate based on UART_CalcBAUD variable... 
-	UA0BRT = ( unsigned short )( ( ( HSCLK_kHZ * 1000UL ) / UART_CalcBAUD ) - 1 );
-
-
-//Step 1: Set Pin Direction...
-//Step 2: Set Pin I/O Type...
-//Step 3: Set Pin Purpose...
-//Step 4: Set Pin Data...
-
-//UA0BUF
-
-	//Direction...	
-	PB0DIR = 1;		// PortB Bit0 set to Input  Mode...UART-RX
-	PB1DIR = 0;		// PortB Bit1 set to Output Mode...UART-TX
-
-	//I/O Type...
-	PB0C1  = 1;		// PortB Bit0 set to (High-impedance input when PBxDIR=1)...
-	PB0C0  = 1;		
-	PB1C1  = 1;		// PortB Bit1 set to CMOS Output... 
-	PB1C0  = 1;	
-
-	//Port B Mode Registers (Purpose)...C. Schell 4-11-2013
-	PB0MD1  = 0;	// PortB Bit0 set to General-purpose input/output mode (initial value)
-	PB0MD0  = 0;	
-	PB1MD1  = 1;	// PortB Bit1 set to UART0 data output pin
-	PB1MD0  = 0;	
-
-	// SETUP UART 0...- C. Schell April 11th, 2013	
-		//UART0 Control Register (UA0CON)
-		U0EN = 0;	 // 0 = Stops communication. (Initial value)
-		
-	//UART0 Mode Register 0 (UA0MOD0)
-		U0IO   = 0;	 // 0 = Transmit mode (initial value)
-
-		U0CK1  = 1;	 // 10 => Select the HSCLK clock to be input to the baud rate generator of the UART0 		
-		U0CK0  = 0;
-
-		U0RSEL = 0;	 // 0 = Selects the PB0 pin as the RX Pin;
-
-		U0RSS = 1;   // U0RSS bit is used to select the received data input sampling timing for the UART0...WAS 0!
-
-	// UART0 Mode Register 1 (UA0MOD1)
-		U0LG1 = 0;	 // 00=> 8-bit data length (initial value)... 
-		U0LG0 = 0;
-
-		U0PT1 = 1;	 // 10=> No PARITY bit (initial value)
-		U0PT0 = 0;
-
-		U0STP = 0;	 // 0=> 1-stop-bit (initial value)
-
-		U0NEG = 0;	 // 0=> Positive Logic (initial value)
-
-		U0DIR = 0;	 // 0=> LSB first (initial value)
-
-
-	// UART0 Baud Rate Registers //Manually set to 9600 BAUD
-		//UA0BRTH = 0x03; // $0354 => 9600bps with 8.192MHz Clock (Approximately 104-us)
-		//UA0BRTL = 0x54;	
-
-	// UART0 Status Register
-		//UA0BUF is a special function register (SFR) to store the transmitted/received data of the UART.
-		//In transmit mode, write transmission data to UA0BUF. To transmit the data consecutively, confirm the U0FUL flag of the
-		//UART0 status register (UA0STAT) becomes "0", then write the next transmitted data to the UA0BUF. Any value written
-		//to UA0BUF can be read.		
-
+	unsigned long br_clk;	//BAUD RATE CLOCK
+	unsigned long br_cnt;	//BAUD RATE COUNT
+	unsigned char setbit;
 	
+	/*=== A parameter check. ===*/
+	switch( (int)cs ){		//BAUD RATE CLOCK SET HERE...
+		/*--- LSCLK ---*/
+		case UART_CS_LSCLK:
+			br_clk = (unsigned long)32768;	  // i.e.: 32.768 kHz
+			break;
+		/*--- LSCLK x 2 ---*/
+		case UART_CS_LSCLK2:
+			br_clk = (unsigned long)(32768 * 2);  // i.e.: 65.536 kHz
+			break;
+		/*--- HSCLK ---*/
+		case UART_CS_HSCLK:
+			br_clk = (unsigned long)kHz * 1024UL; // i.e.: 8.192 MHz	
+			break;
+		/*--- Others ---*/
+		default:
+			return ( UART_R_ERR_CS );		  // else CS error
+	} 
+	br_cnt = br_clk / prm->br;
+	if( br_cnt == 0UL ){			//If Baud Rate Count = zero...Return Baud Rate Error Flag
+		return ( UART_R_ERR_BR );
+	}
+	br_cnt -= 1UL;
+	
+
+	if( prm->lg > (unsigned char)UART_LG_5BIT ){
+		return ( UART_R_ERR_LG );
+	}
+	if( prm->pt > (unsigned char)UART_PT_NON ){
+		return ( UART_R_ERR_PT );
+	}
+	if( prm->stp > (unsigned char)UART_STP_2BIT ){
+		return ( UART_R_ERR_STP );
+	}
+	if( prm->neg > (unsigned char)UART_NEG_NEG ){
+		return ( UART_R_ERR_NEG );
+	}
+	if( prm->dir > (unsigned char)UART_DIR_MSB ){
+		return ( UART_R_ERR_DIR );
+	}
+	
+	
+	/*=== Variable setting. ===*/
+		_gsCtrlParam.data		= (void *)0;
+		_gsCtrlParam.size		= 0;
+		_gsCtrlParam.cnt		= 0;
+		_gsCtrlParam.callBack	= (void *)0;
+		_gsCtrlParam.errStat	= 0;
+	
+	/*=== Register setting. ===*/
+	/*---	An uart communication stop	---*/
+		U0EN = 0;
+
+	/*---	Port setting.	---*/
+		uart_PortClear();
+
+	/*---	Input clock choice to the baud rate generator	---*/
+		setbit = UA0MOD0;
+		setbit &= (unsigned char)( ~(UA0MOD0_U0CK0|UA0MOD0_U0CK1) );
+		setbit |= (unsigned char)( cs << 1 );
+		setbit |= (unsigned char)UA0MOD0_U0RSEL;
+		UA0MOD0 = setbit;
+		U0RSEL = 0;
+	
+	/*---	Communication setting	---*/
+		setbit = UA0MOD1;
+		setbit &= (unsigned char)( ~(UA0MOD1_U0LG0|UA0MOD1_U0LG1|UA0MOD1_U0PT0|UA0MOD1_U0PT1|UA0MOD1_U0STP|UA0MOD1_U0NEG|UA0MOD1_U0DIR) );
+		setbit |= (unsigned char)( (prm->lg  << 0) | 
+			                   (prm->pt  << 2) | 
+			                   (prm->stp << 4) | 
+			                   (prm->neg << 5) | 
+			                   (prm->dir << 6) );
+		UA0MOD1 = setbit;
+
+	/*---	Baud rate count value setting(1)	---*/
+		UA0BRTL = (unsigned char)(br_cnt & 0x000000FF);
+
+	/*---	Baud rate count value setting(2)	---*/
+		setbit = UA0BRTH;
+		setbit &= (unsigned char)( ~(UA0BRTH_U0BR8|UA0BRTH_U0BR9|UA0BRTH_U0BR10|UA0BRTH_U0BR11) );
+		setbit |= (unsigned char)( (br_cnt >> 8) & (UA0BRTH_U0BR8|UA0BRTH_U0BR9|UA0BRTH_U0BR10|UA0BRTH_U0BR11) );
+		UA0BRTH = setbit;
+
+//TO MANUALLY SET BAUD RATE:
+
+//With 8.192MHz Clock
+//	=BAUD=	=COUNT=	=Period per Bit=		=UAxBRTH=	=UAxBRTL=	=%ERROR=
+//	2400bps 	3413 		Approximately 417us 	0x0D 		0x54		 0.01
+//	4800bps 	1707 		Approximately 208us 	0x06 		0xAA		-0.02
+//	9600bps 	853 		Approximately 104us 	0x03 		0x54		 0.04
+//	19200bps 	427 		Approximately 52us 	0x01 		0xAA		-0.08
+//	38400bps 	213 		Approximately 26us 	0x00 		0xD4		 0.16
+//	57600bps 	142 		Approximately 17.4us 	0x00 		0x8D		 0.16
+//	115200bps 	71 		Approximately 8.7us 	0x00 		0x46		 0.16
+
+
+	//UA0BRTH = 0x0D;	//2400 BAUD
+	//UA0BRTL = 0x54;
+
+	/*---	Communication status is clear	---*/
+		U0FER = 0;	// Clear Framing Error Flag to start...
+		U0OER = 0;	// Clear Overrun Error Flag to start...
+		U0PER = 0;	// Clear Parity Error Flag to start...
+		U0FUL = 0;	// Clear Buffer Full Flag to start...
+
+	return ( UART_R_OK );
 }
 
 void uartSendStr( char* str, unsigned char num  )

@@ -16,24 +16,20 @@
 
     History
     2012.10.12  ver.1.00
-    2013.04.18  ver.1.10	//Modified for Q100 Series micros	
 ******************************************************************************/
+
 #ifndef _MCU_H_			//MCU H....	
 #define _MCU_H_
+#endif //MCU H....
 
-#ifndef _ML610111_ 		//Force ML610Q11x
+
+#ifndef _ML610111_		//Force ML610Q111
 #define _ML610111_
-
-#if defined (_ML610111_)  	//If Q111...
 #include <ML610111.H>
+#endif //If Q111...
 
-#elif defined (_ML610112_)  	//If Q112...
-#include <ML610112.H>
+//#ifndef _ML610112_			//Force ML610Q112
+//#define _ML610112_
+//#include <ML610112.H>
+//#endif //If Q112...		
 
-#else
-#error "Unknown target MCU!"
-
-
-#endif //If Q111 / Else If Q112 / Else Error...
-#endif //Force ML610Q11x
-#endif //MCU H....	

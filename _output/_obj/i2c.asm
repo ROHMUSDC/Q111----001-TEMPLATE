@@ -1,9 +1,8 @@
-;; Compile Options : /TML610111 /MS /near /Icommon /Imain /Iirq /Itimer /Itbc /Ipwm /Iuart /Ii2c /SS 256 /SD /Oa /Ot /W 1 /Ff /Fa_output\_obj\ 
+;; Compile Options : /TML610111 /MS /near /LE /Ii2c /Iirq /Imain /Itbc /Itimer /Iuart /Icommon /Imath /Istdio /Istdlib /Istring /Iyvals /CT _output\_prn\i2c.cal /SS 256 /SD /Oa /Ot /W 3 /Zg /Fa_output\_obj\ /Lv /Zs 
 ;; Version Number  : Ver.3.41.8
 ;; File Name       : i2c.c
 
 	type (ML610111) 
-	fastfloat
 	model small, near
 	$$NINITVAR segment data 2h #0h
 	$$NINITTAB segment table 2h any
@@ -18,12 +17,12 @@
 CVERSION 3.41.8
 CGLOBAL 01H 02H 0000H "i2c_getTransSize" 08H 02H 08H 00H 80H 00H 00H 00H 01H
 CGLOBAL 01H 03H 0000H "i2c_stop" 08H 02H 05H 00H 80H 00H 00H 00H 07H
-CGLOBAL 01H 03H 0000H "i2c_startReceive" 08H 02H 03H 00H 82H 04H 00H 00H 01H
-CGLOBAL 01H 03H 0000H "i2c_continue" 08H 02H 04H 00H 81H 06H 00H 00H 01H
-CGLOBAL 01H 03H 0000H "i2c_startSend" 08H 02H 02H 00H 82H 04H 00H 00H 01H
-CGLOBAL 01H 03H 0000H "i2c_init" 08H 02H 01H 00H 83H 0cH 00H 00H 01H
+CGLOBAL 01H 03H 0000H "i2c_startReceive" 08H 02H 03H 00H 82H 06H 00H 00H 01H
+CGLOBAL 01H 03H 0000H "i2c_continue" 08H 02H 04H 00H 83H 0eH 00H 00H 01H
+CGLOBAL 01H 03H 0000H "i2c_startSend" 08H 02H 02H 00H 82H 06H 00H 00H 01H
+CGLOBAL 01H 03H 0000H "i2c_init" 08H 02H 01H 00H 83H 0eH 00H 00H 01H
 CGLOBAL 01H 03H 0000H "i2c_clearIRQ" 08H 02H 07H 00H 80H 00H 00H 00H 07H
-CGLOBAL 01H 03H 0000H "i2c_checkIRQ" 08H 02H 06H 00H 80H 00H 00H 00H 01H
+CGLOBAL 01H 03H 0000H "i2c_checkIRQ" 08H 02H 06H 00H 82H 06H 00H 00H 01H
 CSTRUCTTAG 0000H 0000H 0001H 0009H 00000010H "_Notag"
 CSTRUCTMEM 42H 00000001H 00000000H "mode" 02H 00H 00H
 CSTRUCTMEM 42H 00000002H 00000002H "addr" 04H 03H 00H 00H 00H
@@ -47,7 +46,7 @@ CTYPEDEF 0000H 0000H 43H "cbfI2c" 0AH 03H 00H 02H 00H 00H 00H 00H 00H 00H 07H
 CTYPEDEF 0000H 0000H 43H "tI2cCtrlParam" 04H 00H 05H 01H 00H
 CTYPEDEF 0000H 0000H 43H "_BYTE_FIELD" 04H 00H 05H 00H 00H
 CSGLOBAL 43H 0010H "_gsCtrlParam" 04H 00H 05H 01H 00H
-CFILE 0001H 00000028H "main\\mcu.h"
+CFILE 0001H 00000024H "main\\mcu.h"
 CFILE 0002H 000007EEH "main\\ML610111.H"
 CFILE 0003H 00000045H "i2c\\i2c.h"
 CFILE 0000H 0000022BH "i2c\\i2c.c"
@@ -60,26 +59,35 @@ CBLOCK 1 1 151
 
 ;;{
 CLINEA 0000H 0001H 0097H 0001H 0001H
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+	_syn$4	set	4
+	_rate_cyc$4	set	-2
+	_rate_khz$6	set	-4
+	_down$2	set	-5
+;;*****************************************
+
 	push	lr
 	push	fp
 	mov	fp,	sp
+	add	sp,	#-06
 	push	xr8
-	push	xr4
 	mov	r8,	r0
 	mov	er10,	er2
 CBLOCK 1 2 151
-CRET 000AH
+CRET 000CH
 CARGUMENT 46H 0001H 001CH "mode" 02H 00H 00H
 CARGUMENT 46H 0002H 0029H "kHz" 02H 00H 01H
 CARGUMENT 42H 0001H 0004H "syn" 02H 00H 00H
 CLOCAL 4AH 0001H 0000H 0002H "setbit" 02H 00H 00H
-CLOCAL 46H 0001H 0016H 0002H "down" 02H 00H 00H
-CLOCAL 46H 0002H 0026H 0002H "rate_cyc" 02H 00H 08H
-CLOCAL 46H 0002H 0027H 0002H "rate_khz" 02H 00H 08H
+CLOCAL 42H 0001H 0005H 0002H "down" 02H 00H 00H
+CLOCAL 42H 0002H 0002H 0002H "rate_cyc" 02H 00H 08H
+CLOCAL 42H 0002H 0004H 0002H "rate_khz" 02H 00H 08H
 
 ;;	if( syn > (unsigned char)I2C_SYN_ON ){
 CLINEA 0000H 0001H 009EH 0002H 0027H
-	l	r0,	4[fp]
+	l	r0,	_syn$4[fp]
 	cmp	r0,	#01h
 	ble	_$L1
 CBLOCK 1 3 158
@@ -93,7 +101,6 @@ CBLOCKEND 1 2 226
 ;;}
 CLINEA 0000H 0001H 00E2H 0001H 0001H
 _$L0 :
-	pop	xr4
 	pop	xr8
 	mov	sp,	fp
 	pop	fp
@@ -111,13 +118,13 @@ CBLOCK 1 4 162
 
 ;;		rate_cyc = (unsigned short)I2C_STD_CYC;
 CLINEA 0000H 0001H 00A3H 0003H 0029H
-	mov	r4,	#050h
-	mov	r5,	#00h
+	mov	r0,	#050h
+	mov	r1,	#00h
+	st	er0,	_rate_cyc$4[fp]
 
 ;;		rate_khz = (unsigned short)I2C_STD_KHZ;
 CLINEA 0000H 0001H 00A4H 0003H 0029H
-	mov	r6,	#064h
-	mov	r7,	#00h
+	mov	r0,	#064h
 CBLOCKEND 1 4 165
 
 ;;	else if( mode == (unsigned char)I2C_MOD_FST ){
@@ -132,24 +139,27 @@ CBLOCK 1 5 166
 
 ;;		rate_cyc = (unsigned short)I2C_FST_CYC;
 CLINEA 0000H 0001H 00A7H 0003H 0029H
-	mov	er4,	#20
+	mov	er0,	#20
+	st	er0,	_rate_cyc$4[fp]
 
 ;;		rate_khz = (unsigned short)I2C_FST_KHZ;
 CLINEA 0000H 0001H 00A8H 0003H 0029H
-	mov	r6,	#090h
-	mov	r7,	#01h
+	mov	r0,	#090h
+	mov	r1,	#01h
 CBLOCKEND 1 5 169
 
 ;;	}
 CLINEA 0000H 0000H 00ACH 0002H 0002H
 _$L5 :
+	st	er0,	_rate_khz$6[fp]
 
 ;;	if( ( kHz / rate_cyc ) <= rate_khz ){
 CLINEA 0000H 0001H 00AEH 0002H 0026H
 	mov	er0,	er10
-	mov	er2,	er4
+	l	er2,	_rate_cyc$4[fp]
 	bl	__uidivu8sw
-	cmp	er0,	er6
+	l	er2,	_rate_khz$6[fp]
+	cmp	er0,	er2
 	bgt	_$L9
 CBLOCK 1 7 174
 
@@ -161,18 +171,20 @@ CLINEA 0000H 0001H 00AFH 0003H 0021H
 CLINEA 0000H 0001H 00B1H 0002H 004DH
 	bal	_$L17
 _$L9 :
-	mov	er0,	er4
+	l	er0,	_rate_cyc$4[fp]
+	mov	er2,	er0
 	sllc	r1,	#02h
 	sll	r0,	#02h
-	add	er0,	er4
+	add	er0,	er2
 	add	er0,	er0
-	add	er0,	er4
+	add	er0,	er2
 	mov	r2,	#0ah
 	div	er0,	r2
 	mov	er2,	er0
 	mov	er0,	er10
 	bl	__uidivu8sw
-	cmp	er0,	er6
+	l	er2,	_rate_khz$6[fp]
+	cmp	er0,	er2
 	bgt	_$L12
 CBLOCK 1 8 177
 
@@ -184,9 +196,10 @@ CLINEA 0000H 0001H 00B2H 0003H 0022H
 CLINEA 0000H 0001H 00B4H 0002H 004DH
 	bal	_$L17
 _$L12 :
-	mov	er0,	er4
-	add	er0,	er4
-	add	er0,	er4
+	l	er0,	_rate_cyc$4[fp]
+	mov	er2,	er0
+	add	er0,	er0
+	add	er0,	er2
 	sllc	r1,	#02h
 	sll	r0,	#02h
 	mov	r2,	#0ah
@@ -194,7 +207,8 @@ _$L12 :
 	mov	er2,	er0
 	mov	er0,	er10
 	bl	__uidivu8sw
-	cmp	er0,	er6
+	l	er2,	_rate_khz$6[fp]
+	cmp	er0,	er2
 	bgt	_$L15
 CBLOCK 1 9 180
 
@@ -207,18 +221,20 @@ CBLOCKEND 1 9 182
 CLINEA 0000H 0001H 00B7H 0002H 004DH
 	bal	_$L17
 _$L15 :
-	mov	er0,	er4
-	add	er0,	er4
-	add	er0,	er4
+	l	er0,	_rate_cyc$4[fp]
+	mov	er2,	er0
+	add	er0,	er0
+	add	er0,	er2
 	sllc	r1,	#02h
 	sll	r0,	#02h
-	add	er0,	er4
+	add	er0,	er2
 	mov	r2,	#0ah
 	div	er0,	r2
 	mov	er2,	er0
 	mov	er0,	er10
 	bl	__uidivu8sw
-	cmp	er0,	er6
+	l	er2,	_rate_khz$6[fp]
+	cmp	er0,	er2
 	bgt	_$L18
 CBLOCK 1 10 183
 
@@ -230,7 +246,7 @@ CBLOCKEND 1 10 185
 ;;	}
 CLINEA 0000H 0000H 00BCH 0002H 0002H
 _$L17 :
-	mov	r2,	r0
+	st	r0,	_down$2[fp]
 CBLOCKEND 1 8 226
 
 ;;	_gsCtrlParam.mode		= 0;
@@ -319,10 +335,10 @@ CLINEA 0000H 0001H 00D8H 0002H 001AH
 CLINEA 0000H 0001H 00DFH 0002H 0012H
 	mov	r0,	r8
 	sll	r0,	#01h
-	mov	r1,	r2
+	l	r1,	_down$2[fp]
 	sll	r1,	#02h
 	or	r1,	r0
-	l	r0,	4[fp]
+	l	r0,	_syn$4[fp]
 	sll	r0,	#04h
 	or	r0,	r1
 	or	r0,	#01h
@@ -367,8 +383,19 @@ CBLOCK 2 1 243
 
 ;;{
 CLINEA 0000H 0001H 00F3H 0001H 0001H
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+	_addr_size$4	set	2
+	_data$6	set	4
+	_data_size$8	set	6
+	_func$10	set	8
+	_errStat$0	set	-1
+;;*****************************************
+
 	push	fp
 	mov	fp,	sp
+	add	sp,	#-02
 	push	er8
 	mov	r8,	r0
 CBLOCK 2 2 243
@@ -378,7 +405,7 @@ CARGUMENT 42H 0002H 0002H "addr_size" 02H 00H 01H
 CARGUMENT 42H 0002H 0004H "data" 04H 03H 00H 00H 00H
 CARGUMENT 42H 0002H 0006H "data_size" 02H 00H 01H
 CARGUMENT 43H 0002H 0008H "func" 0AH 03H 00H 02H 00H 00H 00H 00H 00H 00H 07H
-CLOCAL 46H 0001H 0014H 0002H "errStat" 02H 00H 00H
+CLOCAL 42H 0001H 0001H 0002H "errStat" 02H 00H 00H
 
 ;;	_gsCtrlParam.mode		= 0;	/* send */
 CLINEA 0000H 0001H 00F7H 0002H 0023H
@@ -391,17 +418,17 @@ CLINEA 0000H 0001H 00F8H 0002H 001BH
 
 ;;	_gsCtrlParam.addr_size	= addr_size;
 CLINEA 0000H 0001H 00F9H 0002H 0024H
-	l	er0,	2[fp]
+	l	er0,	_addr_size$4[fp]
 	st	er0,	NEAR __gsCtrlParam+04h
 
 ;;	_gsCtrlParam.data		= data;
 CLINEA 0000H 0001H 00FAH 0002H 001BH
-	l	er0,	4[fp]
+	l	er0,	_data$6[fp]
 	st	er0,	NEAR __gsCtrlParam+06h
 
 ;;	_gsCtrlParam.data_size	= data_size;
 CLINEA 0000H 0001H 00FBH 0002H 0024H
-	l	er0,	6[fp]
+	l	er0,	_data_size$8[fp]
 	st	er0,	NEAR __gsCtrlParam+08h
 
 ;;	_gsCtrlParam.cnt		= 0;
@@ -411,7 +438,7 @@ CLINEA 0000H 0001H 00FCH 0002H 0017H
 
 ;;	_gsCtrlParam.callBack	= func;
 CLINEA 0000H 0001H 00FDH 0002H 001EH
-	l	er0,	8[fp]
+	l	er0,	_func$10[fp]
 	st	er0,	NEAR __gsCtrlParam+0ch
 
 ;;	_gsCtrlParam.errStat	= 0;
@@ -453,6 +480,7 @@ _$L22 :
 CLINEA 0000H 0001H 0105H 0002H 0048H
 	l	r0,	0f2a5h
 	and	r0,	#01h
+	st	r0,	_errStat$0[fp]
 
 ;;	if( errStat == (unsigned char)I2C0STAT_I20BB ){
 CLINEA 0000H 0001H 0106H 0002H 0030H
@@ -502,8 +530,19 @@ CBLOCK 3 1 288
 
 ;;{
 CLINEA 0000H 0001H 0120H 0001H 0001H
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+	_addr_size$4	set	2
+	_data$6	set	4
+	_data_size$8	set	6
+	_func$10	set	8
+	_errStat$0	set	-1
+;;*****************************************
+
 	push	fp
 	mov	fp,	sp
+	add	sp,	#-02
 	push	er8
 	mov	r8,	r0
 CBLOCK 3 2 288
@@ -513,7 +552,7 @@ CARGUMENT 42H 0002H 0002H "addr_size" 02H 00H 01H
 CARGUMENT 42H 0002H 0004H "data" 04H 03H 00H 00H 00H
 CARGUMENT 42H 0002H 0006H "data_size" 02H 00H 01H
 CARGUMENT 43H 0002H 0008H "func" 0AH 03H 00H 02H 00H 00H 00H 00H 00H 00H 07H
-CLOCAL 46H 0001H 0014H 0002H "errStat" 02H 00H 00H
+CLOCAL 42H 0001H 0001H 0002H "errStat" 02H 00H 00H
 
 ;;	_gsCtrlParam.mode		= 1;	/* receive */
 CLINEA 0000H 0001H 0125H 0002H 0026H
@@ -526,17 +565,17 @@ CLINEA 0000H 0001H 0126H 0002H 001BH
 
 ;;	_gsCtrlParam.addr_size	= addr_size;
 CLINEA 0000H 0001H 0127H 0002H 0024H
-	l	er0,	2[fp]
+	l	er0,	_addr_size$4[fp]
 	st	er0,	NEAR __gsCtrlParam+04h
 
 ;;	_gsCtrlParam.data		= data;
 CLINEA 0000H 0001H 0128H 0002H 001BH
-	l	er0,	4[fp]
+	l	er0,	_data$6[fp]
 	st	er0,	NEAR __gsCtrlParam+06h
 
 ;;	_gsCtrlParam.data_size	= data_size;
 CLINEA 0000H 0001H 0129H 0002H 0024H
-	l	er0,	6[fp]
+	l	er0,	_data_size$8[fp]
 	st	er0,	NEAR __gsCtrlParam+08h
 
 ;;	_gsCtrlParam.cnt		= 0;
@@ -546,7 +585,7 @@ CLINEA 0000H 0001H 012AH 0002H 0017H
 
 ;;	_gsCtrlParam.callBack	= func;
 CLINEA 0000H 0001H 012BH 0002H 001EH
-	l	er0,	8[fp]
+	l	er0,	_func$10[fp]
 	st	er0,	NEAR __gsCtrlParam+0ch
 
 ;;	_gsCtrlParam.errStat	= 0;
@@ -588,6 +627,7 @@ _$L32 :
 CLINEA 0000H 0001H 0133H 0002H 0048H
 	l	r0,	0f2a5h
 	and	r0,	#01h
+	st	r0,	_errStat$0[fp]
 
 ;;	if( errStat == (unsigned char)I2C0STAT_I20BB ){
 CLINEA 0000H 0001H 0134H 0002H 0030H
@@ -661,19 +701,30 @@ CBLOCK 4 1 335
 
 ;;{
 CLINEA 0000H 0001H 014FH 0001H 0001H
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+	_i2c0stat$0	set	-1
+	_callbackFunc$4	set	-4
+	_setbit$2	set	-5
+;;*****************************************
+
 	push	lr
+	push	fp
+	mov	fp,	sp
+	add	sp,	#-06
 	push	bp
 	push	er4
 CBLOCK 4 2 335
-CRET 0004H
-CLOCAL 46H 0001H 0015H 0002H "i2c0stat" 02H 00H 00H
-CLOCAL 46H 0001H 0018H 0002H "setbit" 02H 00H 00H
-CLOCAL 47H 0002H 0026H 0002H "callbackFunc" 0AH 03H 00H 02H 00H 00H 00H 00H 00H 00H 07H
+CRET 000CH
+CLOCAL 42H 0001H 0001H 0002H "i2c0stat" 02H 00H 00H
+CLOCAL 42H 0001H 0005H 0002H "setbit" 02H 00H 00H
+CLOCAL 43H 0002H 0004H 0002H "callbackFunc" 0AH 03H 00H 02H 00H 00H 00H 00H 00H 00H 07H
 
 ;;	i2c0stat = I2C0STAT;
 CLINEA 0000H 0001H 0154H 0002H 0015H
 	l	r0,	0f2a5h
-	mov	r1,	r0
+	st	r0,	_i2c0stat$0[fp]
 
 ;;	switch(_gsCtrlParam.status){
 CLINEA 0000H 0001H 0155H 0002H 001DH
@@ -719,7 +770,7 @@ CBLOCK 4 27 465
 
 ;;				callbackFunc = _gsCtrlParam.callBack;
 CLINEA 0000H 0001H 01D2H 0005H 0029H
-	mov	er4,	er0
+	st	er0,	_callbackFunc$4[fp]
 
 ;;				_gsCtrlParam.callBack = (void *)0;
 CLINEA 0000H 0001H 01D3H 0005H 0026H
@@ -730,6 +781,7 @@ CLINEA 0000H 0001H 01D3H 0005H 0026H
 CLINEA 0000H 0001H 01D4H 0005H 003BH
 	l	r2,	NEAR __gsCtrlParam+0eh
 	l	er0,	NEAR __gsCtrlParam+0ah
+	l	er4,	_callbackFunc$4[fp]
 	bl	er4
 CBLOCKEND 4 27 469
 
@@ -748,6 +800,8 @@ CLINEA 0000H 0001H 01D9H 0001H 0001H
 _$L44 :
 	pop	er4
 	pop	bp
+	mov	sp,	fp
+	pop	fp
 	pop	pc
 
 ;;		case I2C_SEND_SLAVE_ADDRESS:
@@ -756,7 +810,7 @@ _$L50 :
 
 ;;			if((i2c0stat&I2C0STAT_I20ER) == I2C0STAT_I20ER){
 CLINEA 0000H 0001H 0158H 0004H 0033H
-	mov	r0,	r1
+	l	r0,	_i2c0stat$0[fp]
 	and	r0,	#04h
 	cmp	r0,	#04h
 	bne	_$L51
@@ -785,7 +839,7 @@ CBLOCK 4 5 348
 
 ;;					callbackFunc = _gsCtrlParam.callBack;
 CLINEA 0000H 0001H 015DH 0006H 002AH
-	mov	er4,	er0
+	st	er0,	_callbackFunc$4[fp]
 
 ;;					_gsCtrlParam.callBack = (void *)0;
 CLINEA 0000H 0001H 015EH 0006H 0027H
@@ -796,6 +850,7 @@ CLINEA 0000H 0001H 015EH 0006H 0027H
 CLINEA 0000H 0001H 015FH 0006H 003CH
 	l	r2,	NEAR __gsCtrlParam+0eh
 	l	er0,	NEAR __gsCtrlParam+0ah
+	l	er4,	_callbackFunc$4[fp]
 	bl	er4
 CBLOCKEND 4 5 352
 
@@ -812,7 +867,7 @@ CBLOCKEND 4 4 354
 ;;			else if((i2c0stat&I2C0STAT_I20ACR) == I2C0STAT_I20ACR){
 CLINEA 0000H 0000H 0164H 0004H 003AH
 _$L51 :
-	mov	r0,	r1
+	l	r0,	_i2c0stat$0[fp]
 	and	r0,	#02h
 	cmp	r0,	#02h
 	bne	_$L56
@@ -831,7 +886,6 @@ CLINEA 0000H 0001H 0166H 0005H 0027H
 ;;				I2C0CON = (unsigned char)I2C0CON_I20SP;	/* Stop condition */
 CLINEA 0000H 0001H 0167H 0005H 0040H
 	mov	r0,	#02h
-	st	r0,	0f2a3h
 
 ;;			else{
 CLINEA 0000H 0001H 016AH 0004H 0008H
@@ -871,7 +925,6 @@ CLINEA 0000H 0000H 016FH 0006H 001EH
 ;;					I2C0CON = (unsigned char)I2C0CON_I20ST;	/* i2c start */
 CLINEA 0000H 0001H 0170H 0006H 003CH
 	mov	r0,	#01h
-	st	r0,	0f2a3h
 
 ;;				else{
 CLINEA 0000H 0001H 0172H 0005H 0009H
@@ -892,7 +945,8 @@ CLINEA 0000H 0001H 0174H 0007H 002DH
 
 ;;						setbit = I2C0CON_I20ST;
 CLINEA 0000H 0001H 0175H 0007H 001DH
-	mov	r4,	#01h
+	mov	r0,	#01h
+	st	r0,	_setbit$2[fp]
 
 ;;						if( ( _gsCtrlParam.data_size - 1) == _gsCtrlParam.cnt ){
 CLINEA 0000H 0001H 0176H 0007H 003EH
@@ -905,7 +959,8 @@ CBLOCK 4 11 374
 
 ;;							setbit |= (unsigned char)I2C0CON_I20ACT;
 CLINEA 0000H 0001H 0177H 0008H 002FH
-	mov	r4,	#081h
+	mov	r0,	#081h
+	st	r0,	_setbit$2[fp]
 CBLOCKEND 4 11 376
 
 ;;						}
@@ -914,7 +969,7 @@ _$L64 :
 
 ;;						I2C0CON = setbit;
 CLINEA 0000H 0001H 0179H 0007H 0017H
-	st	r4,	0f2a3h
+	l	r0,	_setbit$2[fp]
 CBLOCKEND 4 10 378
 
 ;;					else{
@@ -949,12 +1004,12 @@ CLINEA 0000H 0000H 017FH 0007H 0019H
 ;;						I2C0CON = (unsigned char)I2C0CON_I20ST;
 CLINEA 0000H 0001H 0180H 0007H 002DH
 	mov	r0,	#01h
-	st	r0,	0f2a3h
 CBLOCKEND 4 12 385
 
 ;;					}
 CLINEA 0000H 0000H 0181H 0006H 0006H
 _$L66 :
+	st	r0,	0f2a3h
 CBLOCKEND 4 9 386
 CBLOCKEND 4 7 387
 CBLOCKEND 4 8 473
@@ -971,7 +1026,7 @@ _$L67 :
 
 ;;			if((i2c0stat&I2C0STAT_I20ACR) == I2C0STAT_I20ACR){
 CLINEA 0000H 0001H 0187H 0004H 0035H
-	mov	r0,	r1
+	l	r0,	_i2c0stat$0[fp]
 	and	r0,	#02h
 	cmp	r0,	#02h
 	bne	_$L68
@@ -1131,7 +1186,7 @@ _$L80 :
 
 ;;			if((i2c0stat&I2C0STAT_I20ACR) == I2C0STAT_I20ACR){
 CLINEA 0000H 0001H 01ACH 0004H 0035H
-	mov	r0,	r1
+	l	r0,	_i2c0stat$0[fp]
 	and	r0,	#02h
 	cmp	r0,	#02h
 	bne	_$L81
@@ -1243,10 +1298,12 @@ CBLOCK 4 24 450
 
 ;;				setbit = (unsigned char)I2C0CON_I20ST;
 CLINEA 0000H 0001H 01C3H 0005H 002AH
-	mov	r4,	#01h
+	mov	r0,	#01h
+	st	r0,	_setbit$2[fp]
 
 ;;				if( ( _gsCtrlParam.data_size - 1) == _gsCtrlParam.cnt ){
 CLINEA 0000H 0001H 01C4H 0005H 003CH
+	l	er0,	NEAR __gsCtrlParam+08h
 	add	er0,	#-1
 	cmp	er0,	er2
 	bne	_$L90
@@ -1254,7 +1311,8 @@ CBLOCK 4 25 452
 
 ;;					setbit |= (unsigned char)I2C0CON_I20ACT;
 CLINEA 0000H 0001H 01C5H 0006H 002DH
-	mov	r4,	#081h
+	mov	r0,	#081h
+	st	r0,	_setbit$2[fp]
 CBLOCKEND 4 25 454
 
 ;;				}
@@ -1263,7 +1321,7 @@ _$L90 :
 
 ;;				I2C0CON = setbit;
 CLINEA 0000H 0001H 01C7H 0005H 0015H
-	st	r4,	0f2a3h
+	l	r0,	_setbit$2[fp]
 CBLOCKEND 4 24 456
 
 ;;			else{
@@ -1280,12 +1338,12 @@ CLINEA 0000H 0001H 01CAH 0005H 0037H
 ;;				I2C0CON = (unsigned char)I2C0CON_I20SP;	/* Stop condition */
 CLINEA 0000H 0001H 01CBH 0005H 0040H
 	mov	r0,	#02h
-	st	r0,	0f2a3h
 CBLOCKEND 4 26 460
 
 ;;			}
 CLINEA 0000H 0000H 01CCH 0004H 0004H
 _$L92 :
+	st	r0,	0f2a3h
 
 ;;			return(I2C_R_TRANS_CONT_OK);
 CLINEA 0000H 0001H 01CDH 0004H 001FH
@@ -1303,6 +1361,11 @@ CBLOCK 5 1 483
 
 ;;{
 CLINEA 0000H 0001H 01E3H 0001H 0001H
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 CBLOCK 5 2 483
 
 ;;	I20ST = 0;
@@ -1363,14 +1426,25 @@ CBLOCK 6 1 506
 
 ;;{
 CLINEA 0000H 0001H 01FAH 0001H 0001H
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+	_qua0$0	set	-1
+	_ret$2	set	-4
+;;*****************************************
+
+	push	fp
+	mov	fp,	sp
+	add	sp,	#-04
 CBLOCK 6 2 506
-CLOCAL 46H 0001H 0014H 0002H "qua0" 02H 00H 00H
-CLOCAL 47H 0002H 0024H 0002H "ret" 02H 00H 01H
+CLOCAL 42H 0001H 0001H 0002H "qua0" 02H 00H 00H
+CLOCAL 43H 0002H 0004H 0002H "ret" 02H 00H 01H
 
 ;;	qua0 = (unsigned char)( IRQ2 & (unsigned char)IRQ2_QI2C0 );
 CLINEA 0000H 0001H 01FEH 0002H 003CH
 	l	r0,	0f01ah
 	and	r0,	#080h
+	st	r0,	_qua0$0[fp]
 
 ;;	if( qua0 == (unsigned char)IRQ2_QI2C0 ){
 CLINEA 0000H 0001H 01FFH 0002H 0029H
@@ -1385,7 +1459,7 @@ CBLOCKEND 6 3 513
 
 ;;	else{
 CLINEA 0000H 0001H 0202H 0002H 0006H
-	rt
+	bal	_$L100
 _$L98 :
 CBLOCK 6 4 514
 
@@ -1394,12 +1468,19 @@ CLINEA 0000H 0001H 0203H 0003H 001AH
 	mov	er0,	#0 
 CBLOCKEND 6 4 516
 
+;;	}
+CLINEA 0000H 0000H 0204H 0002H 0002H
+_$L100 :
+	st	er0,	_ret$2[fp]
+
 ;;	return ret;
 CLINEA 0000H 0001H 0206H 0002H 000CH
 CBLOCKEND 6 2 519
 
 ;;}
 CLINEA 0000H 0000H 0207H 0001H 0001H
+	mov	sp,	fp
+	pop	fp
 	rt
 CBLOCKEND 6 1 519
 CFUNCTIONEND 6
@@ -1413,6 +1494,11 @@ CBLOCK 7 1 529
 
 ;;{
 CLINEA 0000H 0001H 0211H 0001H 0001H
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 CBLOCK 7 2 529
 
 ;;	QI2CM = 0;
@@ -1435,6 +1521,11 @@ CBLOCK 8 1 546
 
 ;;{
 CLINEA 0000H 0001H 0222H 0001H 0001H
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 CBLOCK 8 2 546
 
 ;;	return _gsCtrlParam.cnt;

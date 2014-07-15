@@ -1,9 +1,8 @@
-;; Compile Options : /TML610111 /MS /near /Icommon /Imain /Iirq /Itimer /Itbc /Ipwm /Iuart /Ii2c /SS 256 /SD /Oa /Ot /W 1 /Ff /Fa_output\_obj\ 
+;; Compile Options : /TML610111 /MS /near /LE /Ii2c /Iirq /Imain /Itbc /Itimer /Iuart /Icommon /Imath /Istdio /Istdlib /Istring /Iyvals /CT _output\_prn\timer.cal /SS 256 /SD /Oa /Ot /W 3 /Zg /Fa_output\_obj\ /Lv /Zs 
 ;; Version Number  : Ver.3.41.8
 ;; File Name       : timer.c
 
 	type (ML610111) 
-	fastfloat
 	model small, near
 	$$tm_init$timer segment code 2h #0h
 CVERSION 3.41.8
@@ -19,7 +18,7 @@ CSTRUCTMEM 52H 00000001H 00000006H "b6" 02H 00H 00H
 CSTRUCTMEM 52H 00000001H 00000007H "b7" 02H 00H 00H
 CTYPEDEF 0000H 0000H 43H "_BYTE_FIELD" 04H 00H 05H 00H 00H
 CFILE 0001H 00000027H "common\\common.h"
-CFILE 0002H 00000028H "main\\mcu.h"
+CFILE 0002H 00000024H "main\\mcu.h"
 CFILE 0003H 000007EEH "main\\ML610111.H"
 CFILE 0004H 000001B8H "timer\\timer.h"
 CFILE 0000H 0000004AH "timer\\timer.c"
@@ -32,6 +31,11 @@ CBLOCK 0 1 53
 
 ;;{
 CLINEA 0000H 0001H 0035H 0001H 0001H
+;;*****************************************
+;;	register/stack information
+;;*****************************************
+;;*****************************************
+
 CBLOCK 0 2 53
 CARGUMENT 46H 0001H 0014H "chNo" 02H 00H 00H
 
