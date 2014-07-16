@@ -2,7 +2,6 @@
 
 	EXTRN	CODE NEAR	: _uartSendStr
 	EXTRN	CODE NEAR	: _uart_ErrClr
-	EXTRN	CODE NEAR	: _OLDuart_0_Init
 	EXTRN	CODE NEAR	: _uart_getTransSize
 	EXTRN	CODE NEAR	: _uart_PortClear
 	EXTRN	CODE NEAR	: _uart_clearIRQ
@@ -16,4 +15,5 @@
 	EXTRN	CODE NEAR	: _uart_continue
 	EXTRN	CODE NEAR	: _uart_checkIRQ
 	EXTRN	CODE NEAR	: _uart0_startReceive
+	EXTRN	CODE NEAR	: _uart_0_Init
 ;; End of listing.

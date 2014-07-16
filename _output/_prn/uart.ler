@@ -1,7 +1,7 @@
 
                                                               Page :          1
-                                                              Date : 07-15-2014
-                                                              Time :   18:15:47
+                                                              Date : 07-16-2014
+                                                              Time :   18:59:07
 CCU8 C Compiler Ver.3.41, Source List
 Source File : uart\uart.c
 
@@ -56,8 +56,8 @@ Source File : uart\uart.c
      36 // Pin-15 => GPIO #22 (Q111 I/O A.2)	Pin-16 => GPIO #23 (Q111 I/O C.2)
 
                                                               Page :          2
-                                                              Date : 07-15-2014
-                                                              Time :   18:15:47
+                                                              Date : 07-16-2014
+                                                              Time :   18:59:07
 CCU8 C Compiler Ver.3.41, Source List
 Source File : uart\uart.c
 
@@ -112,8 +112,8 @@ Source File : uart\uart.c
      74 
 
                                                               Page :          3
-                                                              Date : 07-15-2014
-                                                              Time :   18:15:47
+                                                              Date : 07-16-2014
+                                                              Time :   18:59:07
 CCU8 C Compiler Ver.3.41, Source List
 Source File : uart\uart.c
 
@@ -168,8 +168,8 @@ Source File : uart\uart.c
     117 ///* UA0MOD1 */
 
                                                               Page :          4
-                                                              Date : 07-15-2014
-                                                              Time :   18:15:47
+                                                              Date : 07-16-2014
+                                                              Time :   18:59:07
 CCU8 C Compiler Ver.3.41, Source List
 Source File : uart\uart.c
 
@@ -224,8 +224,8 @@ Source File : uart\uart.c
     163 
 
                                                               Page :          5
-                                                              Date : 07-15-2014
-                                                              Time :   18:15:47
+                                                              Date : 07-16-2014
+                                                              Time :   18:59:07
 CCU8 C Compiler Ver.3.41, Source List
 Source File : uart\uart.c
 
@@ -280,8 +280,8 @@ Source File : uart\uart.c
     198 // 	UAnBUF : 	UARTn transmit/receive buffer
 
                                                               Page :          6
-                                                              Date : 07-15-2014
-                                                              Time :   18:15:47
+                                                              Date : 07-16-2014
+                                                              Time :   18:59:07
 CCU8 C Compiler Ver.3.41, Source List
 Source File : uart\uart.c
 
@@ -336,8 +336,8 @@ Source File : uart\uart.c
         am *prm )
 
                                                               Page :          7
-                                                              Date : 07-15-2014
-                                                              Time :   18:15:47
+                                                              Date : 07-16-2014
+                                                              Time :   18:59:07
 CCU8 C Compiler Ver.3.41, Source List
 Source File : uart\uart.c
 
@@ -392,8 +392,8 @@ Source File : uart\uart.c
     279 	}
 
                                                               Page :          8
-                                                              Date : 07-15-2014
-                                                              Time :   18:15:47
+                                                              Date : 07-16-2014
+                                                              Time :   18:59:07
 CCU8 C Compiler Ver.3.41, Source List
 Source File : uart\uart.c
 
@@ -448,8 +448,8 @@ Source File : uart\uart.c
     322 
 
                                                               Page :          9
-                                                              Date : 07-15-2014
-                                                              Time :   18:15:47
+                                                              Date : 07-16-2014
+                                                              Time :   18:59:07
 CCU8 C Compiler Ver.3.41, Source List
 Source File : uart\uart.c
 
@@ -459,14 +459,14 @@ Source File : uart\uart.c
     323 //TO MANUALLY SET BAUD RATE:
     324 
     325 //With 8.192MHz Clock
-    326 //	=BAUD=	=COUNT=	=Period per Bit=		=UAxBRTH=	=UAxBRTL=	=%ERROR=
+    326 //	=BAUD=	=COUNT=			=Period per Bit=		=UAxBRTH=	=UAxBRTL=	=%ERROR=
     327 //	2400bps 	3413 		Approximately 417us 	0x0D 		0x54		 0.01
     328 //	4800bps 	1707 		Approximately 208us 	0x06 		0xAA		-0.02
     329 //	9600bps 	853 		Approximately 104us 	0x03 		0x54		 0.04
-    330 //	19200bps 	427 		Approximately 52us 	0x01 		0xAA		-0.08
-    331 //	38400bps 	213 		Approximately 26us 	0x00 		0xD4		 0.16
+    330 //	19200bps 	427 		Approximately 52us 		0x01 		0xAA		-0.08
+    331 //	38400bps 	213 		Approximately 26us 		0x00 		0xD4		 0.16
     332 //	57600bps 	142 		Approximately 17.4us 	0x00 		0x8D		 0.16
-    333 //	115200bps 	71 		Approximately 8.7us 	0x00 		0x46		 0.16
+    333 //	115200bps 	71 			Approximately 8.7us 	0x00 		0x46		 0.16
     334 
     335 
     336 	//UA0BRTH = 0x0D;	//2400 BAUD
@@ -504,8 +504,8 @@ Source File : uart\uart.c
          0 at termination of transmission.
 
                                                               Page :         10
-                                                              Date : 07-15-2014
-                                                              Time :   18:15:47
+                                                              Date : 07-16-2014
+                                                              Time :   18:59:07
 CCU8 C Compiler Ver.3.41, Source List
 Source File : uart\uart.c
 
@@ -537,7 +537,7 @@ Source File : uart\uart.c
     390 void uart0_startReceive( void ) //Simplified function for RX on Q11 Ser
         ies...
     391 {
-    392 int long delay;
+    392 //int long delay;
     393 unsigned char RX_Code[100];
     394 
     395 	/*===	Reception mode setting	===*/
@@ -560,8 +560,8 @@ Source File : uart\uart.c
     412 	//for (delay=0; delay<50; delay++)
 
                                                               Page :         11
-                                                              Date : 07-15-2014
-                                                              Time :   18:15:47
+                                                              Date : 07-16-2014
+                                                              Time :   18:59:07
 CCU8 C Compiler Ver.3.41, Source List
 Source File : uart\uart.c
 
@@ -596,7 +596,6 @@ Source File : uart\uart.c
         *******/
     435 void uart_startSend( unsigned char *data, unsigned int size, cbfUart fu
         nc )
-***** uart\uart.c(418) : Warning : W5029 : 'delay': unreferenced local variable
     436 {
     437 	/*=== Transmission of a message mode setting. ===*/
     438 	U0EN = 0;
@@ -614,17 +613,17 @@ Source File : uart\uart.c
     450 		UA0BUF = *data;
     451 		_gsCtrlParam.data++;
     452 		_gsCtrlParam.cnt++;
+    453 		U0EN = 1;
 
                                                               Page :         12
-                                                              Date : 07-15-2014
-                                                              Time :   18:15:47
+                                                              Date : 07-16-2014
+                                                              Time :   18:59:07
 CCU8 C Compiler Ver.3.41, Source List
 Source File : uart\uart.c
 
 
  Line #  Source Line
 
-    453 		U0EN = 1;
     454 	}
     455 }
     456 
@@ -670,17 +669,17 @@ Source File : uart\uart.c
     491 /**********************************************************************
         *********
     492 	Routine Name:	uart_continue
+    493 	Form:			int uart_continue( void )
 
                                                               Page :         13
-                                                              Date : 07-15-2014
-                                                              Time :   18:15:47
+                                                              Date : 07-16-2014
+                                                              Time :   18:59:07
 CCU8 C Compiler Ver.3.41, Source List
 Source File : uart\uart.c
 
 
  Line #  Source Line
 
-    493 	Form:			int uart_continue( void )
     494 	Parameters:		none
     495 	Return value:	int
     496 						UART_R_TRANS_FIN(=1)      : send and receive is finished
@@ -726,17 +725,17 @@ Source File : uart\uart.c
     532 			if( u0en == 0 ){
     533 				/*=== It is returned that the transmission ended. ===*/
     534 				if( _gsCtrlParam.callBack != (void *)0 ){
+    535 					_gsCtrlParam.callBack( _gsCtrlParam.size, _gsCtrlParam.errStat );
 
                                                               Page :         14
-                                                              Date : 07-15-2014
-                                                              Time :   18:15:47
+                                                              Date : 07-16-2014
+                                                              Time :   18:59:07
 CCU8 C Compiler Ver.3.41, Source List
 Source File : uart\uart.c
 
 
  Line #  Source Line
 
-    535 					_gsCtrlParam.callBack( _gsCtrlParam.size, _gsCtrlParam.errStat );
     536 					_gsCtrlParam.callBack = (void *)0;
     537 				}
     538 				return ( UART_R_TRANS_FIN );
@@ -782,17 +781,17 @@ Source File : uart\uart.c
         *********
     577 	Routine Name:	uart_stop
     578 	Form:			void uart_stop( void )
+    579 	Parameters:		none
 
                                                               Page :         15
-                                                              Date : 07-15-2014
-                                                              Time :   18:15:47
+                                                              Date : 07-16-2014
+                                                              Time :   18:59:07
 CCU8 C Compiler Ver.3.41, Source List
 Source File : uart\uart.c
 
 
  Line #  Source Line
 
-    579 	Parameters:		none
     580 	Return value:	void
     581 	Description:	stop to send and receive
     582 ***********************************************************************
@@ -838,17 +837,17 @@ Source File : uart\uart.c
         *********
     619 	Routine Name:	uart_clearIRQ
     620 	Form:			void uart_clearIRQ( void )
+    621 	Parameters:		none
 
                                                               Page :         16
-                                                              Date : 07-15-2014
-                                                              Time :   18:15:47
+                                                              Date : 07-16-2014
+                                                              Time :   18:59:07
 CCU8 C Compiler Ver.3.41, Source List
 Source File : uart\uart.c
 
 
  Line #  Source Line
 
-    621 	Parameters:		none
     622 	Return value:	void
     623 	Description:	clear interrupt request
     624 ***********************************************************************
@@ -894,17 +893,17 @@ Source File : uart\uart.c
     658 	Form			: unsigned char uart_ErrGet( void )
     659 	Parameters		: void
     660 	Return value	: unsigned char : Error information
+    661 	Description		: Error information acquisition processing.
 
                                                               Page :         17
-                                                              Date : 07-15-2014
-                                                              Time :   18:15:47
+                                                              Date : 07-16-2014
+                                                              Time :   18:59:07
 CCU8 C Compiler Ver.3.41, Source List
 Source File : uart\uart.c
 
 
  Line #  Source Line
 
-    661 	Description		: Error information acquisition processing.
     662 ***********************************************************************
         *******/
     663 unsigned char uart_ErrGet( void )
@@ -950,17 +949,17 @@ Source File : uart\uart.c
     699 	PB0C1 = 1;		/* Hi Impedance */
     700 	PB0MD0 = 1;
     701 	PB0MD1 = 0;		/* UART RXD */
+    702 }
 
                                                               Page :         18
-                                                              Date : 07-15-2014
-                                                              Time :   18:15:47
+                                                              Date : 07-16-2014
+                                                              Time :   18:59:07
 CCU8 C Compiler Ver.3.41, Source List
 Source File : uart\uart.c
 
 
  Line #  Source Line
 
-    702 }
     703 
     704 /**********************************************************************
         *********
@@ -990,7 +989,7 @@ Source File : uart\uart.c
     727 
     728 
     729 
-    730 void OLDuart_0_Init( void )
+    730 void uart_0_Init( void )
     731 {
     732  	//Setup UART0 on PortB
     733 
@@ -1006,17 +1005,17 @@ Source File : uart\uart.c
     743 	PB1DIR = 0;		// PortB Bit1 set to Output Mode...UART-TX
     744 
     745 	//I/O Type...
+    746 	PB0C1  = 1;		// PortB Bit0 set to (High-impedance input when PBxDIR=1)
 
                                                               Page :         19
-                                                              Date : 07-15-2014
-                                                              Time :   18:15:47
+                                                              Date : 07-16-2014
+                                                              Time :   18:59:07
 CCU8 C Compiler Ver.3.41, Source List
 Source File : uart\uart.c
 
 
  Line #  Source Line
 
-    746 	PB0C1  = 1;		// PortB Bit0 set to (High-impedance input when PBxDIR=1)
         ...
     747 	PB0C0  = 1;		
     748 	PB1C1  = 1;		// PortB Bit1 set to CMOS Output... 
@@ -1062,17 +1061,17 @@ Source File : uart\uart.c
     785 	// UART0 Baud Rate Registers //Manually set to 9600 BAUD
     786 		//UA0BRTH = 0x03; // $0354 => 9600bps with 8.192MHz Clock (Approximat
         ely 104-us)
+    787 		//UA0BRTL = 0x54;	
 
                                                               Page :         20
-                                                              Date : 07-15-2014
-                                                              Time :   18:15:47
+                                                              Date : 07-16-2014
+                                                              Time :   18:59:07
 CCU8 C Compiler Ver.3.41, Source List
 Source File : uart\uart.c
 
 
  Line #  Source Line
 
-    787 		//UA0BRTL = 0x54;	
     788 
     789 	// UART0 Status Register
     790 		//UA0BUF is a special function register (SFR) to store the transmitte
@@ -1083,19 +1082,19 @@ Source File : uart\uart.c
         ansmitted data to the UA0BUF. Any value written
     793 		//to UA0BUF can be read.		
     794 
-    795 	UA0BRT = ( unsigned short )( ( ( HSCLK_kHZ * 1000UL ) / UART_CalcBAUD 
-        ) - 1 );
+    795 	//UA0BRT = ( unsigned short )( ( ( HSCLK_kHZ * 1000UL ) / UART_CalcBAU
+        D ) - 1 );
     796 }
 
 
 Error(s)     :  0
-Warning(s)   :  1
+Warning(s)   :  0
 
 
 
                                                               Page :         21
-                                                              Date : 07-15-2014
-                                                              Time :   18:15:47
+                                                              Date : 07-16-2014
+                                                              Time :   18:59:07
 CCU8 C Compiler Ver.3.41, Source List
 Source File : uart\uart.c
 
@@ -1122,4 +1121,4 @@ Source File : uart\uart.c
   _uart_ErrClr                     0         0          0         0         
   _uart_PortSet                    0         0          0         0         
   _uart_PortClear                  0         0          0         0         
-  _OLDuart_0_Init                  0         0          0         0         
+  _uart_0_Init                     0         0          0         0         

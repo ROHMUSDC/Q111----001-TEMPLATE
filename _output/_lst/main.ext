@@ -6,6 +6,7 @@
 	EXTRN	CODE NEAR	: _PortA_Digital_Inputs
 	EXTRN	CODE NEAR	: _SerialLCDSplash
 	EXTRN	CODE NEAR	: _NOPx
+	EXTRN	DATA NEAR	: _HelloWorld
 	EXTRN	CODE NEAR	: _main
 	EXTRN	CODE NEAR	: _main_reqNotHalt
 	EXTRN	CODE NEAR	: _SendLCDCmd

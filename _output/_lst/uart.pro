@@ -14,4 +14,4 @@ extern	unsigned char uart_ErrGet(void);
 extern	void uart_ErrClr(void);
 extern	void uart_PortSet(void);
 extern	void uart_PortClear(void);
-extern	void OLDuart_0_Init(void);
+extern	void uart_0_Init(void);

@@ -7,10 +7,10 @@
 	$$NVARuart segment data 2h #0h
 	$$NINITVAR segment data 2h #0h
 	$$NINITTAB segment table 2h any
-	$$OLDuart_0_Init$uart segment code 2h #0h
 	$$_send_byte$uart segment code 2h #0h
 	$$uart0_startReceive$uart segment code 2h #0h
 	$$uartSendStr$uart segment code 2h #0h
+	$$uart_0_Init$uart segment code 2h #0h
 	$$uart_ErrClr$uart segment code 2h #0h
 	$$uart_ErrGet$uart segment code 2h #0h
 	$$uart_ErrSet$uart segment code 2h #0h
@@ -28,6 +28,7 @@ CVERSION 3.41.8
 CSGLOBAL 03H 0000H "_send_byte" 08H 02H 10H 00H 80H 00H 00H 00H 07H
 CGLOBAL 01H 02H 0000H "uart_getTransSize" 08H 02H 08H 00H 80H 00H 00H 00H 01H
 CGLOBAL 01H 03H 0000H "uart_PortSet" 08H 02H 0CH 00H 80H 00H 00H 00H 07H
+CGLOBAL 01H 03H 0000H "uart_0_Init" 08H 02H 0EH 00H 80H 00H 00H 00H 07H
 CGLOBAL 01H 03H 0000H "uart_startReceive" 08H 02H 03H 00H 82H 02H 00H 00H 07H
 CGLOBAL 01H 03H 0000H "uart_init" 08H 02H 01H 00H 83H 1aH 00H 00H 01H
 CGLOBAL 01H 03H 0000H "uart_checkIRQ" 08H 02H 06H 00H 82H 06H 00H 00H 01H
@@ -39,7 +40,6 @@ CGLOBAL 01H 03H 0000H "uart0_startReceive" 08H 02H 14H 00H 83H 68H 00H 00H 07H
 CGLOBAL 01H 03H 0000H "uart_stop" 08H 02H 05H 00H 80H 00H 00H 00H 07H
 CGLOBAL 01H 03H 0000H "uart_startSend" 08H 02H 02H 00H 82H 04H 00H 00H 07H
 CGLOBAL 01H 03H 0000H "uartSendStr" 08H 02H 0FH 00H 83H 0cH 00H 00H 07H
-CGLOBAL 01H 03H 0000H "OLDuart_0_Init" 08H 02H 21H 00H 80H 00H 00H 00H 07H
 CGLOBAL 01H 03H 0000H "uart_continue" 08H 02H 04H 00H 83H 0cH 00H 00H 01H
 CGLOBAL 01H 03H 0000H "uart_PortClear" 08H 02H 0DH 00H 80H 00H 00H 00H 07H
 CSTRUCTTAG 0000H 0000H 0002H 0005H 0000000AH "_Notag"
@@ -598,7 +598,7 @@ CLINEA 0000H 0001H 0187H 0001H 0001H
 ;;*****************************************
 ;;	register/stack information
 ;;*****************************************
-	_RX_Code$4	set	-100
+	_RX_Code$0	set	-100
 ;;*****************************************
 
 	push	lr
@@ -607,7 +607,6 @@ CLINEA 0000H 0001H 0187H 0001H 0001H
 	add	sp,	#-0100
 CBLOCK 20 2 391
 CRET 0066H
-CLOCAL 4BH 0004H 0000H 0002H "delay" 02H 00H 02H
 CLOCAL 42H 0064H 0064H 0002H "RX_Code" 05H 01H 64H 00H 00H 00H
 
 ;;	U0EN = 0;  //UART0 Control Register Bit 0 - "0" Stops communication.
@@ -633,7 +632,7 @@ CLINEA 0000H 0001H 0194H 0003H 0040H
 ;;		RX_Code[0] = UA0BUF; //Copy buffer into array...
 CLINEA 0000H 0001H 0196H 0003H 0032H
 	l	r0,	0f290h
-	st	r0,	_RX_Code$4[fp]
+	st	r0,	_RX_Code$0[fp]
 
 ;;	U0EN = 1; //UART0 Control Register Bit 0 - "1" Starts communication
 CLINEA 0000H 0001H 019AH 0002H 0044H
@@ -1524,11 +1523,11 @@ CBLOCKEND 13 1 726
 CFUNCTIONEND 13
 
 
-	rseg $$OLDuart_0_Init$uart
-CFUNCTION 33
+	rseg $$uart_0_Init$uart
+CFUNCTION 14
 
-_OLDuart_0_Init	:
-CBLOCK 33 1 731
+_uart_0_Init	:
+CBLOCK 14 1 731
 
 ;;{
 CLINEA 0000H 0001H 02DBH 0001H 0001H
@@ -1537,7 +1536,7 @@ CLINEA 0000H 0001H 02DBH 0001H 0001H
 ;;*****************************************
 ;;*****************************************
 
-CBLOCK 33 2 731
+CBLOCK 14 2 731
 
 ;;	PB0DIR = 1;		// PortB Bit0 set to Input  Mode...UART-RX
 CLINEA 0000H 0001H 02E6H 0002H 0038H
@@ -1630,22 +1629,17 @@ CLINEA 0000H 0001H 030CH 0003H 0033H
 ;;		U0DIR = 0;	 // 0=> LSB first (initial value)
 CLINEA 0000H 0001H 030EH 0003H 002EH
 	rb	0f293h.6
-
-;;	UA0BRT = ( unsigned short )( ( ( HSCLK_kHZ * 1000UL ) / UART_CalcBAUD ) - 1 );
-CLINEA 0000H 0001H 031BH 0002H 004FH
-	mov	r0,	#054h
-	mov	r1,	#03h
-	st	er0,	0f294h
-CBLOCKEND 33 2 796
+CBLOCKEND 14 2 796
 
 ;;}
 CLINEA 0000H 0001H 031CH 0001H 0001H
 	rt
-CBLOCKEND 33 1 796
-CFUNCTIONEND 33
+CBLOCKEND 14 1 796
+CFUNCTIONEND 14
 
 	public _uart_getTransSize
 	public _uart_PortSet
+	public _uart_0_Init
 	public _uart_startReceive
 	public _uart_init
 	public _uart_checkIRQ
@@ -1657,7 +1651,6 @@ CFUNCTIONEND 33
 	public _uart_stop
 	public _uart_startSend
 	public _uartSendStr
-	public _OLDuart_0_Init
 	public _uart_continue
 	public _uart_PortClear
 	extrn code near : _main

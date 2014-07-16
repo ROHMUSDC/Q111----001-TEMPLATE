@@ -323,14 +323,14 @@ int uart_init( unsigned char cs, unsigned short kHz , const tUartSetParam *prm )
 //TO MANUALLY SET BAUD RATE:
 
 //With 8.192MHz Clock
-//	=BAUD=	=COUNT=	=Period per Bit=		=UAxBRTH=	=UAxBRTL=	=%ERROR=
+//	=BAUD=	=COUNT=			=Period per Bit=		=UAxBRTH=	=UAxBRTL=	=%ERROR=
 //	2400bps 	3413 		Approximately 417us 	0x0D 		0x54		 0.01
 //	4800bps 	1707 		Approximately 208us 	0x06 		0xAA		-0.02
 //	9600bps 	853 		Approximately 104us 	0x03 		0x54		 0.04
-//	19200bps 	427 		Approximately 52us 	0x01 		0xAA		-0.08
-//	38400bps 	213 		Approximately 26us 	0x00 		0xD4		 0.16
+//	19200bps 	427 		Approximately 52us 		0x01 		0xAA		-0.08
+//	38400bps 	213 		Approximately 26us 		0x00 		0xD4		 0.16
 //	57600bps 	142 		Approximately 17.4us 	0x00 		0x8D		 0.16
-//	115200bps 	71 		Approximately 8.7us 	0x00 		0x46		 0.16
+//	115200bps 	71 			Approximately 8.7us 	0x00 		0x46		 0.16
 
 
 	//UA0BRTH = 0x0D;	//2400 BAUD
@@ -389,7 +389,7 @@ static void _send_byte(unsigned char c)
 
 void uart0_startReceive( void ) //Simplified function for RX on Q11 Series...
 {
-int long delay;
+//int long delay;
 unsigned char RX_Code[100];
 
 	/*===	Reception mode setting	===*/
@@ -727,7 +727,7 @@ void uart_PortClear( void )
 
 
 
-void OLDuart_0_Init( void )
+void uart_0_Init( void )
 {
  	//Setup UART0 on PortB
 
@@ -792,5 +792,5 @@ void OLDuart_0_Init( void )
 		//UART0 status register (UA0STAT) becomes "0", then write the next transmitted data to the UA0BUF. Any value written
 		//to UA0BUF can be read.		
 
-	UA0BRT = ( unsigned short )( ( ( HSCLK_kHZ * 1000UL ) / UART_CalcBAUD ) - 1 );
+	//UA0BRT = ( unsigned short )( ( ( HSCLK_kHZ * 1000UL ) / UART_CalcBAUD ) - 1 );
 }

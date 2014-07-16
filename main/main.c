@@ -1,23 +1,50 @@
 //*****************************************************************************
 //
-// USDC TEMPLATE FIRMWARE for Q111 MCU 
-//
-// DEMONSTRATES: 
-//					1.) INTERRUPTS on TBC
-//					2.) INTERRUPTS on TMR 8/9
-//					3.) INTERRUPTS on TMR A/B
-//					4.) INTERRUPTS on TMR E/F
-//					5.) PWM Control
-//					6.) UART...
+// USDC TEMPLATE FIRMWARE for Q111 MCU  
 //
 // Program:	 LAPIS MCU Development Board Demo Code 
-// Author:	 C. Schell, K. Bahar & F. Lee 
+//
+// Purpose:	 Demonstration Code for use with LAPIS MCU Development Board 
+//
+// Demonstrates: 
+//		1.) MCU Initialization (OSC; PORTS; PERIPHERIALS; WDT; etc.) 
+//		2.)	INTERRUPTS on TBC
+//		3.) INTERRUPTS on TMR 8/9
+//		4.) INTERRUPTS on TMR A/B
+//		5.) INTERRUPTS on TMR E/F
+//		6.) PWM Control
+//		7.) UART...
+//		8.) ADC...    
+//
+// Authors:	 C. Schell, K. Bahar & F. Lee 
 //		 	 ROHM Semiconductor USA, LLC
 //		 	 US Design Center
 //
+// Notes: 	
+//		1.) RTLU8 RUNTIME LIBRARIES:
+//				RTLU8 is a C runtime library for mcu's that use the LAPIS nX-U8 as the CPU core
+//				RTLU8 provides a large number of routines that can be used when programming 
+//				in C. Much effort and time can be saved by using these library routines.
+//				For Example, to use the sprintf library for UART commands, you need to add 
+//				the "LU8100SW.lib" RT Library. To do this open the LAPIS IDE & select:
+//				'Project -> Options -> Target' from the menu bar.  In the "General" Tab, 
+//				type in "LU8100SW.lib" to add the RTLU8 runtime library for small memory 
+//				model containing sprintf and many other routines
+//		2.) CHECKING THE PROGRAM SIZE:
+//				You can check the program size from the map file generated during "Compile" step by the Linker. 
+//				Please refer to CCU8 programming guide: (3.1. Map Files and 3.1.4. Program and Data size)
+//				Results will look something like this:
+//					Program and Data Sizes
+//					This portion of the map file gives aggregate program and data sizes for each segment type.
+//						Total size (CODE  ) = 02CE4   (11492)
+//						Total size (DATA  ) = 002E7   (743)
+//						Total size (BIT   ) = 00000.0 (0.0)
+//						Total size (NVDATA) = 00000   (0)
+//						Total size (NVBIT ) = 00000.0 (0.0)
+//						Total size (TABLE ) = 0828A   (33418)
+//
 // Started:  April 6th, 2013
-// Purpose:	 Demonstration Code for use with LAPIS MCU Development Board 
-// Updated:	 JULY 15th, 2014
+// Updated:	 JULY 16th, 2014
 //*****************************************************************************
 
 // ================================ ML610Q111 ================================= 
@@ -106,7 +133,7 @@
 	//#include	<errno.h>		// Error identifiers Library
 	//#include	<limits.h>		// Numerical limits for integers
 	//#include	<muldivu8.h>	// Multiplication and Division accelerator
-	//#include	<setjmp.h>		// Global jump (longjmp)
+	//#include	<setjmp.h>		// Global jump (allow jumps to locations outside the current function) 
 	//#include	<signal.h>		// Signal handling functions
 	//#include	<stdarg.h>		// Variable numbers of arguments
 	//#include	<stddef.h>		// Standard types and macros 
@@ -211,7 +238,7 @@
 //===========================================================================
 
 // ===== Peripheral setting.=====
-	#define HSCLK_KHZ	( 8000u )	// 8MHz = 8000kHz (will be multiplied by 1024 to give 8,192,000Hz)
+	#define HSCLK_KHZ	( 8192u )	// 8MHz = 8000kHz (will be multiplied by 1024 to give 8,192,000Hz)
 	#define FLG_SET	    ( 0x01u ) 	
 
 // ===== SET DESIRED UART SETTINGS HERE! (Options in UART.h) ================
@@ -224,14 +251,14 @@
 
 		// ===== UART Settings =====
 		//STRUCTURE:
-		static const tUartSetParam	_uartSetParam = { 
-			UART_BAUDRATE,
-			UART_DATA_LENGTH,
-			UART_PARITY_BIT,
-			UART_STOP_BIT,
-			UART_LOGIC,
-			UART_DIRECTION
-		};
+			static const tUartSetParam  _uartSetParam = {		// UART Parameters
+				UART_BAUDRATE,						// Members of Structure...
+				UART_DATA_LENGTH,					// Members of Structure...
+				UART_PARITY_BIT,					// Members of Structure...
+				UART_STOP_BIT,						// Members of Structure...
+				UART_LOGIC,							// Members of Structure...
+				UART_DIRECTION						// Members of Structure...
+			};
 //===========================================================================
 
 
@@ -278,9 +305,12 @@
 	static void _intTimer( void );
 
 	void _funcUartFin( unsigned int size, unsigned char errStat );
-	void _funcI2CFin( unsigned int size, unsigned char errStat );
 	void _intUart( void );
+
+	void _funcI2CFin( unsigned int size, unsigned char errStat );
+	void checkI2C( void );
 	void _intI2c( void );
+
 	void _intADC( void );
 	
 	void TBC_ISR( void );			// TBC Interrupt Service Routine...
@@ -305,13 +335,17 @@
 	unsigned char	_flgADCFin;
 	unsigned char	_reqNotHalt;
 	
+	unsigned char			HelloWorld[14] = {"Hello World!  "};
+	
 	static unsigned char	MyData[200];		//Large Array...
-	static unsigned char	RecData[8];			//Small Array...for UART Receive, etc
+	static char 			MyTx[50];			//Small Array...for UART Transmission, etc
+	static unsigned char	MyRx[50];			//Small Array...for UART Receive, etc
 	static float			Sensor1_Data[10];	//Small Array...
 	static float			Sensor2_Data[10];	//Small Array...
 	static float			Sensor3_Data[10];	//Small Array...
+	
 
-/*############################################################################*/
+/*######################################50######################################*/
 /*#                                  APIs                                    #*/
 /*############################################################################*/
 //*****************************************************************************
@@ -332,31 +366,55 @@ int main(void)
 
 	Init:
 		Initialization();		// Init Micro...(Ports, Timers, OSC, IRQ's, UART, etc...)
-		LCD_Init();				// LCD Splash Display...
+		//uart_0_Init(); 
+		//main_clrWDT();
+		//NOPx(10);				// Short Delay... 
 		
-		main_clrWDT();
-		NOPx(10);				// Short Delay... 
-		
-		LED1_pin = 0;
+/* 		LED1_pin = 0;
 		LED2_pin = 0;
-		LED3_pin = 0;
+		//LED3_pin = 0;
 		LED4_pin = 0;
 		LED5_pin = 0;
 		LED6_pin = 0;
 		LED7_pin = 0;
 		LED8_pin = 0;
-		LED9_pin = 0;
+		LED9_pin = 0;   */
 
 
 	MyTest:		
 	//PLACE USER CODE HERE...
+		//PWM_B0_ON(4000, 125);	//period, Duty Cycle variables
 		//LED3_pin ^= 1;
-		PWM_B0_ON(4000, 125);	//period, Duty Cycle variables
-		NOPx(1);				// Short Delay...
+			
+		PB2D ^= 1;
+		QUA0 = 0;
+		main_clrWDT();
 		
-	main_clrWDT();				//Remember, you must periodically clear the timer before it rolls over
-								//...WDT currently set to 8sec
-	goto MyTest;
+		// ===== START UART TEST... =====
+			//Now test UART!!
+				//Add EOL characters to strings
+				HelloWorld[12] 	= 0x0D;  // CR  (Carriage Return)
+				HelloWorld[13] 	= 0x0A;	 // LF  (Line Feed)
+				
+			uart_startSend(HelloWorld, 14, _funcUartFin); // Send, "Hello World!"
+				while(_flgUartFin != 1){
+					NOPx(1);
+					main_clrWDT();
+				}
+		// ===== END UART TEST ===== 
+
+		goto MyTest;
+		
+//			for(i = 0; i<50; i++) 
+//			{
+//				MyTx[i] = 0x20;		// Clear Data Array...
+//			}
+//			
+//		   //sprintf(MyTx, "%u, %u", LCD_Display_ON,LCD_Backlight_ON, "%u Hello World! %u", 215);
+//			sprintf(MyTx, "%u", LCD_Backlight_ON);
+//			MyTx[48] = 0x0D;	//CR
+//			MyTx[49] = 0x0A;	//LF
+			
 
 }//end main
 
@@ -385,46 +443,51 @@ int main(void)
 
 void main_clrWDT( void )
 {
-	__DI(); // Disable multi-interrupts
+	//__DI(); // Disable multi-interrupts
 		do {
 			WDTCON = 0x5Au;
 		} while (WDP != 1);
 		WDTCON = 0xA5u;
 
-	__EI(); // Re-Enable multi-interrupts
+	//__EI(); // Re-Enable multi-interrupts
 }
 
 //===========================================================================
 //	Initialize Micro to Desired State...
 //===========================================================================
-static void Initialization(void)
-{
+static void Initialization(void){
 
 	//Initialize Peripherals	
 		//BLKCON2 Control Bits...Manually Set 4/12/2013
 			DSIO0 = 1; // 0=> Enables Synchronous Serial Port 0 
-			DUA0  = 1; // 0=> Enables the operation of UART0 
+			DUA0  = 0; // 0=> Enables the operation of UART0 
 			DUA1  = 1; // 0=> Enables Uart1 
 			DI2C1 = 1; // 0=> Enables I2C bus Interface (Slave) 
 			DI2C0 = 0; // 0=> Enables I2C bus Interface (Master)	
 	
 		BLKCON4 = 0x00; // SA-ADC: 0=> Enables ; 0xFF=> Disables
 		BLKCON6 = 0x00; // Timers 8, 9, A, E, F : 0=> Enables ; 0xFF=> Disables
-		BLKCON7 = 0x00; // PWM (PWMC, PWMD, PWME, PWMF : 0=> Enables ; 0xFF=> Disables
+		BLKCON7 = 0xFF; // PWM (PWMC, PWMD, PWME, PWMF : 0=> Enables ; 0xFF=> Disables
 
-	// ===== Set Oscillator Rate =====
-     	SetOSC(); 	//8MHz
-
-	// Port Initialize
+	// Port Initialize...
 		PortA_Low();	//Initialize all 3 Ports of Q111 Port A to GPIO-Low
 		PortB_Low();	//Initialize all 8 Ports of Q111 Port B to GPIO-Low
 		PortC_Low();	//Initialize all 4 Ports of Q111 Port C to GPIO-Low
 
+	// UART INIT...	
+		//uart_0_Init();
+				
+				
+	// ===== Set Oscillator Rate =====
+     	SetOSC(); 	//8MHz
 
-
-	// ===== PWM =====	
-		PinB0_PWM();		// Set up PWM peripheral (Pin on B.0)
-
+	// ===== PWM ================================================================
+	//
+	//	NOTE: Possible conflict of B.0 with RX pin from UART0
+	//	
+	//	PinB0_PWM();		// Set up PWM peripheral (Pin on B.0)
+	//===========================================================================	
+		
 	// ===== Comparator =====	
 		//analog_comparator();	//Set up anaolg comparator peripheral
 
@@ -490,7 +553,7 @@ static void Initialization(void)
 	//  	 1         0     => STOP mode
 	//  	 1         1     => (Prohibited)
 	// See ML610Q111/ML610Q112 User Manual - Section 4: MCU Control Function
-		SBYCON = 0;		// Program RUN mode
+	//	SBYCON = 0;		// Program RUN mode
 	//==============================================================================
 
 	//================== VOLTAGE LEVEL SUPERVISOR REGISTER =========================
@@ -508,7 +571,7 @@ static void Initialization(void)
 	//
 	//==============================================================================
 
-  	// IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
+   	// IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 	// INTERRUPT SETUP...
 		//	The ML610Q1xx mcu's have 31 hardware interrupt sources 
 		//		 7 External Interrupt Sources
@@ -517,7 +580,7 @@ static void Initialization(void)
 		//			TIMERS (6); UART; Comparators (2); PWM's ((4); TBC (4)		
 	
 		irq_di();	// Disable Interrupts
-		irq_init();	// Initialize Interrupts (All Off and NO Requests)
+		//irq_init();	// Initialize Interrupts (All Off and NO Requests)
 			//====================================================================
 			//FOR NOTES ONLY...This is all taken care of in "irq_init()"
 				// INTERRUPT ENABLE REGISTERS...
@@ -553,9 +616,10 @@ static void Initialization(void)
 			//------------- SET UP UART Interrupts Handler -------------------------------------------
 				(void)irq_setHdr( (unsigned char)IRQ_NO_UA0INT, _intUart );
 					EUA0 = 1; 	// EUA0 is the enable flag for the UART0 interrupt (1=ENABLED)
+					QUA0 = 1;	// Request Flag for the UART_0 	INTERRUPT (1=REQUEST, 0-NO-REQUEST)
 			//----------------------------------------------------------------------------------------
 			
-			//------------- SET UP I2C MASTER Interrupts Handler -------------------------------------
+ 			//------------- SET UP I2C MASTER Interrupts Handler -------------------------------------
 				(void)irq_setHdr( (unsigned char)IRQ_NO_I2CMINT, _intI2c );
 					EI2CM = 1; // EI2CM is the enable flag for the I2C MASTER interrupt (1=ENABLED)
 					QI2CM = 0;
@@ -564,19 +628,19 @@ static void Initialization(void)
 			//------------- SET UP ADC Interrupts Handler --------------------------------------------
 				(void)irq_setHdr( (unsigned char)IRQ_NO_SADINT, _intADC );
 					ESAD = 1; // ESAD is the enable flag for the ADC interrupt (1=ENABLED)
-					QSAD = 0;
+					QSAD = 0; // Request Flag for the ADC INTERRUPT (1=REQUEST, 0-NO-REQUEST)
 			//----------------------------------------------------------------------------------------
 			
-			//------------- SET UP  xHz TBC Interrupt (Options: 128Hz, 32Hz, 16Hz, 2Hz) --------------
+/* 			//------------- SET UP  xHz TBC Interrupt (Options: 128Hz, 32Hz, 16Hz, 2Hz) --------------
 				(void)irq_setHdr( (unsigned char)IRQ_NO_T2HINT, TBC_ISR );  //Clear interrupt request flag
 					E2H = 1;	  // Enable x Hz TBC Interrupt (1=ENABLED)
 					Q2H = 1;	  // Request flag for the time base counter x Hz interrupt	
 			// -----			
 			//------------- TBC...Set Ratio: : 1:1 => 1_1 --------------------------------------------
 				(void)tb_setHtbdiv( (unsigned char)TB_HTD_1_1 ); //Set the ratio of dividing frequency of the time base counter
-			//----------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------------------------- 
 			
-			//------------- SET UP TIMER 8/9 Interrupt to increment timers every ~X ms ---------------
+ 			//------------- SET UP TIMER 8/9 Interrupt to increment timers every ~X ms ---------------
 				(void)irq_setHdr( (unsigned char)IRQ_NO_TM9INT, TMR89_ISR );  //Clear interrupt request flag
 					ETM8 = 1;	  	// Enable timer 8 Interrupt (1=ENABLED
 					ETM9 = 1;	  	// Enable timer 9 Interrupt (1=ENABLED)
@@ -665,32 +729,50 @@ static void Initialization(void)
 			(void)irq_setHdr( (unsigned char)IRQ_NO_PB3INT, ExtInt_ISR );  //Clear interrupt request flag
 					EPB3 = 0;	//1=> Enables Interrupt
 					QPB3 = 0;	//Enables Request Flag (need to set to 
-			//----------------------------------------------------------------------------------------
+			//----------------------------------------------------------------------------------------  */
 	
 			
 	irq_ei(); // Enable Interrupts
-	// IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII 
+	// IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII  
 
 	// ===== UART Initialization ================================================
 	//
 	//	Pin PB0 of mcu => RX  
 	// 	Pin PB1 of mcu => TX 
 	// 
+
+		
 		(void)uart_init( (unsigned char)UART_CS_HSCLK,	// Generator       				
 			     (unsigned short)HSCLK_KHZ,				// HSCLK frequency 				
 			     &_uartSetParam );						// Parameters from Structure    
 		uart_PortSet();									// Set UART Port Pins
 		_flgUartFin = 0;
 		uart_stop();
-	//
+		
+		//Now test UART!!
+			//Add EOL characters to strings
+			HelloWorld[12] 	= 0x0D;  // CR  (Carriage Return)
+			HelloWorld[13] 	= 0x0A;	 // LF  (Line Feed)
+			
+		uart_startSend(HelloWorld, 14, _funcUartFin); // Send, "Hello World!"
+			while(_flgUartFin != 1){
+				NOPx(1);
+				main_clrWDT();
+			}
 	//===========================================================================
-	
-	
 
-	// SET UP WATCH DOG TIMER...
+	// ===== I2C Initialization =================================================
+	//	(void)i2c_init(I2C_MOD_FST, (unsigned short)HSCLK_KHZ, I2C_SYN_ON);
+	//	I20SYN = 1;		//Enable Clock Stretching	
+	//===========================================================================
+
+	// ===== SET UP WATCH DOG TIMER =============================================
 		WDTMOD = 0x03; 	// 0x03=overflow 8sec...
-		main_clrWDT(); 	// Clear WDT
+		main_clrWDT(); 	// Clear WDT   
+	//===========================================================================
 
+		
+		
 }//End Initialization
 //===========================================================================
 
@@ -700,11 +782,19 @@ static void Initialization(void)
 //===========================================================================
 static void SetOSC(void){
 
-	FCON0 = 0x00;		//xMHz PLL (3=1MHz; 2=2MHz; 1=4MHz; 0=8MHz)...
- 
-      ENOSC = 1;		//1=Enable High Speed Oscillator...
+	//Frequency Control Register 0 (FCON0) 	
+	//	used to control the high-speed clock generation circuit and to select system clock.
+		SYSC0  = 0;			// Used to select the frequency of the HSCLK => 00=8.192MHz.
+		SYSC1  = 0;			//...
+		OSCM1  = 1;			// 10 => Built-in PLL oscillation mode
+		OSCM0  = 0;			//...
+		
+	// Frequency Control Register 1 (FCON1)
+		ENOSC  = 1;			// 1=Enable High Speed Oscillator...
+		SYSCLK = 1;			// Select System Clock: 1=HSCLK; 0=LSCLK 
+		LPLL   = 1;			// 1=Enables the use of PLL oscillation - ADDED 4/30/2013
 
-	__EI();				//INT enable
+	__EI();					//INT enable
 }
 //===========================================================================
 
@@ -1106,30 +1196,30 @@ void PinB0_PWM(void){
 	Routine Name:	_funcUartFin
 	Form:			static void _funcUartFin( unsigned int size, unsigned char errStat )
 	Parameters:		unsigned int size		 : 
-				unsigned char errStat	 : 
+					unsigned char errStat	 : 
 	Return value:	void
 	Description:	UART transmission completion callback function.
 ******************************************************************************/
 static void _funcUartFin( unsigned int size, unsigned char errStat )
 {
-	uart_continue();					// Function in UART.c: process to continue send and receive...
+	uart_continue();						// Function in UART.c: process to continue send & receive...
 	_flgUartFin = (unsigned char)FLG_SET;
-	main_reqNotHalt();				// uncommented 5/2/2013
+	main_reqNotHalt();						// uncommented 5/2/2013
 }
 
 /*******************************************************************************
 	Routine Name:	_funcI2CFin
 	Form:			static void _funcUartFin( unsigned int size, unsigned char errStat )
 	Parameters:		unsigned int size		 : 
-				unsigned char errStat	 : 
+					unsigned char errStat	 : 
 	Return value:	void
 	Description:	UART transmission completion callback function.
 ******************************************************************************/
 static void _funcI2CFin( unsigned int size, unsigned char errStat )
 {
-	i2c_continue();					// Function in UART.c: process to continue send and receive...
+	i2c_continue();							// Function in UART.c: process to continue send & receive...
 	_flgI2CFin = (unsigned char)FLG_SET;
-	main_reqNotHalt();				// uncommented 5/2/2013
+	main_reqNotHalt();						// uncommented 5/2/2013
 }
 
 /*******************************************************************************
@@ -1196,7 +1286,7 @@ static void TBC_ISR( void )
 static void TMR89_ISR( void ) 
 {
 	//Your Code Here...
-	LED1_pin ^= 1;
+	//LED1_pin ^= 1;
 	LED2_pin ^= 1;
 	tm_init(TM_CH_NO_89);
 	tm_start89();		//Clear & Restart Timer...
@@ -1208,7 +1298,7 @@ static void TMR89_ISR( void )
 static void TMRAB_ISR( void ) 
 {
 	//Your Code Here...
-	LED4_pin ^= 1;
+	//LED4_pin ^= 1;
 	LED5_pin ^= 1;
 	tm_init(TM_CH_NO_AB);
 	tm_startAB();		//Clear & Restart Timer...
@@ -1220,7 +1310,7 @@ static void TMRAB_ISR( void )
 static void TMREF_ISR( void ) 
 {
 	//Your Code Here...
-	LED7_pin ^= 1;
+	//LED7_pin ^= 1;
 	LED8_pin ^= 1;
 	tm_init(TM_CH_NO_EF);
 	tm_startEF();		//Clear & Restart Timer...
@@ -1258,20 +1348,20 @@ void MyUART_Send(void){
 	int i;
 
 	
-	for(i = 0; i<150; i++)
+	for(i = 0; i<50; i++)
 	{
-		MyData[i] = 0x20;		// Clear Data Array...
+		MyTx[i] = 0x20;		// Clear Data Array...
 	}
 
-	sprintf(MyData, "%f,%f,%f", Sensor1_Data, Sensor2_Data, Sensor3_Data);
+	sprintf(MyTx, "%f,%f,%f", Sensor1_Data, Sensor2_Data, Sensor3_Data);
 	
-	MyData[148] = 0x0D;	//CR
-	MyData[149] = 0x0A;	//LF
+	MyTx[148] = 0x0D;	//CR
+	MyTx[149] = 0x0A;	//LF
 	
 	//Send Returned Sensor Output to PC!
 	_flgUartFin = 0;
 	uart_stop();
-	uart_startSend(MyData, 150, _funcUartFin);
+	uart_startSend(MyTx, 50, _funcUartFin);
 	while(_flgUartFin != 1){
 		main_clrWDT();
 	}
@@ -1285,13 +1375,13 @@ void MyUART_Receive(void){
 		//Begin UART Receive
 		_flgUartFin = 0;
 		uart_stop();
-		uart_startReceive(RecData, 8, _funcUartFin);
+		uart_startReceive(MyRx, 50, _funcUartFin);
 		while(_flgUartFin != 1){
 			main_clrWDT();
 		}
 		
-		if(RecData[0] == 0x44){			//if RecData == "DD" for Data Dump
-			if(RecData[1] == 0x44){
+		if(MyRx[0] == 0x44){			//if MyRx == "DD" for Data Dump
+			if(MyRx[1] == 0x44){
 			//...your code here...	
 			}
 		}
@@ -1347,7 +1437,7 @@ void LCD_Init(void){
 	int i;
 
 	
-	for(i = 0; i<150; i++)
+	for(i = 0; i<200; i++)
 	{
 		MyData[i] = 0x20;		// Clear Data Array...
 	}
@@ -1365,15 +1455,15 @@ void LCD_Init(void){
 
 
 
-	sprintf(MyData, "%f,%f,%f", Sensor1_Data, Sensor2_Data, Sensor3_Data);
+	//sprintf(MyData, "%f,%f,%f", Sensor1_Data, Sensor2_Data, Sensor3_Data);
 	
-	MyData[148] = 0x0D;	//CR
-	MyData[149] = 0x0A;	//LF
+	//MyData[148] = 0x0D;	//CR
+	//MyData[149] = 0x0A;	//LF
 	
 	//Send Returned Sensor Output to PC!
 	_flgUartFin = 0;
 	uart_stop();
-	uart_startSend(MyData, 150, _funcUartFin);
+	uart_startSend(MyData, 200, _funcUartFin);
 	while(_flgUartFin != 1){
 		main_clrWDT();
 	}

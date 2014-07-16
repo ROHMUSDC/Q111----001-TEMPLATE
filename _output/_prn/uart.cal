@@ -19,5 +19,5 @@ uart_getTransSize
 uart_ErrGet
 uart_ErrClr
 uart_PortSet
-OLDuart_0_Init
+uart_0_Init
 

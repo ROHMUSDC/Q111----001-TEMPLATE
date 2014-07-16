@@ -33,47 +33,31 @@ tm_setAOneshot
 tm_setBOneshot
 main
 |   Initialization
-|   |   SetOSC
-|   |   |   __EI?
 |   |   PortA_Low
 |   |   |   main_clrWDT
-|   |   |   |   __DI?
-|   |   |   |   __EI?
 |   |   PortB_Low
 |   |   |   main_clrWDT...
 |   |   PortC_Low
 |   |   |   main_clrWDT...
-|   |   PinB0_PWM
+|   |   SetOSC
+|   |   |   __EI?
 |   |   irq_di?
-|   |   irq_init?
 |   |   irq_setHdr?
-|   |   tb_setHtbdiv...
-|   |   tm_init?
-|   |   tm_set89Data...
-|   |   tm_set89Source...
-|   |   tm_start89...
-|   |   tm_setABData...
-|   |   tm_setABSource...
-|   |   tm_startAB...
-|   |   tm_setEFData...
-|   |   tm_setEFSource...
-|   |   tm_startEF...
 |   |   irq_ei?
 |   |   uart_init?
 |   |   uart_PortSet?
 |   |   uart_stop?
-|   |   main_clrWDT...
-|   LCD_Init
-|   |   sprintf_nn?
-|   |   uart_stop?
 |   |   uart_startSend?
+|   |   NOPx
 |   |   main_clrWDT...
 |   main_clrWDT...
-|   NOPx
-|   PWM_B0_ON
+|   uart_startSend?
+|   NOPx...
 analog_comparator
 PortA_Digital_Inputs
 |   main_clrWDT...
+PWM_B0_ON
+PinB0_PWM
 _funcUartFin
 |   uart_continue?
 |   main_reqNotHalt
@@ -112,4 +96,9 @@ SerialLCDSplash
 ClearSerialLCD
 |   SendLCDCmd...
 |   uartSendStr?
+LCD_Init
+|   sprintf_nn?
+|   uart_stop?
+|   uart_startSend?
+|   main_clrWDT...
 
