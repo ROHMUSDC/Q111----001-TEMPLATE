@@ -85,12 +85,12 @@ typedef void (*cbfUart)( unsigned int size, unsigned char errStat );
 /*#                               Prototype                                  #*/
 /*############################################################################*/
 
-int			uart_init( unsigned char cs, unsigned short kHz , const tUartSetParam *prm );
+int				uart_init( unsigned char cs, unsigned short kHz , const tUartSetParam *prm );
 void			uart_startSend( unsigned char *data, unsigned int size, cbfUart func );
 void			uart_startReceive( unsigned char *data,unsigned int size, cbfUart func );
-int			uart_continue( void );
+int				uart_continue( void );
 void			uart_stop( void );
-int			uart_checkIRQ( void );
+int				uart_checkIRQ( void );
 void			uart_clearIRQ( void );
 unsigned int	uart_getTransSize( void );
 void 			uart_ErrSet( unsigned char status );

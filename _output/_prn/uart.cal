@@ -4,10 +4,6 @@ Source File : uart\uart.c
 
 uart_init
 |   uart_PortClear
-uartSendStr
-|   _send_byte
-uart0_startReceive
-|   _send_byte...
 uart_startSend
 uart_startReceive
 uart_continue
@@ -19,5 +15,4 @@ uart_getTransSize
 uart_ErrGet
 uart_ErrClr
 uart_PortSet
-uart_0_Init
 
