@@ -15,8 +15,11 @@
 //		 6.) Demo of Hardware PWM Control 
 //		 7.) UART TX Demo 
 //		 8.) UART RX Demo
-//		 9.) ADC Demo...
-//		10.) IsC Master Demo...    
+//		 9.) Serial LCD Demo
+//		10.) PIR Sensor Motion Detection
+//		11.) HALL Sensor Magnetic Field Detection
+//		12.) ADC Demo...
+//		13.) I2C Master Demo...    
 //
 // Authors:	 C. Schell, K. Bahar & F. Lee 
 //		 	 ROHM Semiconductor USA, LLC
@@ -46,7 +49,7 @@
 //						Total size (TABLE ) = 0828A   (33418)
 //
 // Started:  April 6th, 2013
-// Updated:	 JULY 17th, 2014
+// Updated:	 JULY 29th, 2014
 //*****************************************************************************
 
 // ================================ ML610Q111 ================================= 
@@ -163,77 +166,46 @@
 	#define SPI_SCL 	PB5D
 	#define SPI_CS0		PC0D
 	#define SPI_CS1 	PC1D 	
-	
-		// ====== DICE ======
-	//
-	//	1	2	3
-	//
-	//	4	5	6
-	//
-	//	7	8	9
-	//
-	// ==================
 
-	#define LED1_pin		PC1D	//2013-04-18 (LaPi Plug 'n Play Board)
-	#define LED2_pin		PC3D	//2013-04-18 (LaPi Plug 'n Play Board)
-	//#define LED3_pin		PB0D	//2013-04-18 (LaPi Plug 'n Play Board)
-	#define LED4_pin		PC0D	//2013-04-18 (LaPi Plug 'n Play Board)
-	#define LED5_pin		PC2D	//2013-04-18 (LaPi Plug 'n Play Board)
-	#define LED6_pin		PB5D	//2013-04-18 (LaPi Plug 'n Play Board)
-	#define LED7_pin		PB2D	//2013-04-18 (LaPi Plug 'n Play Board)
-	#define LED8_pin		PB7D	//2013-04-18 (LaPi Plug 'n Play Board)
-	#define LED9_pin		PB6D	//2013-04-18 (LaPi Plug 'n Play Board)
+	
+	//LED's in DICE PATTERN...	
+		// ====== DICE ======
+		//	1	2	3
+		//
+		//	4	5	6
+		//
+		//	7	8	9
+		// ==================
+		#define LED1_pin		PC1D	//2013-04-18 (LaPi Plug 'n Play Board)
+		#define LED2_pin		PC3D	//2013-04-18 (LaPi Plug 'n Play Board)
+		//#define LED3_pin		PB0D	//2013-04-18 (LaPi Plug 'n Play Board)
+		#define LED4_pin		PC0D	//2013-04-18 (LaPi Plug 'n Play Board)
+		#define LED5_pin		PC2D	//2013-04-18 (LaPi Plug 'n Play Board)
+		#define LED6_pin		PB5D	//2013-04-18 (LaPi Plug 'n Play Board)
+		#define LED7_pin		PB2D	//2013-04-18 (LaPi Plug 'n Play Board)
+		#define LED8_pin		PB7D	//2013-04-18 (LaPi Plug 'n Play Board)
+		#define LED9_pin		PB6D	//2013-04-18 (LaPi Plug 'n Play Board)
+	
+	//ANALOG INPUTS...
+		#define Acc_Temp_sig_pin	PA0D	//2013-04-18 (LaPi Plug 'n Play Board)
+		#define Acc_Y_sig_pin		PA1D	//2013-04-18 (LaPi Plug 'n Play Board)
+		#define Acc_X_sig_pin		PA2D	//2013-04-18 (LaPi Plug 'n Play Board)
+	
+	//Misc. Connections...
+		#define Hall_sig_pin		PB3D	//2013-04-18 (LaPi Plug 'n Play Board)
+		#define PIR_pin				PB4D	//2013-04-18 (LaPi Plug 'n Play Board)
 	
 	// ===== Commands for Parallax Serial LCD Display =====
-	#define LCD_Display_OFF			(  21U )
-	#define LCD_Display_ON_NoBlink	(  22U )
-	#define LCD_Display_ON 			(  25U )
-	#define LCD_Backlight_ON 		(  17U )
-	#define LCD_Backlight_OFF 		(  18U )
-	#define LCD_HOME 				( 128U )
-	#define LCD_Line2				( 148U )
+		#define LCD_FormFeedClear		(  12U )
+		#define LCD_CarriageReturn		(  13U )
+		#define LCD_Display_OFF			(  21U )
+		#define LCD_Display_ON_NoBlink	(  22U )
+		#define LCD_Display_ON 			(  25U )
+		#define LCD_Backlight_ON 		(  17U )
+		#define LCD_Backlight_OFF 		(  18U )
+		#define LCD_HOME 				( 128U )
+		#define LCD_Line2				( 148U )
 	
-	// ===== Serial Strings =====
-	#define WelcomeString		( "LAPIS Q111 LaPi DEV. DEMO") 
-	#define WelcomeString_LEN	( sizeof(WelcomeString) - 1 )
-
-	#define ClearLCD			( "                                ") 
-	#define ClearLCD_LEN		( sizeof(ClearLCD) - 1 )
-
-	#define DataHeaderString	( "My Sensor Data = \n\r")
-	#define DataHeaderString_LEN	( sizeof(DataHeaderString) - 1  )
-
-	#define AlarmString			( "MOTION DETECTED BY PIR SENSOR!  \n\r" ) 
-	#define AlarmString_LEN		( sizeof(AlarmString) - 1 )
-
-	#define NoAlarmString		( "PIR: NO MOTION  - ALL IS WELL!  \n\r" ) 
-	#define NoAlarmString_LEN	( sizeof(NoAlarmString) - 1 )
-
-	#define MagFieldString		( "MAGNETIC Field  DETECTED BY HALL\n\r" ) 
-	#define MagFieldString_LEN	( sizeof(MagFieldString) - 1 )
-
-	#define NoMagFieldString	( "HALL:NO MAGNETIC Field Detected!\n\r" ) 
-	#define NoMagFieldString_LEN	( sizeof(MagFieldString) - 1 )
-
-	#define OkayString			( "OKAY!\n\r") 
-	#define OkayString_LEN		( sizeof(OkayString) - 1 )
-
-	#define TestString			( "TESTING!") 
-	#define TestString_LEN		( sizeof(TestString) - 1 )
-
-	#define NewLineString		( "\n\r") 
-	#define NewLineString_LEN	( sizeof(NewLineString) - 1 )
-
-	#define FailureString		( "FAILURE!") 
-	#define FailureString_LEN	( sizeof(FailureString) - 1 )
-
-	#define SuccessString		( "SUCCESS!") 
-	#define SuccessString_LEN	( sizeof(SuccessString) - 1 )
-
-	#define PartSuccessString		( "PARTIALLY SUCCESSFUL!") 
-	#define PartSuccessString_LEN	( sizeof(PartSuccessString) - 1 )
-	
-
 //*****************************************************************************
 //===========================================================================
 //   MACROS: 
@@ -244,30 +216,29 @@
 	#define FLG_SET	    ( 0x01u ) 	
 
 // ===== SET DESIRED UART SETTINGS HERE! (Options in UART.h) ================
-#define UART_BAUDRATE		( UART_BR_9600BPS) 	// Data Bits Per Second - Tested at rates from 2400bps to 512000bps!
-#define UART_DATA_LENGTH	( UART_LG_8BIT )		// x-Bit Data
-#define UART_PARITY_BIT		( UART_PT_NON )			// Parity
-#define UART_STOP_BIT		( UART_STP_1BIT )		// x Stop-Bits
-#define UART_LOGIC			( UART_NEG_POS )		// Desired Logic
-#define UART_DIRECTION		( UART_DIR_LSB )		// LSB or MSB First 
+	#define UART_BAUDRATE		( UART_BR_9600BPS) 	// Data Bits Per Second - Tested at rates from 2400bps to 512000bps!
+	#define UART_DATA_LENGTH	( UART_LG_8BIT )		// x-Bit Data
+	#define UART_PARITY_BIT		( UART_PT_NON )			// Parity
+	#define UART_STOP_BIT		( UART_STP_1BIT )		// x Stop-Bits
+	#define UART_LOGIC			( UART_NEG_POS )		// Desired Logic
+	#define UART_DIRECTION		( UART_DIR_LSB )		// LSB or MSB First 
 
-		// ===== UART Settings =====
-		//STRUCTURE:
-			static const tUartSetParam  _uartSetParam = {		// UART Parameters
-				UART_BAUDRATE,						// Members of Structure...
-				UART_DATA_LENGTH,					// Members of Structure...
-				UART_PARITY_BIT,					// Members of Structure...
-				UART_STOP_BIT,						// Members of Structure...
-				UART_LOGIC,							// Members of Structure...
-				UART_DIRECTION						// Members of Structure...
-			};
+	// ===== STRUCTURE for UART Settings =====
+		static const tUartSetParam  _uartSetParam = {		// UART Parameters
+			UART_BAUDRATE,						// Members of Structure...
+			UART_DATA_LENGTH,					// Members of Structure...
+			UART_PARITY_BIT,					// Members of Structure...
+			UART_STOP_BIT,						// Members of Structure...
+			UART_LOGIC,							// Members of Structure...
+			UART_DIRECTION						// Members of Structure...
+		};
 //===========================================================================
 
 
 
 //*****************************************************************************
 //===========================================================================
-//   STRUCTURES: 
+//Other STRUCTURES: 
 //===========================================================================
 	//Example Structure Declaration
 	typedef struct {
@@ -275,7 +246,6 @@
 		unsigned char state_sub : 2;
 		unsigned char reserve   : 5;
 	} STRUCT_STATE;	 
-
 
 //*****************************************************************************
 
@@ -321,27 +291,31 @@
 	void TMREF_ISR( void );			// TIMER E/F Interrupt Service Routine...
 	void ExtInt_ISR( void );		// External Interrupt Interrupt Service Routine...
 	
+	void NOPms( unsigned int ms );	// no return value; "ms" in milliseconds as Argument
+	
 	void SerialLCD_Init_and_Clear (void);	// no return value and no arguments 
 
 	void UART_TX_TEST (void);				// no return value and no arguments
 	void UART_RX_TEST (void);				// no return value and no arguments
-
 	
-
+	void PIR_Detect(void);				// no return value and no arguments
+	void HALL_Detect(void);				// no return value and no arguments
+	void PIR_ALARM (void);				// no return value and no arguments
+	void MAG_ALARM (void);				// no return value and no arguments
 
 //*****************************************************************************
-//GLOBALS...
+//GLOBAL VARIABLE DECLARATIONS...
 
 	//UART, I2C & ADC Variables
 	unsigned char	_flgUartFin;
 	unsigned char 	_flgI2CFin;
 	unsigned char	_flgADCFin;
-	unsigned char	_reqNotHalt;
-	
+	unsigned char	_reqNotHalt; 
 
-/*######################################50######################################*/
-/*#                                  APIs                                    #*/
-/*############################################################################*/
+
+/*##############################################################################*/
+/*#                                  APIs                                      #*/
+/*##############################################################################*/
 //*****************************************************************************
 //===========================================================================
 //  	Start of MAIN FUNCTION
@@ -360,22 +334,21 @@ int main(void)
 	Init:
 		Initialization();		// Init Micro...(Ports, Timers, OSC, IRQ's, UART, etc...)
 		
-		SerialLCD_Init_and_Clear();		// Set up Parallax Serial LCD Display...
+		SerialLCD_Init_and_Clear();	// Init And/Or Clear Parallax Serial LCD Display...
 
-		UART_TX_TEST();					// Test UART TX...
-
-		//SerialLCD_Init_and_Clear(); 	//Clear Display in prep for ECHO
-			
-	Rx_Test_Loop:
+		UART_TX_TEST();				// Test UART TX...
 		
-		UART_RX_TEST();
-	
-	goto Rx_Test_Loop;
+		NOPms(2000);
+		
+		SerialLCD_Init_and_Clear();	// Init And/Or Clear Parallax Serial LCD Display...
+		
+		//UART_RX_TEST();			// Uncomment to Test UART RX...(You should use a lop here to better test)
 
 	Primary_Loop:		
 		//PLACE USER CODE HERE...
 		//PWM_B0_ON(4000, 125);	//period, Duty Cycle variables
-
+		PIR_Detect();
+		
 		LED5_pin ^= 1;
 		
 		main_clrWDT();
@@ -441,9 +414,7 @@ static void Initialization(void){
 		PortB_Low();	//Initialize all 8 Ports of Q111 Port B to GPIO-Low
 		PortC_Low();	//Initialize all 4 Ports of Q111 Port C to GPIO-Low
 
-	// UART INIT...	
-		//uart_0_Init();
-				
+			
 				
 	// ===== Set Oscillator Rate =====
      	SetOSC(); 	//8MHz
@@ -632,7 +603,8 @@ static void Initialization(void){
 			//----------------------------------------------------------------------------------------
 
 			
- 			//------------- SET UP TIMER A/B Interrupt to increment timers every ~X ms ---------------
+ 			//Commented Timer A/B Interrupt out, as it is used for NOPms() function
+			//------------- SET UP TIMER A/B Interrupt to increment timers every ~X ms ---------------
 				(void)irq_setHdr( (unsigned char)IRQ_NO_TMBINT, TMRAB_ISR );  //Clear interrupt request flag
 					ETMA = 1;	  	// Enable timer 8 Interrupt (1=ENABLED
 					ETMB = 1;	  	// Enable timer 9 Interrupt (1=ENABLED)
@@ -655,7 +627,7 @@ static void Initialization(void){
 					HTD1 = 1;
 					HTD0 = 1; 
 			//----------------------------------------------------------------------------------------
-
+			
 			
 			//------------- SET UP TIMER E/F Interrupt to increment timers every ~X ms ---------------
 				(void)irq_setHdr( (unsigned char)IRQ_NO_TMFINT, TMREF_ISR );  //Clear interrupt request flag
@@ -1084,7 +1056,7 @@ void PinB0_PWM(void){
 
 /*******************************************************************************
 	Routine Name:	NOPms
-	Form:			void NOP1000( unsigned int ms )
+	Form:			void NOPms( unsigned int ms )
 	Parameters:		unsigned int sec = "Number of seconds where the device is 
 						not doing anything"
 	Return value:	void
@@ -1092,12 +1064,10 @@ void PinB0_PWM(void){
 					timer A+B (max 0xFFFF)*(HTBCLK = 1/16 * HSCLK 
 					= (1/16)*8192kHz = 512kHz, see HTBDR to change if 
 					we need an even smaller increment timer...)
-					1/(512kHz) * 0xFFFF = 127ms
-					
+					1/(512kHz) * 0xFFFF = 127ms					
 ******************************************************************************/
-/* 
-	void NOPms( unsigned int ms )
-	{
+
+void NOPms( unsigned int ms ){ 
 	unsigned int timerThres;
 	unsigned char TimeFlag;
 	unsigned int TempSec;
@@ -1135,8 +1105,7 @@ void PinB0_PWM(void){
 
 	TimerRestart:
 		main_clrWDT();	
-		//tm_restart89();	//using LSCLK, the maximum delay time we have is ~2 secs
-		tm_startAB();
+		tm_startAB();	//using LSCLK, the maximum delay time we have is ~2 secs
 		timer = tm_getABCounter();
 		while(timer < timerThres){
 			timer = tm_getABCounter();
@@ -1148,8 +1117,8 @@ void PinB0_PWM(void){
 			timerThres = 0xFFFF;
 			goto TimerRestart;
 		}
-	} //End NOPms 
-*/
+} //End NOPms 
+
 
 /*******************************************************************************
 	Routine Name:	_funcUartFin
@@ -1312,41 +1281,18 @@ xxx = MyCount;
 
 //===========================================================================
 void SerialLCD_Init_and_Clear(void){
-	/* 	FOR REF ONLY - CMD's used to control Parallax Serial LCD!
-		#define LCD_Display_OFF			(  21U )
-		#define LCD_Display_ON_NoBlink	(  22U )
-		#define LCD_Display_ON 			(  25U )
-		#define LCD_Backlight_ON 		(  17U )
-		#define LCD_Backlight_OFF 		(  18U )
-		#define LCD_HOME 				( 128U )
-		#define LCD_Line2				( 148U ) 
-	*/
-		int i;
-		unsigned char LCD_CONFIG[3]   = {LCD_Display_ON, LCD_Backlight_ON, LCD_HOME}; 
-		unsigned char CLEAR_LCD[32];		//Small Array...for UART Transmission, etc
 
-			
- 		//FIRST CONFIGURE THE LCD...
-		uart_startSend(LCD_CONFIG, 3, _funcUartFin); // Send LCD COMMANDS
+		unsigned char LCD_CONFIG[3]   = {LCD_Display_ON, LCD_Backlight_ON, LCD_HOME}; 
+		unsigned char LCD_CONFIG2[1]  = {LCD_FormFeedClear};	//Move to 0,0 & Clear Display 		
+
+ 		//-------------------------------------------------------------
+		//Now, CLEAR THE DISPLAY!
+		uart_startSend(LCD_CONFIG2, 1, _funcUartFin); // Send LCD COMMANDS
 		while(_flgUartFin != 1){
 			main_clrWDT(); 
 		}
-
-		//-------------------------------------------------------------
-		//Now, CLEAR THE DISPLAY!
-		for(i = 0; i<32; i++) 
-		{
-			CLEAR_LCD[i] = 0x20;	// 0x20 = "Space" => Clear Array
-		}		
-			//CLEAR Parallax LCD Display!
-			_flgUartFin = 0;
-			uart_stop();
-			uart_startSend(CLEAR_LCD, 32, _funcUartFin);
-			while(_flgUartFin != 1){
-				main_clrWDT(); 
-			}	
-		//-------------------------------------------------------------	
-
+		
+		NOPms(100); 
 }
 //===========================================================================
 
@@ -1359,7 +1305,6 @@ void UART_TX_TEST (void)
 	// ===== START UART TX TEST... =====
 		unsigned char UARTStartupMessage[26] = {"ML610Q111 UART - TX Demo: "};
 		
-		//CLEAR Parallax LCD Display!
 		_flgUartFin = 0;
 		uart_stop();
 		uart_startSend(UARTStartupMessage, 26, _funcUartFin);
@@ -1367,15 +1312,14 @@ void UART_TX_TEST (void)
 			main_clrWDT(); 
 		}
 			
-	// ===== END UART TX TEST =====  
+	/* // ===== END UART TX TEST =====  
 	
-
 			
- 		//FIRST CONFIGURE THE LCD...
+  		//Re-CONFIGURE THE LCD...
 		uart_startSend(LCD_HOME, 1, _funcUartFin); // Return Cursor back to HOME
 		while(_flgUartFin != 1){
 			main_clrWDT(); 
-		}
+		} */
 }
 //===========================================================================
 
@@ -1415,5 +1359,107 @@ void UART_RX_TEST(void){
 		
 }
 //===========================================================================
+
+//===========================================================================
+void PIR_Detect(void)
+{
+unsigned int x;	// 0 to 65,535
+// Passive InfraRed Sensor Detection...
+// Q111 MICRO CONNECTIONS FOR (LaPi Plug 'n Play Board)
+
+	//PIR_pin => PB4D	
+	//Setup PIR Sensor Input on B.4
+		//Step 1: Set Pin Direction...
+			PB4DIR = 1;			// PortB Bit4 set Direction to INPUT...
+		//Step 2: Set Pin I/O Type...
+			PB4C1  = 0;			// PortB Bit4 set Type to HIGH-IMPEDANCE INPUT...
+			PB4C0  = 0;	
+		//Step 3: Set Pin Purpose...
+			PB4MD1  = 0;		// PortB Bit4 set Purpose to GENERAL PURPOSE Input/Output...
+			PB4MD0  = 0;
+
+	if (PIR_pin == 1)
+	{
+		PIR_ALARM();	// PIR DETECTION EVENT!
+	}//endif
+	else if (PIR_pin == 0)
+	{
+	
+		//Add code here for PIR event NOT DETECTED!
+		
+	}
+
+}
+//===========================================================================
+
+//===========================================================================
+void HALL_Detect(void)
+{
+unsigned int x;	// 0 to 65,535
+// HALL Sensor Detection...
+// Q111 MICRO CONNECTIONS FOR (LaPi Plug 'n Play Board)
+
+	//Hall_sig_pin =>	PB3D	
+	//Setup HALL Sensor Input on B.3
+		//Step 1: Set Pin Direction...
+			PB3DIR = 1;			// PortB Bit3 set Direction to INPUT...
+		//Step 2: Set Pin I/O Type...
+			PB3C1  = 0;			// PortB Bit3 set Type to HIGH-IMPEDANCE INPUT...
+			PB3C0  = 0;	
+		//Step 3: Set Pin Purpose...
+			PB3MD1  = 0;		// PortB Bit3 set Purpose to GENERAL PURPOSE Input/Output...
+			PB3MD0  = 0;
+
+	if (Hall_sig_pin == 0) 		//Low means B-field present...
+	{
+	
+		//Add code here for MAG FIELD DETECTION EVENT!
+			
+	}//endif
+	else if (Hall_sig_pin == 1)	//High means no B-field present...
+	{
+	
+		//Add code here for MAG FIELD NOT DETECTED!
+		
+	}
+
+}
+//===========================================================================
  	
+//===========================================================================
+void PIR_ALARM (void) {
+
+	//unsigned char LCD_Cmd_HOME  = {LCD_HOME}; 
+	//unsigned char LCD_Cmd_FF  = {LCD_FormFeedClear};	//The cursor is moved to position 0 on line 0 and the entire display is cleared 
+
+	unsigned char PIR_ALARM_Message[16] = {"PIR EVENT ALARM!"};
+	unsigned char counter;
+		
+	// ===== START ALARM EVENT UART TX... =====
+		//CLEAR Parallax LCD Display!
+		SerialLCD_Init_and_Clear();	// Init And/Or Clear Parallax Serial LCD Display...
+		//Now Send ALARM Message...
+		_flgUartFin = 0;
+		uart_stop();
+		uart_startSend(PIR_ALARM_Message, 16, _funcUartFin);
+		while(_flgUartFin != 1){
+			main_clrWDT(); 
+		}
+		
+		///FLASH LED while Event Detected...
+		while(PIR_pin == 1) //While motion is still detected...
+		{
+			LED8_pin = 1;	// Toggle LED
+				NOPms(100);
+			LED8_pin = 0;	// Toggle LED
+				NOPms(100);
+		} ///wend
+		
+		//Finally, Clear Display & Reset
+		SerialLCD_Init_and_Clear();	// Init And/Or Clear Parallax Serial LCD Display...
+	// ===== END ALARM EVENT UART TX =====  
+	
+
+}
+//===========================================================================
 

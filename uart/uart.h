@@ -35,6 +35,7 @@
 #define UART_BR_38400BPS	( 38400 )	/* baud rate : 38400bps			*/
 #define UART_BR_57600BPS	( 57600 )	/* baud rate : 57600bps			*/
 #define UART_BR_115200BPS	( 115200 )	/* baud rate : 115200bps		*/
+#define UART_BR_130400BPS	( 130400 )	/* baud rate : 130400bps		*/ //Added by C. Schell 7/24/2014
 #define UART_LG_8BIT		( 0 )		/* data length : 8bit			*/
 #define UART_LG_7BIT		( 1 )		/* data length : 7bit			*/
 #define UART_LG_6BIT		( 2 )		/* data length : 6bit			*/
