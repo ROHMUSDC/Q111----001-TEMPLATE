@@ -49,7 +49,7 @@
 //						Total size (TABLE ) = 0828A   (33418)
 //
 // Started:  April 6th, 2013
-// Updated:	 JULY 18th, 2014
+// Updated:	 JULY 29th, 2014
 //*****************************************************************************
 
 // ================================ ML610Q111 ================================= 
@@ -166,87 +166,46 @@
 	#define SPI_SCL 	PB5D
 	#define SPI_CS0		PC0D
 	#define SPI_CS1 	PC1D 	
+
 	
-	//LED's in DICE PATTERN...
-	
-	// ====== DICE ======
-	//	1	2	3
-	//
-	//	4	5	6
-	//
-	//	7	8	9
-	// ==================
-	#define LED1_pin		PC1D	//2013-04-18 (LaPi Plug 'n Play Board)
-	#define LED2_pin		PC3D	//2013-04-18 (LaPi Plug 'n Play Board)
-	//#define LED3_pin		PB0D	//2013-04-18 (LaPi Plug 'n Play Board)
-	#define LED4_pin		PC0D	//2013-04-18 (LaPi Plug 'n Play Board)
-	#define LED5_pin		PC2D	//2013-04-18 (LaPi Plug 'n Play Board)
-	#define LED6_pin		PB5D	//2013-04-18 (LaPi Plug 'n Play Board)
-	#define LED7_pin		PB2D	//2013-04-18 (LaPi Plug 'n Play Board)
-	#define LED8_pin		PB7D	//2013-04-18 (LaPi Plug 'n Play Board)
-	#define LED9_pin		PB6D	//2013-04-18 (LaPi Plug 'n Play Board)
+	//LED's in DICE PATTERN...	
+		// ====== DICE ======
+		//	1	2	3
+		//
+		//	4	5	6
+		//
+		//	7	8	9
+		// ==================
+		#define LED1_pin		PC1D	//2013-04-18 (LaPi Plug 'n Play Board)
+		#define LED2_pin		PC3D	//2013-04-18 (LaPi Plug 'n Play Board)
+		//#define LED3_pin		PB0D	//2013-04-18 (LaPi Plug 'n Play Board)
+		#define LED4_pin		PC0D	//2013-04-18 (LaPi Plug 'n Play Board)
+		#define LED5_pin		PC2D	//2013-04-18 (LaPi Plug 'n Play Board)
+		#define LED6_pin		PB5D	//2013-04-18 (LaPi Plug 'n Play Board)
+		#define LED7_pin		PB2D	//2013-04-18 (LaPi Plug 'n Play Board)
+		#define LED8_pin		PB7D	//2013-04-18 (LaPi Plug 'n Play Board)
+		#define LED9_pin		PB6D	//2013-04-18 (LaPi Plug 'n Play Board)
 	
 	//ANALOG INPUTS...
-	#define Acc_Temp_sig_pin	PA0D	//2013-04-18 (LaPi Plug 'n Play Board)
-	#define Acc_Y_sig_pin		PA1D	//2013-04-18 (LaPi Plug 'n Play Board)
-	#define Acc_X_sig_pin		PA2D	//2013-04-18 (LaPi Plug 'n Play Board)
+		#define Acc_Temp_sig_pin	PA0D	//2013-04-18 (LaPi Plug 'n Play Board)
+		#define Acc_Y_sig_pin		PA1D	//2013-04-18 (LaPi Plug 'n Play Board)
+		#define Acc_X_sig_pin		PA2D	//2013-04-18 (LaPi Plug 'n Play Board)
 	
 	//Misc. Connections...
-	#define Hall_sig_pin		PB3D	//2013-04-18 (LaPi Plug 'n Play Board)
-	#define PIR_pin				PB4D	//2013-04-18 (LaPi Plug 'n Play Board)
+		#define Hall_sig_pin		PB3D	//2013-04-18 (LaPi Plug 'n Play Board)
+		#define PIR_pin				PB4D	//2013-04-18 (LaPi Plug 'n Play Board)
 	
 	// ===== Commands for Parallax Serial LCD Display =====
-	#define LCD_FormFeedClear		(  12U )
-	#define LCD_CarriageReturn		(  13U )
-	#define LCD_Display_OFF			(  21U )
-	#define LCD_Display_ON_NoBlink	(  22U )
-	#define LCD_Display_ON 			(  25U )
-	#define LCD_Backlight_ON 		(  17U )
-	#define LCD_Backlight_OFF 		(  18U )
-	#define LCD_HOME 				( 128U )
-	#define LCD_Line2				( 148U )
+		#define LCD_FormFeedClear		(  12U )
+		#define LCD_CarriageReturn		(  13U )
+		#define LCD_Display_OFF			(  21U )
+		#define LCD_Display_ON_NoBlink	(  22U )
+		#define LCD_Display_ON 			(  25U )
+		#define LCD_Backlight_ON 		(  17U )
+		#define LCD_Backlight_OFF 		(  18U )
+		#define LCD_HOME 				( 128U )
+		#define LCD_Line2				( 148U )
 	
-	// ===== Serial Strings =====
-	#define WelcomeString		( "LAPIS Q111 LaPi DEV. DEMO") 
-	#define WelcomeString_LEN	( sizeof(WelcomeString) - 1 )
-
-	#define ClearLCD			( "                                ") 
-	#define ClearLCD_LEN		( sizeof(ClearLCD) - 1 )
-
-	#define DataHeaderString	( "My Sensor Data = \n\r")
-	#define DataHeaderString_LEN	( sizeof(DataHeaderString) - 1  )
-
-	#define AlarmString			( "MOTION DETECTED BY PIR SENSOR!  \n\r" ) 
-	#define AlarmString_LEN		( sizeof(AlarmString) - 1 )
-
-	#define NoAlarmString		( "PIR: NO MOTION  - ALL IS WELL!  \n\r" ) 
-	#define NoAlarmString_LEN	( sizeof(NoAlarmString) - 1 )
-
-	#define MagFieldString		( "MAGNETIC Field  DETECTED BY HALL\n\r" ) 
-	#define MagFieldString_LEN	( sizeof(MagFieldString) - 1 )
-
-	#define NoMagFieldString	( "HALL:NO MAGNETIC Field Detected!\n\r" ) 
-	#define NoMagFieldString_LEN	( sizeof(MagFieldString) - 1 )
-
-	#define OkayString			( "OKAY!\n\r") 
-	#define OkayString_LEN		( sizeof(OkayString) - 1 )
-
-	#define TestString			( "TESTING!") 
-	#define TestString_LEN		( sizeof(TestString) - 1 )
-
-	#define NewLineString		( "\n\r") 
-	#define NewLineString_LEN	( sizeof(NewLineString) - 1 )
-
-	#define FailureString		( "FAILURE!") 
-	#define FailureString_LEN	( sizeof(FailureString) - 1 )
-
-	#define SuccessString		( "SUCCESS!") 
-	#define SuccessString_LEN	( sizeof(SuccessString) - 1 )
-
-	#define PartSuccessString		( "PARTIALLY SUCCESSFUL!") 
-	#define PartSuccessString_LEN	( sizeof(PartSuccessString) - 1 )
-	
-
 //*****************************************************************************
 //===========================================================================
 //   MACROS: 
@@ -351,7 +310,7 @@
 	unsigned char	_flgUartFin;
 	unsigned char 	_flgI2CFin;
 	unsigned char	_flgADCFin;
-	unsigned char	_reqNotHalt;
+	unsigned char	_reqNotHalt; 
 
 
 /*##############################################################################*/
@@ -375,9 +334,14 @@ int main(void)
 	Init:
 		Initialization();		// Init Micro...(Ports, Timers, OSC, IRQ's, UART, etc...)
 		
-		SerialLCD_Init_and_Clear();	// Set up Parallax Serial LCD Display...
+		SerialLCD_Init_and_Clear();	// Init And/Or Clear Parallax Serial LCD Display...
 
 		UART_TX_TEST();				// Test UART TX...
+		
+		NOPms(2000);
+		
+		SerialLCD_Init_and_Clear();	// Init And/Or Clear Parallax Serial LCD Display...
+		
 		//UART_RX_TEST();			// Uncomment to Test UART RX...(You should use a lop here to better test)
 
 	Primary_Loop:		
@@ -639,7 +603,7 @@ static void Initialization(void){
 			//----------------------------------------------------------------------------------------
 
 			
- 			/* Commented Timer 8/9 Interrupt out, as it is used for NOPms() function
+ 			//Commented Timer A/B Interrupt out, as it is used for NOPms() function
 			//------------- SET UP TIMER A/B Interrupt to increment timers every ~X ms ---------------
 				(void)irq_setHdr( (unsigned char)IRQ_NO_TMBINT, TMRAB_ISR );  //Clear interrupt request flag
 					ETMA = 1;	  	// Enable timer 8 Interrupt (1=ENABLED
@@ -663,7 +627,7 @@ static void Initialization(void){
 					HTD1 = 1;
 					HTD0 = 1; 
 			//----------------------------------------------------------------------------------------
-			*/
+			
 			
 			//------------- SET UP TIMER E/F Interrupt to increment timers every ~X ms ---------------
 				(void)irq_setHdr( (unsigned char)IRQ_NO_TMFINT, TMREF_ISR );  //Clear interrupt request flag
@@ -1317,41 +1281,18 @@ xxx = MyCount;
 
 //===========================================================================
 void SerialLCD_Init_and_Clear(void){
-	/* 	FOR REF ONLY - CMD's used to control Parallax Serial LCD!
-		#define LCD_Display_OFF			(  21U )
-		#define LCD_Display_ON_NoBlink	(  22U )
-		#define LCD_Display_ON 			(  25U )
-		#define LCD_Backlight_ON 		(  17U )
-		#define LCD_Backlight_OFF 		(  18U )
-		#define LCD_HOME 				( 128U )
-		#define LCD_Line2				( 148U ) 
-	*/
-		int i;
-		unsigned char LCD_CONFIG[3]   = {LCD_Display_ON, LCD_Backlight_ON, LCD_HOME}; 
-		unsigned char CLEAR_LCD[32];		//Small Array...for UART Transmission, etc
 
-			
- 		//FIRST CONFIGURE THE LCD...
-		uart_startSend(LCD_CONFIG, 3, _funcUartFin); // Send LCD COMMANDS
+		unsigned char LCD_CONFIG[3]   = {LCD_Display_ON, LCD_Backlight_ON, LCD_HOME}; 
+		unsigned char LCD_CONFIG2[1]  = {LCD_FormFeedClear};	//Move to 0,0 & Clear Display 		
+
+ 		//-------------------------------------------------------------
+		//Now, CLEAR THE DISPLAY!
+		uart_startSend(LCD_CONFIG2, 1, _funcUartFin); // Send LCD COMMANDS
 		while(_flgUartFin != 1){
 			main_clrWDT(); 
 		}
-
-		//-------------------------------------------------------------
-		//Now, CLEAR THE DISPLAY!
-		for(i = 0; i<32; i++) 
-		{
-			CLEAR_LCD[i] = 0x20;	// 0x20 = "Space" => Clear Array
-		}		
-			//CLEAR Parallax LCD Display!
-			_flgUartFin = 0;
-			uart_stop();
-			uart_startSend(CLEAR_LCD, 32, _funcUartFin);
-			while(_flgUartFin != 1){
-				main_clrWDT(); 
-			}	
-		//-------------------------------------------------------------	
-
+		
+		NOPms(100); 
 }
 //===========================================================================
 
@@ -1364,7 +1305,6 @@ void UART_TX_TEST (void)
 	// ===== START UART TX TEST... =====
 		unsigned char UARTStartupMessage[26] = {"ML610Q111 UART - TX Demo: "};
 		
-		//CLEAR Parallax LCD Display!
 		_flgUartFin = 0;
 		uart_stop();
 		uart_startSend(UARTStartupMessage, 26, _funcUartFin);
@@ -1372,14 +1312,14 @@ void UART_TX_TEST (void)
 			main_clrWDT(); 
 		}
 			
-	// ===== END UART TX TEST =====  
+	/* // ===== END UART TX TEST =====  
 	
 			
- 		//Re-CONFIGURE THE LCD...
+  		//Re-CONFIGURE THE LCD...
 		uart_startSend(LCD_HOME, 1, _funcUartFin); // Return Cursor back to HOME
 		while(_flgUartFin != 1){
 			main_clrWDT(); 
-		}
+		} */
 }
 //===========================================================================
 
@@ -1440,11 +1380,7 @@ unsigned int x;	// 0 to 65,535
 
 	if (PIR_pin == 1)
 	{
-
 		PIR_ALARM();	// PIR DETECTION EVENT!
-		LED8_pin ^= 1;	// Toggle LED
-		NOPms(1000);
-
 	}//endif
 	else if (PIR_pin == 0)
 	{
@@ -1497,34 +1433,30 @@ void PIR_ALARM (void) {
 	//unsigned char LCD_Cmd_FF  = {LCD_FormFeedClear};	//The cursor is moved to position 0 on line 0 and the entire display is cleared 
 
 	unsigned char PIR_ALARM_Message[16] = {"PIR EVENT ALARM!"};
-
-
- 	//SerialLCD_Init_and_Clear();		// Set up Parallax Serial LCD Display...	
-		//CLEAR Parallax LCD Display!
-		uart_startSend(LCD_FormFeedClear, 1, _funcUartFin); // Return Cursor back to HOME
-		while(_flgUartFin != 1){
-			main_clrWDT(); 
-		} 
-		
-		NOPms(250);
-	
-
-/*  	//Re-CONFIGURE THE LCD...
-	uart_startSend(LCD_Cmd_HOME, 1, _funcUartFin); // Return Cursor back to HOME
-	while(_flgUartFin != 1){
-		main_clrWDT(); 
-	}  */
+	unsigned char counter;
 		
 	// ===== START ALARM EVENT UART TX... =====
-		
 		//CLEAR Parallax LCD Display!
+		SerialLCD_Init_and_Clear();	// Init And/Or Clear Parallax Serial LCD Display...
+		//Now Send ALARM Message...
 		_flgUartFin = 0;
 		uart_stop();
 		uart_startSend(PIR_ALARM_Message, 16, _funcUartFin);
 		while(_flgUartFin != 1){
 			main_clrWDT(); 
 		}
-			
+		
+		///FLASH LED while Event Detected...
+		while(PIR_pin == 1) //While motion is still detected...
+		{
+			LED8_pin = 1;	// Toggle LED
+				NOPms(100);
+			LED8_pin = 0;	// Toggle LED
+				NOPms(100);
+		} ///wend
+		
+		//Finally, Clear Display & Reset
+		SerialLCD_Init_and_Clear();	// Init And/Or Clear Parallax Serial LCD Display...
 	// ===== END ALARM EVENT UART TX =====  
 	
 
